@@ -1,0 +1,7 @@
+{
+  "name": "Figment Studio - Premium Architectural Visualization",
+  "description": "A high-end architectural visualization studio based in Abuja, Nigeria, offering 3D rendering, animation, and immersive digital storytelling for the global AEC industry.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
