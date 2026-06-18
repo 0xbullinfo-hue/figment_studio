@@ -29,23 +29,26 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-canvas-dark text-white border-t border-white/5">
+    <footer
+      className="border-t"
+      style={{
+        background: '#060402',
+        borderColor: 'rgba(255,255,255,0.04)',
+      }}
+    >
       <div className="content-max px-6 md:px-10 lg:px-16 py-16 md:py-20">
+
         {/* Top row */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 md:gap-16 pb-12 border-b border-white/10">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 md:gap-16 pb-12"
+          style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+
           {/* Brand column */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="flex items-center gap-3">
-              <Logo className="h-10" variant="light" />
-              <div className="leading-none">
-                <p className="text-sm font-semibold text-white">Figment Studio</p>
-                <p className="text-2xs text-primary" style={{ letterSpacing: '0.14em' }}>CREATIVE STUDIO</p>
-              </div>
-            </div>
-            <p className="text-white/55 text-sm leading-relaxed max-w-xs">
+            <Logo className="w-9 h-9" />
+            <p className="text-sm leading-relaxed max-w-xs" style={{ color: 'rgba(242,237,230,0.4)' }}>
               Nigeria's leading architectural visualization house. Cinematic renders, AI-guided design, and private delivery for world-class projects.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               {[
                 { icon: 'photo_camera', label: 'Instagram', href: 'https://instagram.com' },
                 { icon: 'work', label: 'LinkedIn', href: 'https://linkedin.com' },
@@ -57,7 +60,21 @@ const Footer: React.FC = () => {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={s.label}
-                  className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/40 transition-all duration-200"
+                  className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200"
+                  style={{
+                    border: '1px solid rgba(255,255,255,0.07)',
+                    color: 'rgba(255,255,255,0.28)',
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.color = '#F07A3A';
+                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(240,122,58,0.3)';
+                    (e.currentTarget as HTMLElement).style.background = 'rgba(240,122,58,0.06)';
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.28)';
+                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)';
+                    (e.currentTarget as HTMLElement).style.background = 'transparent';
+                  }}
                 >
                   <span className="material-symbols-outlined text-[16px]">{s.icon}</span>
                 </a>
@@ -68,13 +85,16 @@ const Footer: React.FC = () => {
           {/* Nav columns */}
           {Object.entries(links).map(([section, items]) => (
             <div key={section} className="space-y-5">
-              <p className="label-xs text-white/40">{section}</p>
+              <p className="label-xs" style={{ color: 'rgba(255,255,255,0.22)' }}>{section}</p>
               <ul className="space-y-3">
                 {items.map((item) => (
                   <li key={item.label}>
                     <button
                       onClick={() => navigate(item.path)}
-                      className="text-sm text-white/55 hover:text-white hover-underline transition-colors duration-200"
+                      className="text-sm hover-underline transition-colors duration-200"
+                      style={{ color: 'rgba(242,237,230,0.38)' }}
+                      onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(242,237,230,0.75)')}
+                      onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(242,237,230,0.38)')}
                     >
                       {item.label}
                     </button>
@@ -87,14 +107,26 @@ const Footer: React.FC = () => {
 
         {/* Bottom row */}
         <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-white/30 text-xs">
+          <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>
             © {year} Figment Studio Ltd. Abuja, Nigeria. All rights reserved.
           </p>
-          <div className="flex items-center gap-6 text-xs text-white/30">
-            <span className="hover:text-white/60 cursor-pointer transition-colors">Privacy Policy</span>
-            <span className="hover:text-white/60 cursor-pointer transition-colors">Terms of Service</span>
+          <div className="flex items-center gap-6 text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>
+            <span
+              className="cursor-pointer transition-colors duration-200"
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.55)')}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.2)')}
+            >
+              Privacy Policy
+            </span>
+            <span
+              className="cursor-pointer transition-colors duration-200"
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.55)')}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.2)')}
+            >
+              Terms of Service
+            </span>
             <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-slow"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse-slow" />
               <span>All systems operational</span>
             </div>
           </div>

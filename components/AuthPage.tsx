@@ -9,6 +9,19 @@ interface AuthPageProps {
   onBack: () => void;
 }
 
+const inputStyle: React.CSSProperties = {
+  width: '100%',
+  borderRadius: '0.625rem',
+  border: '1px solid #272018',
+  background: '#0A0805',
+  padding: '0.875rem 1rem 0.875rem 3rem',
+  fontSize: '0.875rem',
+  color: '#F2EDE6',
+  fontFamily: 'Inter, sans-serif',
+  outline: 'none',
+  transition: 'all 0.2s ease',
+};
+
 const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
   const [searchParams] = useSearchParams();
   const { login } = useStudioStore();
@@ -29,94 +42,104 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
 
   if (isRegister) {
     return (
-      <div className="bg-white dark:bg-[#181a1b] text-[#1c140d] dark:text-gray-100 min-h-screen selection:bg-primary/30 font-display">
-        <header className="flex items-center justify-between border-b border-solid border-[#f4ede7] dark:border-gray-800 px-10 py-5 bg-white/80 dark:bg-[#181a1b]/80 backdrop-blur-md sticky top-0 z-50">
-          <button onClick={onBack} className="hover:opacity-80 transition-opacity">
-            <Logo />
+      <div className="min-h-screen bg-background text-text-main font-body">
+        {/* Header */}
+        <header
+          className="flex items-center justify-between px-10 py-5 sticky top-0 z-50"
+          style={{
+            background: 'rgba(10,8,5,0.92)',
+            backdropFilter: 'blur(16px)',
+            borderBottom: '1px solid rgba(255,255,255,0.05)',
+          }}
+        >
+          <button onClick={onBack}>
+            <Logo className="w-8 h-8" />
           </button>
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <button
               onClick={() => setIsRegister(false)}
-              className="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-10 px-6 bg-transparent text-[#1c140d] dark:text-white text-sm font-bold border border-[#e8dbce] dark:border-gray-700 hover:bg-[#fcfaf8] transition-colors"
+              className="btn-secondary px-5 py-2 text-sm"
             >
-              LOGIN
+              Login
             </button>
-            <button className="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-10 px-6 bg-[#f4ede7] dark:bg-gray-800 text-[#1c140d] dark:text-white text-sm font-bold transition-colors">
-              SUPPORT
+            <button className="btn-ghost px-5 py-2 text-sm">
+              Support
             </button>
           </div>
         </header>
 
-        <main className="flex-1 flex flex-col items-center py-12 px-6">
-          <div className="w-full max-w-[640px] mb-12">
-            <div className="flex flex-col gap-3">
-              <div className="flex justify-between items-end">
-                <div className="flex flex-col text-left">
-                  <span className="text-xs font-bold text-primary uppercase tracking-widest">Step 01 / 03</span>
-                  <h3 className="text-xl font-bold dark:text-white">PERSONAL DETAILS</h3>
-                </div>
-                <p className="text-[#9c7349] dark:text-gray-400 text-sm font-medium">NEXT: SECURITY</p>
+        <main className="flex flex-col items-center py-12 px-6">
+          {/* Progress */}
+          <div className="w-full max-w-xl mb-10">
+            <div className="flex justify-between items-end mb-3">
+              <div>
+                <p className="label-sm text-primary">Step 01 / 03</p>
+                <p className="text-lg font-semibold text-text-main mt-1">Personal Details</p>
               </div>
-              <div className="h-1.5 w-full bg-[#e8dbce] dark:bg-gray-800 rounded-full overflow-hidden">
-                <div className="h-full bg-primary rounded-full transition-all duration-700" style={{ width: '33.33%' }}></div>
-              </div>
+              <p className="text-xs text-text-muted uppercase tracking-widest">Next: Security</p>
+            </div>
+            <div className="h-1 w-full rounded-full" style={{ background: 'rgba(255,255,255,0.06)' }}>
+              <div className="h-full rounded-full bg-primary transition-all duration-700" style={{ width: '33.33%' }} />
             </div>
           </div>
 
-          <div className="w-full max-w-[640px] bg-white dark:bg-[#212425] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] p-10 border border-[#f4ede7] dark:border-gray-800">
-            <h1 className="text-[#1c140d] dark:text-white text-3xl font-bold leading-tight mb-8 uppercase tracking-tight text-left">Join the Studio</h1>
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className="space-y-2 text-left">
-                <label className="block text-xs font-bold text-[#1c140d] dark:text-gray-300 uppercase tracking-widest">Full Name</label>
-                <input required className="block w-full rounded-lg border-[#e8dbce] dark:border-gray-700 bg-[#fcfaf8] dark:bg-gray-900/50 h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-[#9c7349]/50" placeholder="Alexander Figment" type="text" />
-              </div>
-              <div className="space-y-2 text-left">
-                <label className="block text-xs font-bold text-[#1c140d] dark:text-gray-300 uppercase tracking-widest">Company Name</label>
-                <input required className="block w-full rounded-lg border-[#e8dbce] dark:border-gray-700 bg-[#fcfaf8] dark:bg-gray-900/50 h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-[#9c7349]/50" placeholder="Architectural Collective Ltd." type="text" />
-              </div>
-              <div className="space-y-2 text-left">
-                <label className="block text-xs font-bold text-[#1c140d] dark:text-gray-300 uppercase tracking-widest">Work Email</label>
-                <input required className="block w-full rounded-lg border-[#e8dbce] dark:border-gray-700 bg-[#fcfaf8] dark:bg-gray-900/50 h-14 px-4 text-base focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-[#9c7349]/50" placeholder="hello@company.com" type="email" />
-              </div>
+          {/* Form card */}
+          <div className="w-full max-w-xl card-base p-10 space-y-6">
+            <h1 className="font-display font-light text-3xl text-text-main">Join the Studio</h1>
 
-              <div className="pt-8 mt-8 border-t border-[#f4ede7] dark:border-gray-800 space-y-6">
+            <form className="space-y-5" onSubmit={handleSubmit}>
+              {[
+                { label: 'Full Name', placeholder: 'Alexander Figment', type: 'text' },
+                { label: 'Company Name', placeholder: 'Architectural Collective Ltd.', type: 'text' },
+                { label: 'Work Email', placeholder: 'hello@company.com', type: 'email' },
+              ].map((field) => (
+                <div key={field.label} className="space-y-2">
+                  <label className="label-xs text-text-muted block">{field.label}</label>
+                  <input
+                    required
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    className="input-base"
+                  />
+                </div>
+              ))}
+
+              <div className="pt-6 border-t border-border-ui space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="block text-xs font-bold text-[#1c140d] dark:text-gray-300 uppercase tracking-widest">Password</label>
-                  <span className="text-[10px] font-bold text-green-600 dark:text-green-400 tracking-tighter uppercase">Strong</span>
+                  <label className="label-xs text-text-muted">Password</label>
+                  <span className="text-2xs font-semibold text-emerald-400 uppercase tracking-wide">Strong</span>
                 </div>
-                <div className="space-y-3 relative">
-                  <div className="relative">
-                    <input required className="block w-full rounded-lg border-[#e8dbce] dark:border-gray-700 bg-[#fcfaf8] dark:bg-gray-900/50 h-14 px-4 pr-12 text-base focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all" type={showPassword ? 'text' : 'password'} defaultValue="hardpassword123" />
-                    <button
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9c7349] hover:text-[#1c140d] dark:hover:text-white transition-colors"
-                      type="button"
-                    >
-                      <span className="material-symbols-outlined text-lg">{showPassword ? 'visibility_off' : 'visibility'}</span>
-                    </button>
-                  </div>
-                  <div className="flex gap-1.5 h-1">
-                    <div className="flex-1 bg-primary rounded-full"></div>
-                    <div className="flex-1 bg-primary rounded-full"></div>
-                    <div className="flex-1 bg-primary rounded-full"></div>
-                    <div className="flex-1 bg-primary rounded-full"></div>
-                    <div className="flex-1 bg-[#e8dbce] dark:bg-gray-700 rounded-full"></div>
-                  </div>
+                <div className="relative">
+                  <input
+                    required
+                    type={showPassword ? 'text' : 'password'}
+                    defaultValue="hardpassword123"
+                    className="input-base pr-12"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-main transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">{showPassword ? 'visibility_off' : 'visibility'}</span>
+                  </button>
+                </div>
+                {/* Strength bar */}
+                <div className="flex gap-1.5 h-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className={`flex-1 rounded-full ${i < 4 ? 'bg-primary' : 'bg-border-ui'}`} />
+                  ))}
                 </div>
               </div>
 
-              <div className="pt-8">
-                <button
-                  type="submit"
-                  className="w-full h-16 bg-primary text-white text-sm font-bold uppercase tracking-widest rounded-lg shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2"
-                >
-                  CREATE ACCOUNT & START PROJECT
-                  <span className="material-symbols-outlined">arrow_forward</span>
-                </button>
-              </div>
+              <button type="submit" className="btn-primary w-full justify-center py-3.5 mt-2">
+                Create Account & Start Project
+                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+              </button>
             </form>
           </div>
-          <p className="mt-12 text-[#9c7349] dark:text-gray-500 text-xs font-medium uppercase tracking-[0.2em] text-center max-w-xs leading-relaxed">
+
+          <p className="mt-10 text-text-faint text-xs text-center uppercase tracking-widest max-w-xs leading-relaxed">
             Trusted by global architects & design collectives since 2018.
           </p>
         </main>
@@ -125,80 +148,139 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-gray-50 architectural-bg relative overflow-x-hidden font-display">
-      <div className="absolute inset-0 bg-white/60 backdrop-blur-md"></div>
+    <div
+      className="min-h-screen flex items-center justify-center p-6 font-body"
+      style={{ background: '#0A0805' }}
+    >
+      {/* Background glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at 50% 30%, rgba(240,122,58,0.08) 0%, transparent 60%)',
+        }}
+      />
 
-      <div className="relative z-10 w-full max-w-lg flex flex-col items-center">
-        <div className="flex flex-col items-center mb-8">
-          <button onClick={onBack} className="hover:scale-105 transition-transform mb-4 flex flex-col items-center gap-2">
-            <Logo className="h-14" />
-            <p className="label-xs text-primary" style={{ letterSpacing: '0.14em' }}>CREATIVE STUDIO</p>
-          </button>
-        </div>
+      {/* Dot grid */}
+      <div className="absolute inset-0 dot-grid opacity-40 pointer-events-none" />
 
-        <div className="w-full bg-white rounded-[2rem] p-10 md:p-12 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.1),0_18px_36px_-18px_rgba(0,0,0,0.15)] border border-white">
-          <div className="flex p-1 bg-gray-100 rounded-2xl mb-10 w-full">
-            <button
-              onClick={() => setPortalType('client')}
-              className={`flex-1 text-center py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest cursor-pointer transition-all ${portalType === 'client' ? 'bg-white text-brand-dark shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-            >
-              Client
-            </button>
-            <button
-              onClick={() => setPortalType('admin')}
-              className={`flex-1 text-center py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest cursor-pointer transition-all ${portalType === 'admin' ? 'bg-white text-brand-dark shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-            >
-              Admin
-            </button>
+      <div className="relative z-10 w-full max-w-md flex flex-col items-center gap-8">
+        {/* Logo */}
+        <button onClick={onBack} className="flex flex-col items-center gap-2 group">
+          <Logo className="w-12 h-12" iconOnly />
+          <p className="label-xs text-primary group-hover:text-primary-hover transition-colors" style={{ letterSpacing: '0.18em' }}>
+            CREATIVE STUDIO
+          </p>
+        </button>
+
+        {/* Card */}
+        <div
+          className="w-full rounded-2xl p-10"
+          style={{
+            background: '#151009',
+            border: '1px solid #272018',
+            boxShadow: '0 32px 64px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04)',
+          }}
+        >
+          {/* Toggle tab */}
+          <div className="flex p-1 rounded-xl mb-8" style={{ background: '#0A0805' }}>
+            {(['client', 'admin'] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setPortalType(tab)}
+                className="flex-1 py-2.5 rounded-lg text-2xs font-bold uppercase tracking-widest transition-all duration-200"
+                style={{
+                  background: portalType === tab ? '#272018' : 'transparent',
+                  color: portalType === tab ? '#F2EDE6' : '#4E4540',
+                }}
+              >
+                {tab === 'client' ? 'Client' : 'Admin'}
+              </button>
+            ))}
           </div>
 
-          <div className="w-full flex flex-col gap-8">
-            <div className="flex flex-col gap-2 text-center">
-              <h3 className="text-brand-dark text-3xl font-black tracking-tight">
+          <div className="space-y-6">
+            <div className="text-center space-y-1.5">
+              <h1 className="font-display font-light text-3xl text-text-main">
                 {portalType === 'client' ? 'Client Portal' : 'Admin Control'}
-              </h3>
-              <p className="text-gray-400 text-sm font-medium text-center">Secure access to your architectural ecosystem</p>
+              </h1>
+              <p className="text-sm text-text-muted">Secure access to your architectural ecosystem</p>
               {portalType === 'client' && upgradeIntent && (
-                <p className="text-[10px] uppercase tracking-[0.2em] text-primary font-semibold">Pro upgrade flow active</p>
+                <p className="label-xs text-primary" style={{ letterSpacing: '0.14em' }}>Pro upgrade flow active</p>
               )}
             </div>
 
-            <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-              <div className="flex flex-col gap-2 text-left">
-                <label className="text-brand-dark text-[10px] font-bold uppercase tracking-widest px-1">Email Address</label>
-                <div className="relative group">
-                  <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-primary transition-colors">alternate_email</span>
-                  <input required className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-100 bg-gray-50/50 text-brand-dark focus:ring-2 focus:ring-primary focus:border-transparent focus:bg-white outline-none transition-all placeholder:text-gray-300" placeholder="name@company.com" type="email" />
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              {/* Email */}
+              <div className="space-y-1.5">
+                <label className="label-xs text-text-muted block">Email Address</label>
+                <div className="relative">
+                  <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[18px] text-text-faint">
+                    alternate_email
+                  </span>
+                  <input
+                    required
+                    type="email"
+                    placeholder="name@company.com"
+                    style={{ ...inputStyle, paddingLeft: '2.75rem' }}
+                    onFocus={e => {
+                      e.currentTarget.style.borderColor = 'rgba(240,122,58,0.4)';
+                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(240,122,58,0.07)';
+                    }}
+                    onBlur={e => {
+                      e.currentTarget.style.borderColor = '#272018';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  />
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2 text-left">
-                <div className="flex justify-between items-center px-1">
-                  <label className="text-brand-dark text-[10px] font-bold uppercase tracking-widest">Password</label>
-                  <button type="button" className="text-primary text-[10px] font-bold uppercase tracking-widest hover:text-primary/80 transition-colors">Forgot?</button>
+              {/* Password */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="label-xs text-text-muted">Password</label>
+                  <button type="button" className="text-2xs font-semibold text-primary hover:text-primary-hover transition-colors uppercase tracking-wide">
+                    Forgot?
+                  </button>
                 </div>
-                <div className="relative group">
-                  <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-primary transition-colors">lock</span>
-                  <input required className="w-full pl-12 pr-12 py-4 rounded-xl border border-gray-100 bg-gray-50/50 text-brand-dark focus:ring-2 focus:ring-primary focus:border-transparent focus:bg-white outline-none transition-all placeholder:text-gray-300" placeholder="••••••••" type={showPassword ? 'text' : 'password'} />
+                <div className="relative">
+                  <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[18px] text-text-faint">lock</span>
+                  <input
+                    required
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    style={{ ...inputStyle, paddingLeft: '2.75rem', paddingRight: '2.75rem' }}
+                    onFocus={e => {
+                      e.currentTarget.style.borderColor = 'rgba(240,122,58,0.4)';
+                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(240,122,58,0.07)';
+                    }}
+                    onBlur={e => {
+                      e.currentTarget.style.borderColor = '#272018';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  />
                   <button
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 hover:text-brand-dark transition-colors"
                     type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-text-faint hover:text-text-muted transition-colors"
                   >
-                    <span className="material-symbols-outlined text-lg">{showPassword ? 'visibility_off' : 'visibility'}</span>
+                    <span className="material-symbols-outlined text-[18px]">
+                      {showPassword ? 'visibility_off' : 'visibility'}
+                    </span>
                   </button>
                 </div>
               </div>
 
-              <button className="w-full bg-primary hover:bg-[#e37d1a] text-white py-4 rounded-xl text-sm font-bold tracking-[0.15em] uppercase shadow-lg shadow-primary/30 transition-all active:scale-[0.98] mt-4" type="submit">
+              <button type="submit" className="btn-primary w-full justify-center py-3.5 mt-2">
                 Enter Portal
               </button>
             </form>
 
             {portalType === 'client' && (
-              <p className="text-center text-sm font-semibold tracking-wide">
-                <span className="text-gray-400">New client?</span>
-                <button onClick={() => setIsRegister(true)} className="text-primary hover:text-primary/80 transition-colors ml-1">Create an Account</button>
+              <p className="text-center text-sm text-text-muted">
+                New client?{' '}
+                <button onClick={() => setIsRegister(true)} className="text-primary hover:text-primary-hover transition-colors font-semibold">
+                  Create an Account
+                </button>
               </p>
             )}
           </div>

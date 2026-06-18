@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+    const onScroll = () => setScrolled(window.scrollY > 16);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -29,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
   const navItems = [
     { label: 'About', path: '/about' },
     { label: 'Portfolio', path: '/portfolio' },
-    { label: 'ArcViz AI', path: '/arcviz' },
+    { label: 'ArcViz AI', path: '/arcviz', live: true },
     { label: 'Pricing', path: '/estimator' },
     { label: 'Contact', path: '/contact' },
   ];
@@ -41,26 +41,19 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
       <header
         className={`sticky top-0 z-50 w-full transition-all duration-300 ${
           scrolled
-            ? 'bg-surface/95 backdrop-blur-lg shadow-[0_1px_0_rgba(0,0,0,0.06)] border-b border-border-ui'
-            : 'bg-background/80 backdrop-blur-sm border-b border-transparent'
+            ? 'bg-background/95 backdrop-blur-xl border-b border-border-ui shadow-[0_1px_0_rgba(255,255,255,0.03)]'
+            : 'bg-transparent border-b border-transparent'
         }`}
       >
-        <div className="content-max px-6 md:px-10 lg:px-16 flex items-center justify-between h-16">
+        <div className="content-max px-6 md:px-10 lg:px-16 flex items-center justify-between h-[68px]">
+
           {/* Logo */}
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-3 group flex-shrink-0"
+            className="flex-shrink-0 group"
             aria-label="Figment Studio Home"
           >
-            <Logo className="h-9" />
-            <div className="hidden sm:block leading-none">
-              <p className="text-sm font-semibold text-text-main tracking-tight group-hover:text-primary transition-colors">
-                Figment Studio
-              </p>
-              <p className="label-xs text-primary" style={{ letterSpacing: '0.14em' }}>
-                creative studio
-              </p>
-            </div>
+            <Logo className="w-8 h-8" />
           </button>
 
           {/* Desktop Nav */}
@@ -69,17 +62,17 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`relative px-3.5 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 ${
+                className={`relative px-3.5 py-2 rounded-lg text-[13.5px] font-medium transition-all duration-200 flex items-center gap-1.5 ${
                   isActive(item.path)
                     ? 'text-primary bg-primary-light'
-                    : 'text-text-secondary hover:text-text-main hover:bg-background-alt'
+                    : 'text-text-muted hover:text-text-main hover:bg-surface'
                 }`}
               >
                 {item.label}
-                {item.label === 'ArcViz AI' && (
-                  <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-60"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                {item.live && (
+                  <span className="flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-1.5 w-1.5 rounded-full bg-primary opacity-60" />
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
                   </span>
                 )}
               </button>
@@ -87,79 +80,73 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
 
             <button
               onClick={onOpenVision}
-              className="px-3.5 py-2 rounded-lg text-[13px] font-medium text-text-secondary hover:text-primary hover:bg-primary-light transition-all duration-200 flex items-center gap-1.5"
+              className="px-3.5 py-2 rounded-lg text-[13.5px] font-medium text-text-muted hover:text-primary hover:bg-primary-light transition-all duration-200 flex items-center gap-1.5"
             >
-              <span className="material-symbols-outlined text-[16px]">auto_awesome</span>
+              <span className="material-symbols-outlined text-[15px]">auto_awesome</span>
               Vision AI
             </button>
           </nav>
 
-          {/* CTA actions */}
-          <div className="hidden lg:flex items-center gap-3">
-            <div className="h-5 w-px bg-border-ui mx-1" />
+          {/* CTA */}
+          <div className="hidden lg:flex items-center gap-2">
+            <div className="h-4 w-px bg-border-ui mx-1" />
             {auth.isAuthenticated ? (
               <>
                 <button
                   onClick={() => navigate(auth.role === 'admin' ? '/admin' : '/dashboard')}
-                  className="btn-ghost text-[13px] flex items-center gap-1.5"
+                  className="btn-ghost text-[13px]"
                 >
                   <span className="material-symbols-outlined text-[15px]">dashboard</span>
                   Dashboard
                 </button>
                 <button
                   onClick={() => { logout(); navigate('/'); }}
-                  className="btn-secondary text-[13px] py-2"
+                  className="btn-secondary text-[13px] py-2 px-4"
                 >
                   Sign Out
                 </button>
               </>
             ) : (
               <>
-                <button
-                  onClick={() => navigate('/auth')}
-                  className="btn-ghost text-[13px]"
-                >
+                <button onClick={() => navigate('/auth')} className="btn-ghost text-[13px]">
                   Sign In
                 </button>
-                <button
-                  onClick={() => navigate('/estimator')}
-                  className="btn-primary text-[13px] py-2.5 shadow-none"
-                >
+                <button onClick={() => navigate('/estimator')} className="btn-primary text-[13px] py-2.5 px-5">
                   Get Estimate
                 </button>
               </>
             )}
           </div>
 
-          {/* Mobile menu toggle */}
+          {/* Mobile toggle */}
           <button
-            className="lg:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-background-alt transition-colors"
+            className="lg:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-surface transition-colors"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           >
-            <span className="material-symbols-outlined text-[22px] text-text-main">
+            <span className="material-symbols-outlined text-[22px] text-text-muted">
               {mobileOpen ? 'close' : 'menu'}
             </span>
           </button>
         </div>
       </header>
 
-      {/* Mobile Nav Drawer */}
+      {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 flex flex-col pt-16">
+        <div className="lg:hidden fixed inset-0 z-40 flex flex-col pt-[68px]">
           <div
-            className="absolute inset-0 bg-text-main/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="relative bg-surface border-b border-border-ui shadow-popup p-6 space-y-1.5">
+          <div className="relative bg-surface border-b border-border-ui shadow-popup p-5 space-y-1">
             {navItems.map((item) => (
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`w-full text-left px-4 py-3 rounded-lg text-[15px] font-medium transition-all duration-200 ${
+                className={`w-full text-left px-4 py-3.5 rounded-xl text-[15px] font-medium transition-all duration-200 ${
                   isActive(item.path)
                     ? 'text-primary bg-primary-light'
-                    : 'text-text-secondary hover:text-text-main hover:bg-background-alt'
+                    : 'text-text-secondary hover:text-text-main hover:bg-surface-alt'
                 }`}
               >
                 {item.label}
@@ -167,27 +154,20 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
             ))}
             <button
               onClick={() => { onOpenVision(); setMobileOpen(false); }}
-              className="w-full text-left px-4 py-3 rounded-lg text-[15px] font-medium text-primary hover:bg-primary-light transition-all duration-200 flex items-center gap-2"
+              className="w-full text-left px-4 py-3.5 rounded-xl text-[15px] font-medium text-primary hover:bg-primary-light transition-all flex items-center gap-2"
             >
-              <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
+              <span className="material-symbols-outlined text-[17px]">auto_awesome</span>
               Vision AI
             </button>
-            <div className="pt-3 mt-3 border-t border-border-ui space-y-2">
+            <div className="pt-3 mt-2 border-t border-border-ui space-y-2">
               {auth.isAuthenticated ? (
-                <button
-                  onClick={() => navigate(auth.role === 'admin' ? '/admin' : '/dashboard')}
-                  className="btn-primary w-full"
-                >
+                <button onClick={() => navigate(auth.role === 'admin' ? '/admin' : '/dashboard')} className="btn-primary w-full">
                   Dashboard
                 </button>
               ) : (
                 <>
-                  <button onClick={() => navigate('/auth')} className="btn-secondary w-full">
-                    Sign In
-                  </button>
-                  <button onClick={() => navigate('/estimator')} className="btn-primary w-full">
-                    Get Estimate
-                  </button>
+                  <button onClick={() => navigate('/auth')} className="btn-secondary w-full">Sign In</button>
+                  <button onClick={() => navigate('/estimator')} className="btn-primary w-full">Get Estimate</button>
                 </>
               )}
             </div>

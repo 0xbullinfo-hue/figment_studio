@@ -6,13 +6,13 @@ const services: Service[] = [
   {
     id: '1',
     title: '3D Rendering',
-    description: 'High-fidelity photo-real stills at 4K+ resolution designed for marketing campaigns, investor decks, and stakeholder presentations.',
+    description: 'High-fidelity photo-real stills at 4K+ resolution for marketing campaigns, investor decks, and stakeholder presentations.',
     icon: 'deployed_code',
   },
   {
     id: '2',
     title: 'Cinematic Animation',
-    description: 'Immersive architectural walkthroughs and fly-through films with cinematic lighting and sound design.',
+    description: 'Immersive architectural walkthroughs and fly-through films with cinematic lighting, camera choreography, and sound design.',
     icon: 'videocam',
   },
   {
@@ -31,7 +31,7 @@ const services: Service[] = [
 
 const Services: React.FC = () => {
   return (
-    <section className="section-pad bg-surface" id="services">
+    <section className="section-pad bg-background-alt" id="services">
       <div className="content-lg">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14">
@@ -39,33 +39,42 @@ const Services: React.FC = () => {
             <p className="label-sm text-primary">Our Expertise</p>
             <h2 className="display-md text-text-main">
               Tailored Visualization<br />
-              <em className="italic text-text-muted font-light">for Every Scale</em>
+              <em className="italic font-light text-text-muted">for Every Scale</em>
             </h2>
           </div>
-          <p className="max-w-sm text-text-muted leading-relaxed">
+          <p className="max-w-sm text-text-muted leading-relaxed text-sm">
             We combine technical precision with artistic flair to produce results that captivate decision-makers and close deals.
           </p>
         </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* Cards grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {services.map((service, idx) => (
             <article
               key={service.id}
               className="group accent-card p-7 space-y-5 card-hover cursor-default"
             >
-              {/* Number + Icon row */}
+              {/* Number + icon */}
               <div className="flex items-start justify-between">
-                <div className="w-12 h-12 rounded-xl bg-primary-light text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                  <span className="material-symbols-outlined text-[22px]">{service.icon}</span>
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300"
+                  style={{
+                    background: 'rgba(240,122,58,0.12)',
+                    color: '#F07A3A',
+                  }}
+                  onMouseEnter={() => {}}
+                >
+                  <span className="material-symbols-outlined text-[22px] group-hover:scale-110 transition-transform duration-300">
+                    {service.icon}
+                  </span>
                 </div>
-                <span className="font-display text-4xl font-light text-border-strong group-hover:text-primary/30 transition-colors duration-300">
+                <span className="font-display text-4xl font-light" style={{ color: 'rgba(255,255,255,0.07)' }}>
                   {String(idx + 1).padStart(2, '0')}
                 </span>
               </div>
 
               <div className="space-y-2.5">
-                <h3 className="text-base font-semibold text-text-main font-body tracking-tight">
+                <h3 className="text-sm font-semibold text-text-main font-body tracking-tight">
                   {service.title}
                 </h3>
                 <p className="text-sm text-text-muted leading-relaxed">{service.description}</p>

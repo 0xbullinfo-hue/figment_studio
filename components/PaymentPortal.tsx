@@ -128,62 +128,62 @@ const PaymentPortal: React.FC<PaymentPortalProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="bg-[#fcfaf8] text-[#1c140d] min-h-screen font-display text-left">
-      <header className="border-b border-[#e8dbce] bg-white px-10 h-16 sticky top-0 z-50 flex items-center justify-between">
+    <div className="bg-background text-text-main min-h-screen font-body text-left">
+      <header className="border-b border-border-ui bg-surface/95 backdrop-blur-md px-10 h-16 sticky top-0 z-50 flex items-center justify-between">
         <button onClick={onBack} className="flex items-center gap-2 group">
           <span className="material-symbols-outlined text-primary group-hover:translate-x-[-2px] transition-transform">arrow_back</span>
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Back to Billing</span>
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-text-muted">Back to Billing</span>
         </button>
         <Logo className="h-8" />
-        <div className="size-8 rounded-full border-2 border-primary/20 bg-primary/10 flex items-center justify-center font-black text-primary text-[10px]">JT</div>
+        <div className="size-8 rounded-full border border-primary/30 bg-primary/10 flex items-center justify-center font-semibold text-primary text-[10px] font-body">JT</div>
       </header>
 
       <main className="max-w-[1100px] mx-auto px-6 lg:px-20 py-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <section className="bg-white rounded-3xl border border-[#e8dbce] shadow-sm p-8 space-y-8">
+        <section className="card-base rounded-3xl p-8 space-y-8">
           <div>
-            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Payment Portal</p>
-            <h1 className="text-3xl font-black tracking-tight uppercase mt-2">Gateway Checkout</h1>
-            <p className="text-sm text-slate-500 mt-2">Choose payment provider and billing currency. Designed for both USD and local settlement.</p>
+            <p className="label-xs text-text-muted">Payment Portal</p>
+            <h1 className="font-display font-light text-3xl text-text-main mt-2">Gateway Checkout</h1>
+            <p className="text-sm text-text-muted mt-2">Choose payment provider and billing currency. Designed for both USD and local settlement.</p>
           </div>
 
           <div className="space-y-3">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Provider</p>
+            <p className="label-xs text-text-muted">Provider</p>
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => setProvider('paystack')}
-                className={`rounded-xl border px-4 py-4 text-left transition-all ${provider === 'paystack' ? 'border-primary bg-primary/5 text-primary' : 'border-[#e8dbce] hover:border-primary/40'}`}
+                className={`rounded-xl border px-4 py-4 text-left transition-all ${provider === 'paystack' ? 'border-primary bg-primary/10 text-primary' : 'border-border-ui hover:border-border-strong text-text-secondary'}`}
               >
-                <p className="text-sm font-black uppercase">Paystack</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Cards, transfer, local rails</p>
+                <p className="text-sm font-semibold">Paystack</p>
+                <p className="text-2xs font-semibold uppercase tracking-widest text-text-muted">Cards, transfer, local rails</p>
               </button>
               <button
                 onClick={() => setProvider('flutterwave')}
-                className={`rounded-xl border px-4 py-4 text-left transition-all ${provider === 'flutterwave' ? 'border-primary bg-primary/5 text-primary' : 'border-[#e8dbce] hover:border-primary/40'}`}
+                className={`rounded-xl border px-4 py-4 text-left transition-all ${provider === 'flutterwave' ? 'border-primary bg-primary/10 text-primary' : 'border-border-ui hover:border-border-strong text-text-secondary'}`}
               >
-                <p className="text-sm font-black uppercase">Flutterwave</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Global + African payments</p>
+                <p className="text-sm font-semibold">Flutterwave</p>
+                <p className="text-2xs font-semibold uppercase tracking-widest text-text-muted">Global + African payments</p>
               </button>
             </div>
           </div>
 
           <div className="space-y-3">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Billing Currency</p>
+            <p className="label-xs text-text-muted">Billing Currency</p>
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => setCurrency('USD')}
-                className={`rounded-xl border px-4 py-3 text-sm font-black uppercase tracking-widest transition-all ${currency === 'USD' ? 'border-primary bg-primary/5 text-primary' : 'border-[#e8dbce] hover:border-primary/40'}`}
+                className={`rounded-xl border px-4 py-3 text-sm font-semibold uppercase tracking-widest transition-all ${currency === 'USD' ? 'border-primary bg-primary/10 text-primary' : 'border-border-ui hover:border-border-strong text-text-muted'}`}
               >
                 USD
               </button>
               <button
                 onClick={() => setCurrency('NGN')}
-                className={`rounded-xl border px-4 py-3 text-sm font-black uppercase tracking-widest transition-all ${currency === 'NGN' ? 'border-primary bg-primary/5 text-primary' : 'border-[#e8dbce] hover:border-primary/40'}`}
+                className={`rounded-xl border px-4 py-3 text-sm font-semibold uppercase tracking-widest transition-all ${currency === 'NGN' ? 'border-primary bg-primary/10 text-primary' : 'border-border-ui hover:border-border-strong text-text-muted'}`}
               >
                 NGN
               </button>
             </div>
             <p className="text-xs text-slate-500">
-              Conversion preview: {formatMoney(amount, 'USD')} ≈ {formatMoney(amount * fxRate, 'NGN')} (display rate: 1 USD = {fxRate.toLocaleString()} NGN)
+              Rate preview: {formatMoney(amount, 'USD')} ≈ {formatMoney(amount * fxRate, 'NGN')} · 1 USD = {fxRate.toLocaleString()} NGN
             </p>
           </div>
 
@@ -196,38 +196,38 @@ const PaymentPortal: React.FC<PaymentPortalProps> = ({ onBack }) => {
           </button>
 
           {!checkoutUrl && (
-            <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-xl p-3">
+            <p className="text-[11px] rounded-xl p-3" style={{ background: 'rgba(245,158,11,0.08)', color: '#fbbf24', border: '1px solid rgba(245,158,11,0.2)' }}>
               Live checkout URL is not configured yet. Set <strong>VITE_PAYSTACK_CHECKOUT_URL</strong> and <strong>VITE_FLUTTERWAVE_CHECKOUT_URL</strong>.
             </p>
           )}
         </section>
 
-        <aside className="bg-[#1c140d] text-white rounded-3xl p-8 space-y-8 shadow-xl">
+        <aside className="rounded-3xl p-8 space-y-8" style={{ background: '#0F0B07', border: '1px solid rgba(240,122,58,0.15)', boxShadow: '0 20px 60px rgba(0,0,0,0.5)' }}>
           <div>
-            <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Invoice Reference</p>
-            <h2 className="text-2xl font-black text-primary uppercase tracking-tight mt-1">{invoiceId}</h2>
+            <p className="label-xs text-text-muted">Invoice Reference</p>
+            <h2 className="font-display font-light text-2xl text-primary mt-1">{invoiceId}</h2>
           </div>
 
-          <div className="space-y-4 bg-white/5 border border-white/10 rounded-2xl p-6">
+          <div className="space-y-4 rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-400 font-bold uppercase">Project</span>
-              <span className="font-black text-right">{project}</span>
+              <span className="text-text-faint font-semibold uppercase tracking-wide text-xs">Project</span>
+              <span className="font-semibold text-text-secondary text-right text-sm">{project}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-400 font-bold uppercase">Base (USD)</span>
-              <span className="font-black">{formatMoney(amount, 'USD')}</span>
+              <span className="text-text-faint font-semibold uppercase tracking-wide text-xs">Base (USD)</span>
+              <span className="font-semibold text-text-secondary">{formatMoney(amount, 'USD')}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-400 font-bold uppercase">Paying In</span>
-              <span className="font-black">{currency}</span>
+              <span className="text-text-faint font-semibold uppercase tracking-wide text-xs">Paying In</span>
+              <span className="font-semibold text-text-secondary">{currency}</span>
             </div>
-            <div className="pt-4 border-t border-white/10 flex justify-between items-end">
-              <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Total Due</span>
-              <span className="text-3xl font-black text-primary">{formatMoney(convertedAmount, currency)}</span>
+            <div className="pt-4 flex justify-between items-end" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+              <span className="label-xs text-text-muted">Total Due</span>
+              <span className="font-display font-light text-3xl text-primary">{formatMoney(convertedAmount, currency)}</span>
             </div>
           </div>
 
-          <div className="text-[11px] text-gray-400 leading-relaxed">
+          <div className="text-[11px] text-text-faint leading-relaxed">
             Currency conversion shown here is an estimate for client visibility. Final settlement uses provider exchange rates at checkout.
           </div>
         </aside>
