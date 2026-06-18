@@ -2,80 +2,76 @@
 import React from 'react';
 
 interface LogoProps {
-  className?: string;
+  size?: number;
+  showWordmark?: boolean;
   iconOnly?: boolean;
-  /** 'default' = orange mark; 'white' = fully white for certain overlays */
-  variant?: 'default' | 'white';
+  color?: string;
+  className?: string;
 }
 
 /**
- * Figment Studio logo — inline SVG (transparent background, always visible on dark).
- * The mark is a stylised swoosh "F": two curved strokes forming an abstract F shape
- * in the brand orange (#F07A3A).
+ * Figment Studio — refined mark-only SVG.
+ * A geometric "F" constructed from two precise horizontal bars and a vertical stroke,
+ * all in the brand orange, designed for dark backgrounds.
  */
-const LogoMark: React.FC<{ color?: string; className?: string }> = ({
+const Logo: React.FC<LogoProps> = ({
+  size = 36,
+  showWordmark = false,
+  iconOnly = false,
   color = '#F07A3A',
-  className = 'w-10 h-10',
-}) => (
-  <svg
-    className={className}
-    viewBox="0 0 100 120"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    {/* Upper swoosh — top bar of the F */}
-    <path
-      d="M18 44 C22 32 40 24 62 27 C76 29 84 35 78 43 C72 51 54 49 36 55"
-      stroke={color}
-      strokeWidth="11"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="none"
-    />
-    {/* Lower swoosh — middle arm flowing into vertical stem */}
-    <path
-      d="M36 55 C44 52 54 51 60 55 C66 59 63 67 56 70 C44 74 24 76 20 96"
-      stroke={color}
-      strokeWidth="11"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="none"
-    />
-  </svg>
-);
-
-const Logo: React.FC<LogoProps> = ({ className = 'w-9 h-9', iconOnly = false, variant = 'default' }) => {
-  const markColor = variant === 'white' ? '#FFFFFF' : '#F07A3A';
-  const textColor = variant === 'white' ? '#FFFFFF' : '#F07A3A';
-
-  if (iconOnly) {
-    return <LogoMark color={markColor} className={className} />;
-  }
+  className = '',
+}) => {
+  const displayWordmark = showWordmark && !iconOnly;
 
   return (
-    <div className="flex items-center gap-3">
-      <LogoMark color={markColor} className={className} />
-      <div className="leading-none select-none">
-        <p
-          className="font-body font-semibold tracking-tight"
-          style={{ color: variant === 'white' ? '#fff' : '#F2EDE6', fontSize: '0.9rem', lineHeight: 1 }}
-        >
-          Figment
-        </p>
-        <p
-          className="font-body font-semibold uppercase"
-          style={{
-            color: textColor,
-            fontSize: '0.5rem',
-            letterSpacing: '0.22em',
-            marginTop: '3px',
-            lineHeight: 1,
-          }}
-        >
-          creative studio
-        </p>
-      </div>
+    <div className={`inline-flex items-center gap-3 flex-shrink-0 ${className}`}>
+      {/* Mark */}
+      <svg
+        viewBox="0 0 40 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-label="Figment Studio mark"
+        className="flex-shrink-0"
+        style={{ width: size, height: size }}
+      >
+        {/* Vertical stem */}
+        <rect x="8" y="6" width="4" height="28" fill={color} />
+        {/* Top bar */}
+        <rect x="8" y="6" width="22" height="4" fill={color} />
+        {/* Middle bar (shorter — classic F proportions) */}
+        <rect x="8" y="19" width="16" height="4" fill={color} />
+      </svg>
+
+      {displayWordmark && (
+        <div className="leading-none select-none text-left">
+          <p
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontSize: '0.85rem',
+              fontWeight: 500,
+              color: '#FFFFFF',
+              letterSpacing: '0.04em',
+              lineHeight: 1,
+            }}
+          >
+            Figment
+          </p>
+          <p
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontSize: '0.5rem',
+              fontWeight: 500,
+              color,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              marginTop: '4px',
+              lineHeight: 1,
+            }}
+          >
+            Studio
+          </p>
+        </div>
+      )}
     </div>
   );
 };

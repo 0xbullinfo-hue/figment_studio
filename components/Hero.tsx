@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { IMAGES } from '../constants.ts';
 
@@ -8,153 +7,97 @@ interface HeroProps {
   onOpenArcViz: () => void;
 }
 
-const STATS = [
-  { value: '200+', label: 'Projects Delivered' },
-  { value: '98%',  label: 'Client Satisfaction' },
-  { value: '4K+',  label: 'Render Resolution' },
-  { value: '10 yrs', label: 'Studio Experience' },
-];
-
 const Hero: React.FC<HeroProps> = ({ onOpenVision, onStartProject, onOpenArcViz }) => {
   return (
-    <section className="relative w-full overflow-hidden bg-background" id="hero">
-      <div className="px-6 md:px-10 lg:px-16 pt-6 pb-10">
+    <section className="relative w-full min-h-screen flex flex-col bg-background select-none" id="hero">
+      {/* Background image & overlay */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: `url("${IMAGES.hero}")`,
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-transparent lg:from-black/90 lg:via-black/75 lg:to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+      </div>
 
-        {/* Main hero card */}
-        <div
-          className="relative w-full rounded-3xl overflow-hidden border border-border-ui bg-cover bg-center"
-          style={{
-            backgroundImage: `url("${IMAGES.hero}")`,
-            minHeight: 'clamp(540px, 68vh, 820px)',
-          }}
-        >
-          {/* Deep dark overlay */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'linear-gradient(115deg, rgba(10,8,5,0.96) 0%, rgba(10,8,5,0.78) 42%, rgba(10,8,5,0.15) 100%)',
-            }}
-          />
-
-          {/* Subtle orange glow at top-left */}
-          <div
-            className="absolute -top-20 -left-20 w-[500px] h-[400px] opacity-30 pointer-events-none"
-            style={{
-              background: 'radial-gradient(ellipse, rgba(240,122,58,0.35) 0%, transparent 65%)',
-              filter: 'blur(50px)',
-            }}
-          />
-
-          {/* Content */}
-          <div className="relative z-10 h-full flex flex-col justify-between p-8 md:p-12 lg:p-16">
-
-            {/* Top badges */}
-            <div className="flex items-start justify-between">
-              <div
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-2xs font-semibold tracking-widest uppercase"
-                style={{
-                  background: 'rgba(255,255,255,0.06)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  color: 'rgba(242,237,230,0.7)',
-                }}
-              >
-                <span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ background: '#F07A3A', animation: 'pulse 3s ease-in-out infinite' }}
-                />
-                Abuja, Nigeria
-              </div>
-              <div
-                className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full text-2xs font-semibold tracking-wide"
-                style={{
-                  background: 'rgba(240,122,58,0.12)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(240,122,58,0.25)',
-                  color: '#F07A3A',
-                }}
-              >
-                <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
-                AI-Powered Visualization
-              </div>
-            </div>
-
-            {/* Headline block */}
-            <div className="max-w-3xl space-y-7 mt-auto">
-              <div className="space-y-4">
-                <p className="label-sm" style={{ color: 'rgba(240,122,58,0.8)', letterSpacing: '0.18em' }}>
-                  Premium Architectural Visualization
-                </p>
-                <h1
-                  className="font-display font-light text-white"
-                  style={{ fontSize: 'clamp(3rem, 7.5vw, 6rem)', lineHeight: 1.04 }}
-                >
-                  We Make<br />
-                  Blueprints{' '}
-                  <span className="gradient-text">Breathe.</span>
-                </h1>
-                <p className="text-base md:text-lg leading-relaxed font-light max-w-xl" style={{ color: 'rgba(242,237,230,0.58)' }}>
-                  Cinematic 3D renders, AI-guided scene planning, and private delivery workflows — built for discerning architects and developers.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <button onClick={onStartProject} id="hero-start-project" className="btn-primary">
-                  <span className="material-symbols-outlined text-[16px]">rocket_launch</span>
-                  Start a Project
-                </button>
-                <button
-                  onClick={onOpenArcViz}
-                  id="hero-arcviz"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200"
-                  style={{
-                    background: 'rgba(255,255,255,0.07)',
-                    backdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(255,255,255,0.12)',
-                    color: '#F2EDE6',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.12)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.07)')}
-                >
-                  <span className="material-symbols-outlined text-[16px]">camera</span>
-                  ArcViz AI
-                </button>
-                <button
-                  onClick={onOpenVision}
-                  id="hero-vision"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200"
-                  style={{
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    color: 'rgba(242,237,230,0.55)',
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)';
-                    e.currentTarget.style.color = '#F2EDE6';
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
-                    e.currentTarget.style.color = 'rgba(242,237,230,0.55)';
-                  }}
-                >
-                  <span className="material-symbols-outlined text-[16px]">auto_awesome</span>
-                  Vision AI
-                </button>
-              </div>
-            </div>
+      {/* Hero Content */}
+      <div className="relative z-10 flex-1 flex flex-col justify-between px-8 md:px-12 lg:px-16 pt-24 pb-16 min-h-[85vh]">
+        {/* Top line detail */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            <span className="text-[10px] tracking-[0.25em] uppercase text-text-secondary font-medium">Abuja, Nigeria</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase text-primary font-medium">
+            <span className="material-symbols-outlined text-[13px]">auto_awesome</span>
+            AI Scene Planning
           </div>
         </div>
 
-        {/* Stats bar */}
-        <div className="mt-5 grid grid-cols-2 md:grid-cols-4 gap-3">
-          {STATS.map((stat) => (
-            <div
-              key={stat.label}
-              className="card-base card-hover flex flex-col items-center justify-center py-5 px-4 text-center gap-1"
+        {/* Center Main Text block */}
+        <div className="max-w-4xl my-auto space-y-8 text-left">
+          <p className="text-primary text-[11px] tracking-[0.3em] uppercase font-bold">
+            Figment Studio Abuja
+          </p>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-light text-white tracking-tighter leading-[0.98]">
+            We Make<br />
+            Blueprints <span className="text-primary font-normal">Breathe.</span>
+          </h1>
+          <p className="text-text-secondary text-base md:text-lg font-light leading-relaxed max-w-2xl font-sans">
+            Cinematic 3D renders, AI-guided scene planning, and private delivery workflows. Designed for discerning architects and developers.
+          </p>
+          <div className="flex flex-wrap gap-4 pt-4">
+            <button 
+              onClick={onStartProject}
+              className="bg-primary hover:bg-primary-hover text-white text-xs font-bold uppercase tracking-[0.2em] px-8 py-4 rounded-lg transition-all duration-300 shadow-[0_4px_14px_rgba(240,122,58,0.3)] hover:translate-y-[-2px]"
             >
-              <span className="font-display text-2xl font-semibold text-primary">{stat.value}</span>
-              <span className="label-xs">{stat.label}</span>
-            </div>
-          ))}
+              Start Project
+            </button>
+            <button 
+              onClick={onOpenArcViz}
+              className="border border-white/20 hover:border-primary text-white hover:text-primary text-xs font-bold uppercase tracking-[0.2em] px-8 py-4 rounded-lg bg-black/40 backdrop-blur-md transition-all duration-300 hover:translate-y-[-2px]"
+            >
+              ArcViz AI
+            </button>
+          </div>
+        </div>
+
+        {/* Bottom Editorial Bar (Taran Inspired) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 pt-10 border-t border-white/10 mt-auto text-left">
+          <div className="space-y-1.5">
+            <h4 className="text-[10px] tracking-[0.2em] uppercase text-text-muted font-bold font-sans">Office Location</h4>
+            <p className="text-xs text-text-secondary leading-relaxed font-sans">Plot 442, Central Business District<br />Abuja, FCT, Nigeria</p>
+          </div>
+          <div className="space-y-1.5">
+            <h4 className="text-[10px] tracking-[0.2em] uppercase text-text-muted font-bold font-sans">Get In Touch</h4>
+            <p className="text-xs text-text-secondary leading-relaxed font-sans">
+              T. +234 813 900 0000<br />
+              E. <a href="mailto:hello@figment.co" className="hover:text-primary transition-colors">hello@figment.co</a>
+            </p>
+          </div>
+          <div className="space-y-1.5 flex items-center">
+            {/* Play Intro Video button */}
+            <button 
+              onClick={onOpenArcViz}
+              className="flex items-center gap-4 group focus:outline-none text-left"
+            >
+              <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white bg-black/40 group-hover:border-primary group-hover:bg-primary/20 transition-all duration-300">
+                <span className="material-symbols-outlined text-lg group-hover:scale-110 transition-transform">play_arrow</span>
+              </div>
+              <div>
+                <h4 className="text-[10px] tracking-[0.2em] uppercase text-white font-bold group-hover:text-primary transition-colors font-sans">Play Intro Film</h4>
+                <p className="text-[10px] text-text-muted font-sans font-medium">Look How We Work</p>
+              </div>
+            </button>
+          </div>
+          <div className="hidden lg:flex items-center justify-end">
+            {/* Scroll Down */}
+            <a href="#services" className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-text-muted hover:text-primary transition-colors">
+              <span>Scroll Down</span>
+              <span className="material-symbols-outlined animate-bounce">arrow_downward</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>

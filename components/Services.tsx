@@ -35,14 +35,14 @@ const Services: React.FC = () => {
       <div className="content-lg">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14">
-          <div className="space-y-4">
-            <p className="label-sm text-primary">Our Expertise</p>
-            <h2 className="display-md text-text-main">
+          <div className="space-y-4 text-left">
+            <p className="label-sm text-primary font-sans">Our Expertise</p>
+            <h2 className="text-3xl md:text-5xl font-display font-light text-white leading-tight">
               Tailored Visualization<br />
               <em className="italic font-light text-text-muted">for Every Scale</em>
             </h2>
           </div>
-          <p className="max-w-sm text-text-muted leading-relaxed text-sm">
+          <p className="max-w-sm text-text-secondary leading-relaxed text-sm font-sans text-left">
             We combine technical precision with artistic flair to produce results that captivate decision-makers and close deals.
           </p>
         </div>
@@ -52,7 +52,7 @@ const Services: React.FC = () => {
           {services.map((service, idx) => (
             <article
               key={service.id}
-              className="group accent-card p-7 space-y-5 card-hover cursor-default"
+              className="group card p-7 space-y-5 rounded-2xl cursor-default text-left"
             >
               {/* Number + icon */}
               <div className="flex items-start justify-between">
@@ -62,7 +62,6 @@ const Services: React.FC = () => {
                     background: 'rgba(240,122,58,0.12)',
                     color: '#F07A3A',
                   }}
-                  onMouseEnter={() => {}}
                 >
                   <span className="material-symbols-outlined text-[22px] group-hover:scale-110 transition-transform duration-300">
                     {service.icon}
@@ -74,13 +73,13 @@ const Services: React.FC = () => {
               </div>
 
               <div className="space-y-2.5">
-                <h3 className="text-sm font-semibold text-text-main font-body tracking-tight">
+                <h3 className="text-base font-semibold text-white font-sans tracking-wide">
                   {service.title}
                 </h3>
-                <p className="text-sm text-text-muted leading-relaxed">{service.description}</p>
+                <p className="text-sm text-text-secondary leading-relaxed font-sans">{service.description}</p>
               </div>
 
-              <div className="flex items-center gap-1.5 text-primary text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="flex items-center gap-1.5 text-primary text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-sans">
                 <span>Learn more</span>
                 <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
               </div>

@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
   return (
     <>
       <header
-        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+        className={`lg:hidden sticky top-0 z-50 w-full transition-all duration-300 ${
           scrolled
             ? 'bg-background/95 backdrop-blur-xl border-b border-border-ui shadow-[0_1px_0_rgba(255,255,255,0.03)]'
             : 'bg-transparent border-b border-transparent'
