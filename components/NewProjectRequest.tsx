@@ -1,5 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 interface ServiceCardProps {
   enabled: boolean;
@@ -146,6 +147,10 @@ const NewProjectRequest: React.FC<NewProjectRequestProps> = ({ onBack, onSubmit 
 
   return (
     <div className="bg-[#fcfaf8] text-[#1c140d] min-h-screen font-display flex flex-col">
+      <Helmet>
+        <title>New Project Briefing | Figment Studio</title>
+        <meta name="description" content="Settle your project scope, upload your drawings, and submit a new project request to the Figment Studio team." />
+      </Helmet>
       <header className="sticky top-0 z-50 w-full border-b border-[#e8dbce] bg-white/80 backdrop-blur-md shrink-0">
         <div className="max-w-[1400px] mx-auto px-10 h-16 flex items-center justify-between">
           <div className="flex items-center gap-6">

@@ -12,7 +12,7 @@ export const IMAGES = {
   },
 
   staff: [
-    { name: 'Tunde Okeowo', role: 'Managing Director', url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600' },
+    { name: 'Ikechukwu Onuegbu', role: 'Managing Director', url: '/ikechukwu-onuegbu.jpg' },
     { name: 'Amara Okafor', role: 'Lead 3D Artist', url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600' },
     { name: 'Ibrahim Bello', role: 'Arch Consultant', url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600' },
     { name: 'Fatima Yusuf', role: 'VR Developer', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600' },

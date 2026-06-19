@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStudioStore } from '../store';
 import BeforeAfterSlider from './BeforeAfterSlider';
@@ -14,6 +15,10 @@ const DeliveryPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white font-display">
+      <Helmet>
+        <title>{project.title} - Final Delivery Package | Figment Studio</title>
+        <meta name="description" content={`Download final high-fidelity assets, 8K rendering deliverables, and view legal releases for ${project.title}.`} />
+      </Helmet>
       <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-xl shrink-0">
         <div className="max-w-[1280px] mx-auto px-10 h-20 flex items-center justify-between">
           <div className="flex items-center gap-8">

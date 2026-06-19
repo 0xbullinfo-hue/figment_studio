@@ -6,6 +6,7 @@ import Footer from './components/Footer.tsx';
 import VisionAssistant from './components/VisionAssistant.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 import { useStudioStore } from './store.ts';
+import CustomCursor from './components/CustomCursor.tsx';
 
 /**
  * Scrolls to the top of the page on every route change.
@@ -103,7 +104,7 @@ const AppRoutes = () => {
     <>
       <Routes>
         <Route path="/" element={<Layout onOpenVision={() => setIsVisionAssistantOpen(true)} />}>
-          <Route index element={<LandingPage onOpenVision={() => setIsVisionAssistantOpen(true)} />} />
+          <Route index element={<LandingPage />} />
           <Route path="estimator" element={<Estimator onBack={() => navigate(-1)} onFinish={() => navigate('/success')} />} />
           <Route path="portfolio" element={<PortfolioGallery />} />
           <Route path="about" element={<AboutPage />} />
@@ -120,7 +121,7 @@ const AppRoutes = () => {
           <Route path="billing" element={<BillingManager onBack={() => navigate(-1)} onNavigate={(path, state) => navigate(path, state ? { state } : undefined)} />} />
           <Route path="payment" element={<PaymentPortal onBack={() => navigate(-1)} />} />
           <Route path="assets" element={<AssetManager onBack={() => navigate(-1)} onNavigate={(path) => navigate(path)} />} />
-          <Route path="support" element={<SupportCenter onBack={() => navigate(-1)} onNavigate={(path) => navigate(path)} />} />
+          <Route path="support" element={<SupportCenter onBack={() => navigate(-1)} />} />
           <Route path="profile" element={<ProfileSettings onBack={() => navigate(-1)} onNavigate={(path) => navigate(path)} />} />
           <Route path="new-project" element={<NewProjectRequest onBack={() => navigate(-1)} onSubmit={handleNewProjectSubmit} />} />
           <Route path="project/:id" element={<ProjectDetails />} />
@@ -146,6 +147,7 @@ const App: React.FC = () => {
       <HelmetProvider>
         <BrowserRouter>
           <ScrollToTop />
+          <CustomCursor />
           <AppRoutes />
         </BrowserRouter>
       </HelmetProvider>

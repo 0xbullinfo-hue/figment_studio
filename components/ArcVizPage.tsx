@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { VisionChat } from '../types.ts';
 import { streamArchitecturalAI } from '../services/geminiService.ts';
-import Logo from './Logo.tsx';
 import { useStudioStore } from '../store.ts';
 
 type BuilderTab = 'lighting' | 'camera' | 'motion' | 'context';

@@ -1,15 +1,18 @@
 
 import React from 'react';
-import { AppView } from '../types';
+import { Helmet } from 'react-helmet-async';
 
 interface SupportCenterProps {
   onBack: () => void;
-  onNavigate: (view: AppView) => void;
 }
 
-const SupportCenter: React.FC<SupportCenterProps> = ({ onBack, onNavigate }) => {
+const SupportCenter: React.FC<SupportCenterProps> = ({ onBack }) => {
   return (
     <div className="bg-[#f8f7f5] min-h-screen text-[#1c140d] font-body">
+      <Helmet>
+        <title>Client Support Hub | Figment Studio</title>
+        <meta name="description" content="Access Figment Studio's client support center. View active trouble tickets or search our architectural onboarding and delivery guides." />
+      </Helmet>
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#e9dace]">
         <div className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-6">

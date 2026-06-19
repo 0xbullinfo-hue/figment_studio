@@ -12,7 +12,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
-  const isHome = currentPath === '/';
   const { auth, logout } = useStudioStore();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);

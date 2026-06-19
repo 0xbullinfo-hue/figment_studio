@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 interface HeroProps {
-  onOpenVision: () => void;
   onStartProject: () => void;
   onOpenArcViz: () => void;
 }
@@ -37,7 +36,7 @@ const SLIDES = [
   },
 ];
 
-const Hero: React.FC<HeroProps> = ({ onOpenVision, onStartProject, onOpenArcViz }) => {
+const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenArcViz }) => {
   const [current, setCurrent] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
   const [progress, setProgress] = useState(0);

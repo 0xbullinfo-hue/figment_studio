@@ -1,9 +1,14 @@
 
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const FeedbackForm: React.FC<{ onFinish: () => void }> = ({ onFinish }) => {
   return (
     <div className="bg-white py-20 px-6 max-w-3xl mx-auto">
+      <Helmet>
+        <title>Client Feedback | Figment Studio</title>
+        <meta name="description" content="Share your experience working with Figment Studio. Your feedback helps us shape future architectural visual experiences." />
+      </Helmet>
       <div className="text-center mb-16 space-y-4">
         <h1 className="text-4xl font-black tracking-tighter uppercase">Your Feedback Matters</h1>
         <p className="text-gray-500 text-lg">Thank you for choosing Figment Studio. Your insights help us refine our craft.</p>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Marker } from '../types';
 import { useStudioStore } from '../store';
@@ -54,6 +55,10 @@ const MarkupTool: React.FC = () => {
 
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden font-display text-left">
+      <Helmet>
+        <title>Design Feedback Canvas | Figment Studio</title>
+        <meta name="description" content="Collaborate on architectural designs using Figment Studio's interactive markup canvas. Place revision pins and specify change requests directly on high-resolution renders." />
+      </Helmet>
       <header className="flex items-center justify-between border-b border-gray-100 px-6 py-3 bg-white z-50">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(`/project/${project.id}`)} className="p-2 hover:bg-gray-100 rounded-lg flex items-center gap-2 group">

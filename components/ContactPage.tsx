@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const faqs = [
   { q: "What is the typical timeline for a project?", a: "Typical timelines range from 2 to 4 weeks depending on the complexity of the design and lighting iterations required." },
@@ -13,6 +14,10 @@ const ContactPage: React.FC = () => {
 
   return (
     <div className="bg-white">
+      <Helmet>
+        <title>Contact Our Abuja Office | Figment Studio</title>
+        <meta name="description" content="Get in touch with Figment Studio in Central Business District, Abuja. Submit your design brief, ask about timelines, or inquire about cinematic 3D walkthroughs." />
+      </Helmet>
       <div className="flex flex-col lg:flex-row w-full border-b border-gray-100">
         <section className="w-full lg:w-1/2 p-10 md:p-20 flex flex-col justify-center border-r border-gray-100">
           <div className="max-w-[520px] mx-auto w-full">

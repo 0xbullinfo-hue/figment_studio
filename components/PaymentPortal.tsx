@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import Logo from './Logo.tsx';
 
@@ -129,6 +130,10 @@ const PaymentPortal: React.FC<PaymentPortalProps> = ({ onBack }) => {
 
   return (
     <div className="bg-background text-text-main min-h-screen font-body text-left">
+      <Helmet>
+        <title>Secure Payment Portal | Figment Studio</title>
+        <meta name="description" content="Securely settle your Figment Studio invoice via Paystack or Flutterwave." />
+      </Helmet>
       <header className="border-b border-border-ui bg-surface/95 backdrop-blur-md px-10 h-16 sticky top-0 z-50 flex items-center justify-between">
         <button onClick={onBack} className="flex items-center gap-2 group">
           <span className="material-symbols-outlined text-primary group-hover:translate-x-[-2px] transition-transform">arrow_back</span>

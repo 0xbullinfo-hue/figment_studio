@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStudioStore } from '../store';
 
@@ -32,6 +33,10 @@ const ProjectDetails: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-white overflow-hidden font-display text-left">
+      <Helmet>
+        <title>{project.title} - Project Intelligence | Figment Studio</title>
+        <meta name="description" content={`Monitor milestones, view interactive 360 previews, and manage revisions for ${project.title} directly in the Figment Studio portal.`} />
+      </Helmet>
       <aside className="w-64 bg-slate-50 border-r border-gray-200 flex flex-col justify-between p-8 shrink-0">
         <div className="space-y-12">
           <div className="space-y-2">

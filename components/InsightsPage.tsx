@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const InsightCard: React.FC<{ title: string; date: string; category: string; img: string }> = ({ title, date, category, img }) => (
   <div className="group cursor-pointer space-y-6">
@@ -20,6 +21,10 @@ const InsightCard: React.FC<{ title: string; date: string; category: string; img
 const InsightsPage: React.FC = () => {
   return (
     <div className="bg-white py-20 px-6 lg:px-40">
+      <Helmet>
+        <title>Insights & News | Figment Studio</title>
+        <meta name="description" content="Read industry insights, trends, and technology updates on architectural visualization, 3D printing, and design in West Africa from Figment Studio." />
+      </Helmet>
       <div className="max-w-7xl mx-auto space-y-20">
         <div className="max-w-2xl">
           <h1 className="text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.9] mb-8">News & <br /><span className="text-primary italic">Insights</span></h1>

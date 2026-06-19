@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { AppView } from '../types';
 import { useStudioStore } from '../store.ts';
 
@@ -63,6 +64,10 @@ const AssetManager: React.FC<AssetManagerProps> = ({ onBack, onNavigate }) => {
 
   return (
     <div className="bg-[#fcfcfc] text-[#1c140d] antialiased min-h-screen font-body">
+      <Helmet>
+        <title>Asset Manager | Figment Studio</title>
+        <meta name="description" content="Securely access, search, and download your project models, blueprints, and high-resolution visual assets from Figment Studio." />
+      </Helmet>
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 px-6 py-4">
         <div className="max-w-[1600px] mx-auto flex items-center justify-between gap-8">
           <div className="flex items-center gap-8">

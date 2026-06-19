@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { useStudioStore } from '../store';
 import Logo from './Logo.tsx';
@@ -37,6 +38,10 @@ const ClientDashboard: React.FC<DashboardProps> = ({ onOpenVision }) => {
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-display text-left relative">
+      <Helmet>
+        <title>Client Dashboard | Figment Studio</title>
+        <meta name="description" content="Access your private project pipeline, review design deliverables, and communicate directly with the Figment Studio team." />
+      </Helmet>
       <aside className="hidden md:flex w-64 bg-white border-r border-[#e8dbce] flex-col justify-between p-8 shrink-0">
         <div className="space-y-12">
           <button onClick={() => navigate('/')} className="hover:opacity-80 transition-opacity focus:outline-none">

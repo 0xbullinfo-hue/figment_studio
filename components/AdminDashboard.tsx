@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import Logo from './Logo.tsx';
-import { Project, ProjectProposal, PortfolioItem } from '../types.ts';
+import { Project, ProjectProposal } from '../types.ts';
 import { useStudioStore } from '../store';
 
 interface ChatMessage {
@@ -380,6 +381,10 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-[#0c0c0c] font-display text-left overflow-hidden">
+      <Helmet>
+        <title>Studio Control | Figment Studio</title>
+        <meta name="description" content="Figment Studio internal administration and client pipeline controller." />
+      </Helmet>
       <aside className="w-80 bg-zinc-950 border-r border-zinc-900 p-10 flex flex-col justify-between shrink-0">
         <div className="space-y-16">
           <Logo size={36} showWordmark showTagline />

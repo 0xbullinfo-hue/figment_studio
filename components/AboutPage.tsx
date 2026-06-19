@@ -1,10 +1,15 @@
 
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { IMAGES } from '../constants.ts';
 
 const AboutPage: React.FC = () => {
   return (
     <div className="bg-white">
+      <Helmet>
+        <title>About Our Studio | Figment Studio</title>
+        <meta name="description" content="Discover Figment Studio, Abuja's premier architectural visualization firm. We combine design precision, cinematic animation, and local inspiration to tell architectural stories globally." />
+      </Helmet>
       <section className="px-6 lg:px-20 py-20 bg-gray-50 overflow-hidden relative">
         <div className="absolute inset-0 abuja-map-overlay opacity-[0.03]"></div>
         <div className="max-w-[1200px] mx-auto relative z-10">

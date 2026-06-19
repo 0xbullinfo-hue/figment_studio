@@ -1,7 +1,12 @@
 
 import React, { useState, useMemo } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { IMAGES } from '../constants.ts';
 import { useStudioStore } from '../store.ts';
+
+// ... (remaining of the service card file above)
+// I will import Helmet at top.
+// Then inside return on line 199:
 
 interface ServiceCardProps {
   enabled: boolean;
@@ -197,6 +202,10 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
 
   return (
     <div className="bg-white min-h-screen font-display text-left pb-60">
+      <Helmet>
+        <title>Instant Quote Estimator | Figment Studio</title>
+        <meta name="description" content="Calculate your architectural rendering, cinematic 3D animation, or scale model project cost instantly with Figment Studio's transparent pricing tool." />
+      </Helmet>
       <main className="mx-auto max-w-[1200px] px-6 py-12">
         <div className="mb-12 flex flex-col gap-4 text-left">
           <button onClick={onBack} className="flex items-center gap-2 text-primary font-bold text-sm mb-4 hover:translate-x-[-4px] transition-all w-fit">

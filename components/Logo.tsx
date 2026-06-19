@@ -40,14 +40,9 @@ interface LogoProps {
  */
 const Logo: React.FC<LogoProps> = ({
   size = 36,
-  showWordmark = false,
-  showTagline = false,
-  iconOnly = false,
   className = '',
   textColor = '#FFFFFF',
 }) => {
-  const displayWordmark = showWordmark && !iconOnly;
-  const displayTagline  = displayWordmark && showTagline;
 
   const isDarkText = textColor !== '#FFFFFF' && textColor !== 'white' && !textColor.startsWith('rgba(255');
   const imgFilter = isDarkText ? 'brightness(0)' : 'none';

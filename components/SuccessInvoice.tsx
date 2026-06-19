@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 interface SuccessInvoiceProps {
@@ -27,6 +28,10 @@ const SuccessInvoice: React.FC<SuccessInvoiceProps> = ({ onBack, onGoHome }) => 
 
   return (
     <div className="min-h-screen bg-gray-50 py-16 px-6 font-display text-left">
+      <Helmet>
+        <title>Invoice Generated Successfully | Figment Studio</title>
+        <meta name="description" content="Your project quote has been successfully generated. Follow the Stanbic bank transfer instructions to lock in your production timeline." />
+      </Helmet>
       <div className="max-w-4xl mx-auto space-y-12">
         <div className="text-center space-y-6">
           <div className="inline-flex items-center justify-center size-20 rounded-full bg-primary/10 text-primary ring-8 ring-primary/5">

@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import Logo from './Logo.tsx';
 import { useStudioStore } from '../store.ts';
 
@@ -50,6 +51,10 @@ const BillingManager: React.FC<BillingManagerProps> = ({ onBack, onNavigate }) =
 
   return (
     <div className="bg-[#fcfaf8] text-[#1c140d] min-h-screen font-display text-left">
+      <Helmet>
+        <title>Billing & Invoices | Figment Studio</title>
+        <meta name="description" content="Manage your Figment Studio project billing, download invoices, or submit proof of payment." />
+      </Helmet>
       <header className="border-b border-[#e8dbce] bg-white px-10 h-16 sticky top-0 z-50 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <button onClick={onBack} className="flex items-center gap-2 group">

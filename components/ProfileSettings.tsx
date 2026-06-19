@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { AppView } from '../types.ts';
 import Logo from './Logo.tsx';
 
@@ -11,6 +12,10 @@ interface ProfileSettingsProps {
 const ProfileSettings: React.FC<ProfileSettingsProps> = ({ onBack, onNavigate }) => {
   return (
     <div className="bg-[#fcfaf8] min-h-screen font-display text-left">
+      <Helmet>
+        <title>Account Settings | Figment Studio</title>
+        <meta name="description" content="Update your personal details, company name, work email, or manage your security options at Figment Studio." />
+      </Helmet>
       <header className="sticky top-0 z-50 w-full border-b border-[#e9dace] bg-white px-6 h-16 flex items-center justify-between">
         <Logo size={28} iconOnly />
         <nav className="flex items-center gap-8">

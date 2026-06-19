@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { PortfolioItem } from '../types.ts';
 import { useStudioStore } from '../store';
@@ -29,6 +30,10 @@ const PortfolioGallery: React.FC = () => {
 
   return (
     <section className="max-w-[1600px] mx-auto px-8 lg:px-16 py-20 bg-white min-h-screen">
+      <Helmet>
+        <title>Portfolio | Figment Studio</title>
+        <meta name="description" content="Browse Figment Studio's curated collection of premium 3D renderings, cinematic animations, and interior visualizations for real estate in Abuja and beyond." />
+      </Helmet>
       <div className="flex flex-col gap-6 mb-20 text-left">
         <div className="max-w-3xl">
           <h1 className="text-5xl lg:text-6xl font-bold tracking-tight uppercase leading-[0.9] mb-8">Selected<br />Works</h1>

@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
 import Logo from './Logo.tsx';
 import { useStudioStore } from '../store.ts';
@@ -43,6 +44,10 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
   if (isRegister) {
     return (
       <div className="min-h-screen bg-background text-text-main font-body">
+        <Helmet>
+          <title>Join the Studio | Figment Studio</title>
+          <meta name="description" content="Create a private account at Figment Studio to collaborate, receive custom quotes, and review architectural deliverables." />
+        </Helmet>
         {/* Header */}
         <header
           className="flex items-center justify-between px-10 py-5 sticky top-0 z-50"
@@ -152,6 +157,10 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
       className="min-h-screen flex items-center justify-center p-6 font-body"
       style={{ background: '#0A0805' }}
     >
+      <Helmet>
+        <title>Studio Portal Login | Figment Studio</title>
+        <meta name="description" content="Access your private client dashboard or administrative controls at Figment Studio." />
+      </Helmet>
       {/* Background glow */}
       <div
         className="absolute inset-0 pointer-events-none"

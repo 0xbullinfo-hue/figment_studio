@@ -6,12 +6,8 @@ import Portfolio from './Portfolio';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
-interface LandingPageProps {
-  onOpenVision: () => void;
-}
-
 const TEAM = [
-  { name: 'Tunde Okeowo', role: 'Managing Director', specialty: 'Architectural Vision & Strategy', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop' },
+  { name: 'Ikechukwu Onuegbu', role: 'Managing Director', specialty: 'Architectural Vision & Strategy', img: '/ikechukwu-onuegbu.jpg' },
   { name: 'Amara Okafor', role: 'Lead 3D Artist', specialty: 'Photorealistic Rendering & Lighting', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600&auto=format&fit=crop' },
   { name: 'Ibrahim Bello', role: 'Arch. Consultant', specialty: 'Structural Design & Planning', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop' },
   { name: 'Fatima Yusuf', role: 'VR Developer', specialty: 'Immersive Experience & XR', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop' },
@@ -113,7 +109,7 @@ const SectionHeading: React.FC<{ children: React.ReactNode; dim?: string }> = ({
   </h2>
 );
 
-const LandingPage: React.FC<LandingPageProps> = ({ onOpenVision }) => {
+const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -139,7 +135,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onOpenVision }) => {
       </Helmet>
 
       <Hero
-        onOpenVision={onOpenVision}
         onStartProject={() => navigate('/estimator')}
         onOpenArcViz={() => navigate('/arcviz')}
       />
