@@ -95,7 +95,7 @@ const VIDEO_DURATIONS = ['8s', '10s', '15s', '20s', '30s'];
 const CONTEXT_STYLES = ['Minimal', 'Urban Premium', 'Tropical Landscape', 'Studio Background'];
 const WEATHER_STYLES = ['Keep Original', 'Clear', 'Overcast', 'After Rain', 'Harmattan Haze'];
 const ROOMS = ['Living Room', 'Bedroom', 'Kitchen', 'Office', 'Exterior Facade', 'Landscape'];
-const TRIAL_RENDER_LIMIT = 4;
+const TRIAL_RENDER_LIMIT = 5;
 
 const ArcVizPage: React.FC = () => {
   const navigate = useNavigate();
@@ -171,6 +171,21 @@ const ArcVizPage: React.FC = () => {
       consoleScrollRef.current.scrollTop = consoleScrollRef.current.scrollHeight;
     }
   }, [renderLogs, renderProgress]);
+
+  // Scroll window to top when step transitions (e.g. setup to workspace)
+  useEffect(() => {
+    const htmlEl = document.documentElement;
+    const originalStyle = htmlEl.style.scrollBehavior;
+    htmlEl.style.scrollBehavior = 'auto';
+    window.scrollTo(0, 0);
+    const timer = setTimeout(() => {
+      htmlEl.style.scrollBehavior = originalStyle;
+    }, 50);
+    return () => {
+      clearTimeout(timer);
+      htmlEl.style.scrollBehavior = originalStyle;
+    };
+  }, [step]);
 
   const updateGuidedPrompt = <K extends keyof GuidedPromptState>(key: K, value: GuidedPromptState[K]) => {
     setGuidedPrompt((prev) => ({ ...prev, [key]: value }));
@@ -378,7 +393,7 @@ const ArcVizPage: React.FC = () => {
                 <span className="material-symbols-outlined mt-0.5">info</span>
                 <div>
                   <strong className="uppercase block mb-1">Trial Mode Active</strong>
-                  Receive up to 4 renders with core parameters. Upgrade to a studio account to unlock continuous video walk cycles, environment context styling, and high-precision API rendering.
+                  Receive up to {TRIAL_RENDER_LIMIT} renders with core parameters. Upgrade to a studio account to unlock continuous video walk cycles, environment context styling, and high-precision API rendering.
                 </div>
               </div>
             )}
@@ -471,7 +486,17 @@ const ArcVizPage: React.FC = () => {
                 Back
               </button>
               <button
-                onClick={() => setStep('workspace')}
+                onClick={() => {
+                  const htmlEl = document.documentElement;
+                  const originalStyle = htmlEl.style.scrollBehavior;
+                  htmlEl.style.scrollBehavior = 'auto';
+                  window.scrollTo(0, 0);
+                  setStep('workspace');
+                  // Restore scroll behavior after transition
+                  setTimeout(() => {
+                    htmlEl.style.scrollBehavior = originalStyle;
+                  }, 50);
+                }}
                 disabled={!isSetupComplete || trialExceeded}
                 className="rounded-lg bg-primary hover:bg-primary-hover px-8 py-2.5 text-[10px] font-bold uppercase tracking-widest text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all font-sans shadow-lg shadow-primary/10"
               >
@@ -628,7 +653,16 @@ const ArcVizPage: React.FC = () => {
                     </button>
                   )}
                   <button
-                    onClick={() => setStep('setup')}
+                    onClick={() => {
+                      const htmlEl = document.documentElement;
+                      const originalStyle = htmlEl.style.scrollBehavior;
+                      htmlEl.style.scrollBehavior = 'auto';
+                      window.scrollTo(0, 0);
+                      setStep('setup');
+                      setTimeout(() => {
+                        htmlEl.style.scrollBehavior = originalStyle;
+                      }, 50);
+                    }}
                     className="w-full rounded-xl border border-border-ui py-3 text-[10px] font-bold uppercase tracking-widest text-text-muted hover:border-white/30 hover:text-white transition-all font-sans bg-background-alt"
                   >
                     Back To Setup
