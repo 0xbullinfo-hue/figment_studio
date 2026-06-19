@@ -17,101 +17,105 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location.pathname]);
+  useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
   const navItems = [
     { label: 'About', path: '/about' },
-    { label: 'Portfolio', path: '/portfolio' },
-    { label: 'ArcViz AI', path: '/arcviz', live: true },
-    { label: 'Pricing', path: '/estimator' },
+    { label: 'Services', path: '/arcviz' },
+    { label: 'Works', path: '/portfolio' },
+    { label: 'Estimates', path: '/estimator' },
     { label: 'Contact', path: '/contact' },
   ];
 
-  const isActive = (path: string) => currentPath === path;
+  const isActive = (path: string) => currentPath === path || (path !== '/' && currentPath.startsWith(path));
 
   return (
     <>
       <header
-        className={`lg:hidden sticky top-0 z-50 w-full transition-all duration-300 ${
+        className={`sticky top-0 z-50 w-full transition-all duration-500 ${
           scrolled
-            ? 'bg-background/95 backdrop-blur-xl border-b border-border-ui shadow-[0_1px_0_rgba(255,255,255,0.03)]'
+            ? 'bg-[#0E0E0E]/96 backdrop-blur-xl border-b border-white/[0.05] shadow-[0_1px_24px_rgba(0,0,0,0.6)]'
             : 'bg-transparent border-b border-transparent'
         }`}
       >
-        <div className="content-max px-6 md:px-10 lg:px-16 flex items-center justify-between h-[68px]">
+        <div className="flex items-center justify-between h-[72px] px-6 md:px-10 lg:px-16 max-w-[1600px] mx-auto">
 
           {/* Logo */}
           <button
             onClick={() => navigate('/')}
-            className="flex-shrink-0 group"
+            className="flex-shrink-0 group focus:outline-none"
             aria-label="Figment Studio Home"
           >
-            <Logo className="w-8 h-8" />
+            <Logo showWordmark size={32} color="#F07A3A" />
           </button>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navItems.map((item) => (
-              <button
-                key={item.path}
-                onClick={() => navigate(item.path)}
-                className={`relative px-3.5 py-2 rounded-lg text-[13.5px] font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                  isActive(item.path)
-                    ? 'text-primary bg-primary-light'
-                    : 'text-text-muted hover:text-text-main hover:bg-surface'
-                }`}
-              >
-                {item.label}
-                {item.live && (
-                  <span className="flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-1.5 w-1.5 rounded-full bg-primary opacity-60" />
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
-                  </span>
-                )}
-              </button>
-            ))}
-
+          {/* Center Nav – desktop */}
+          <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
+            {navItems.map((item) => {
+              const active = isActive(item.path);
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => navigate(item.path)}
+                  className={`relative flex items-center gap-2 px-4 py-2 text-[12px] tracking-[0.16em] uppercase font-medium transition-all duration-300 focus:outline-none ${
+                    active ? 'text-white' : 'text-text-muted hover:text-text-secondary'
+                  }`}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  {item.label}
+                  {/* Active dot indicator (Minnaro style) */}
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
+                      active ? 'bg-primary scale-100 opacity-100' : 'bg-transparent scale-0 opacity-0'
+                    }`}
+                  />
+                </button>
+              );
+            })}
             <button
               onClick={onOpenVision}
-              className="px-3.5 py-2 rounded-lg text-[13.5px] font-medium text-text-muted hover:text-primary hover:bg-primary-light transition-all duration-200 flex items-center gap-1.5"
+              className="relative flex items-center gap-2 px-4 py-2 text-[12px] tracking-[0.16em] uppercase font-medium text-text-muted hover:text-primary transition-all duration-300 focus:outline-none"
             >
-              <span className="material-symbols-outlined text-[15px]">auto_awesome</span>
+              <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
               Vision AI
             </button>
           </nav>
 
-          {/* CTA */}
-          <div className="hidden lg:flex items-center gap-2">
-            <div className="h-4 w-px bg-border-ui mx-1" />
+          {/* Right CTA – desktop */}
+          <div className="hidden lg:flex items-center gap-3">
             {auth.isAuthenticated ? (
               <>
                 <button
                   onClick={() => navigate(auth.role === 'admin' ? '/admin' : '/dashboard')}
-                  className="btn-ghost text-[13px]"
+                  className="text-[11px] tracking-[0.2em] uppercase text-text-muted hover:text-text-secondary transition-colors font-medium flex items-center gap-1.5"
                 >
-                  <span className="material-symbols-outlined text-[15px]">dashboard</span>
+                  <span className="material-symbols-outlined text-[14px]">dashboard</span>
                   Dashboard
                 </button>
                 <button
                   onClick={() => { logout(); navigate('/'); }}
-                  className="btn-secondary text-[13px] py-2 px-4"
+                  className="text-[11px] tracking-[0.2em] uppercase border border-border-ui hover:border-primary/40 text-text-muted hover:text-primary transition-all px-4 py-2 font-medium"
                 >
                   Sign Out
                 </button>
               </>
             ) : (
               <>
-                <button onClick={() => navigate('/auth')} className="btn-ghost text-[13px]">
-                  Sign In
+                <button
+                  onClick={() => navigate('/auth')}
+                  className="text-[11px] tracking-[0.2em] uppercase text-text-muted hover:text-text-secondary transition-colors font-medium"
+                >
+                  Client Portal
                 </button>
-                <button onClick={() => navigate('/estimator')} className="btn-primary text-[13px] py-2.5 px-5">
+                <button
+                  onClick={() => navigate('/estimator')}
+                  className="text-[11px] tracking-[0.2em] uppercase bg-primary hover:bg-primary-hover text-white px-5 py-2.5 font-semibold transition-all duration-300 hover:shadow-[0_4px_14px_rgba(240,122,58,0.3)]"
+                >
                   Get Estimate
                 </button>
               </>
@@ -120,11 +124,11 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
 
           {/* Mobile toggle */}
           <button
-            className="lg:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-surface transition-colors"
+            className="lg:hidden flex items-center justify-center w-9 h-9 text-text-muted hover:text-white transition-colors focus:outline-none"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           >
-            <span className="material-symbols-outlined text-[22px] text-text-muted">
+            <span className="material-symbols-outlined text-[22px]">
               {mobileOpen ? 'close' : 'menu'}
             </span>
           </button>
@@ -133,41 +137,47 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 flex flex-col pt-[68px]">
+        <div className="lg:hidden fixed inset-0 z-40 pt-[72px]">
           <div
-            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="relative bg-surface border-b border-border-ui shadow-popup p-5 space-y-1">
-            {navItems.map((item) => (
-              <button
-                key={item.path}
-                onClick={() => navigate(item.path)}
-                className={`w-full text-left px-4 py-3.5 rounded-xl text-[15px] font-medium transition-all duration-200 ${
-                  isActive(item.path)
-                    ? 'text-primary bg-primary-light'
-                    : 'text-text-secondary hover:text-text-main hover:bg-surface-alt'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
+          <div className="relative bg-[#0E0E0E] border-b border-border-ui shadow-2xl p-6 space-y-1">
+            {navItems.map((item) => {
+              const active = isActive(item.path);
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => navigate(item.path)}
+                  className={`w-full text-left flex items-center justify-between px-3 py-3.5 text-[12px] tracking-[0.2em] uppercase font-medium transition-all duration-200 border-b border-border-ui last:border-none ${
+                    active ? 'text-primary' : 'text-text-muted hover:text-white'
+                  }`}
+                >
+                  {item.label}
+                  {active && <span className="w-1.5 h-1.5 rounded-full bg-primary" />}
+                </button>
+              );
+            })}
             <button
               onClick={() => { onOpenVision(); setMobileOpen(false); }}
-              className="w-full text-left px-4 py-3.5 rounded-xl text-[15px] font-medium text-primary hover:bg-primary-light transition-all flex items-center gap-2"
+              className="w-full text-left flex items-center gap-2 px-3 py-3.5 text-[12px] tracking-[0.2em] uppercase font-medium text-primary"
             >
-              <span className="material-symbols-outlined text-[17px]">auto_awesome</span>
+              <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
               Vision AI
             </button>
-            <div className="pt-3 mt-2 border-t border-border-ui space-y-2">
+            <div className="pt-4 mt-2 space-y-2.5">
               {auth.isAuthenticated ? (
-                <button onClick={() => navigate(auth.role === 'admin' ? '/admin' : '/dashboard')} className="btn-primary w-full">
+                <button onClick={() => navigate(auth.role === 'admin' ? '/admin' : '/dashboard')} className="w-full bg-primary text-white text-[11px] tracking-[0.2em] uppercase font-semibold py-3">
                   Dashboard
                 </button>
               ) : (
                 <>
-                  <button onClick={() => navigate('/auth')} className="btn-secondary w-full">Sign In</button>
-                  <button onClick={() => navigate('/estimator')} className="btn-primary w-full">Get Estimate</button>
+                  <button onClick={() => navigate('/auth')} className="w-full border border-border-ui text-text-secondary text-[11px] tracking-[0.2em] uppercase font-semibold py-3">
+                    Client Portal
+                  </button>
+                  <button onClick={() => navigate('/estimator')} className="w-full bg-primary text-white text-[11px] tracking-[0.2em] uppercase font-semibold py-3">
+                    Get Estimate
+                  </button>
                 </>
               )}
             </div>

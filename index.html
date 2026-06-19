@@ -50,6 +50,7 @@
             "surface-alt":     "#262626",
             "border-ui":       "rgba(255,255,255,0.06)",
             "border-strong":   "rgba(255,255,255,0.14)",
+            "border-accent":   "rgba(240,122,58,0.22)",
             "primary":         "#F07A3A",
             "primary-light":   "rgba(240,122,58,0.12)",
             "primary-hover":   "#FF8B4A",
@@ -362,6 +363,119 @@
       .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl {
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45) !important;
       }
+
+      /* ── Legacy utility aliases (used by inner pages) ── */
+      .hover-underline {
+        position: relative;
+      }
+      .hover-underline::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255,255,255,0.28);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.25s ease;
+      }
+      .hover-underline:hover::after { transform: scaleX(1); }
+
+      /* Blank override so Studio doesn't error */
+      .abuja-map-overlay { display: none; }
+
+      /* ── Buttons (inner pages / Estimator / Contact) ── */
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.75rem;
+        background: #F07A3A;
+        color: #fff;
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        border: none;
+        transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+        cursor: pointer;
+      }
+      .btn-primary:hover { background: #FF8B4A; box-shadow: 0 4px 14px rgba(240,122,58,0.3); transform: translateY(-1px); }
+
+      .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.75rem;
+        background: transparent;
+        color: rgba(255,255,255,0.65);
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        border: 1px solid rgba(255,255,255,0.15);
+        transition: border-color 0.25s ease, color 0.25s ease;
+        cursor: pointer;
+      }
+      .btn-secondary:hover { border-color: rgba(255,255,255,0.35); color: rgba(255,255,255,0.9); }
+
+      .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: transparent;
+        color: rgba(255,255,255,0.5);
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        border: none;
+        transition: color 0.2s ease;
+        cursor: pointer;
+      }
+      .btn-ghost:hover { color: rgba(255,255,255,0.9); }
+
+      /* ── Layout aliases (Estimator, About, Contact pages) ── */
+      .content-max  { max-width: 1600px; margin: 0 auto; }
+      .content-lg   { max-width: 1200px; margin: 0 auto; }
+      .content-md   { max-width: 860px;  margin: 0 auto; }
+      .section-pad     { padding: 6rem 5rem; }
+      .section-pad-sm  { padding: 4rem 5rem; }
+      @media(max-width:1024px) { .section-pad { padding: 5rem 2.5rem; } .section-pad-sm { padding: 3.5rem 2.5rem; } }
+      @media(max-width:640px)  { .section-pad { padding: 4rem 1.5rem; } .section-pad-sm { padding: 3rem 1.5rem; } }
+
+      /* ── Label helpers ── */
+      .label-sm {
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.28em;
+      }
+      .label-xs {
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.6rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.22em;
+      }
+      .display-md {
+        font-family: 'Tenor Sans', sans-serif;
+        font-weight: 300;
+        font-size: clamp(2rem, 4.5vw, 3.5rem);
+        line-height: 1.06;
+        letter-spacing: -0.02em;
+        color: #FFFFFF;
+      }
+      .font-body { font-family: 'Outfit', sans-serif; }
+      .text-2xs { font-size: 0.6rem; }
     }
   </style>
 </head>

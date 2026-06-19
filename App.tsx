@@ -39,22 +39,14 @@ const AppOutlet = () => (
   </div>
 );
 
-import Sidebar from './components/Sidebar.tsx';
-
 const Layout = ({ onOpenVision }: { onOpenVision: () => void }) => {
   return (
-    <div className="relative flex min-h-screen flex-row overflow-x-hidden bg-background">
-      {/* Desktop Sidebar Nav */}
-      <Sidebar onOpenVision={onOpenVision} />
-
-      {/* Main Column */}
-      <div className="flex-1 flex flex-col min-h-screen lg:pl-64">
-        <Header onOpenVision={onOpenVision} />
-        <main className="flex-1 flex flex-col">
-          <AppOutlet />
-        </main>
-        <Footer />
-      </div>
+    <div className="relative flex flex-col min-h-screen overflow-x-hidden bg-background">
+      <Header onOpenVision={onOpenVision} />
+      <main className="flex-1 flex flex-col">
+        <AppOutlet />
+      </main>
+      <Footer />
     </div>
   );
 };

@@ -1,90 +1,176 @@
 
-import React from 'react';
-import { Service } from '../types';
+import React, { useState } from 'react';
 
-const services: Service[] = [
+const SERVICES = [
   {
-    id: '1',
-    title: '3D Rendering',
-    description: 'High-fidelity photo-real stills at 4K+ resolution for marketing campaigns, investor decks, and stakeholder presentations.',
-    icon: 'deployed_code',
+    id: '01',
+    title: '3D Architectural Rendering',
+    short: '3D Rendering',
+    description: 'High-fidelity photo-real stills at 4K+ resolution for marketing campaigns, investor decks, and stakeholder presentations. Every pixel tuned for maximum impact.',
+    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1200&auto=format&fit=crop',
+    tags: ['Still Image', '4K+', 'Marketing'],
   },
   {
-    id: '2',
+    id: '02',
     title: 'Cinematic Animation',
-    description: 'Immersive architectural walkthroughs and fly-through films with cinematic lighting, camera choreography, and sound design.',
-    icon: 'videocam',
+    short: 'Animation',
+    description: 'Immersive architectural walkthroughs and fly-through films with cinematic lighting, camera choreography, and spatial audio design.',
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop',
+    tags: ['Film', 'Fly-Through', 'Sound'],
   },
   {
-    id: '3',
-    title: 'Interior Design',
-    description: 'Detailed interior styling and spatial planning rendered with tactile material accuracy and mood-specific lighting.',
-    icon: 'layers',
+    id: '03',
+    title: 'Interior Design Visualization',
+    short: 'Interiors',
+    description: 'Detailed interior styling and spatial planning rendered with tactile material accuracy, mood-specific lighting, and furniture placement precision.',
+    image: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1200&auto=format&fit=crop',
+    tags: ['Materials', 'Lighting', 'Spatial'],
   },
   {
-    id: '4',
-    title: '3D Printing',
-    description: 'Physical scale models with micro-detail precision — ideal for urban master-planning and property launch events.',
-    icon: 'print',
+    id: '04',
+    title: '3D Scale Models & Printing',
+    short: 'Scale Models',
+    description: 'Physical scale models with micro-detail precision — ideal for urban master-planning, property launch events, and client showrooms.',
+    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop',
+    tags: ['Physical', 'Master-Planning', 'Events'],
   },
 ];
 
 const Services: React.FC = () => {
+  const [active, setActive] = useState(0);
+  const svc = SERVICES[active];
+
   return (
-    <section className="section-pad bg-background-alt" id="services">
-      <div className="content-lg">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14">
-          <div className="space-y-4 text-left">
-            <p className="label-sm text-primary font-sans">Our Expertise</p>
-            <h2 className="text-3xl md:text-5xl font-display font-light text-white leading-tight">
+    <section className="bg-[#0E0E0E]" id="services">
+
+      {/* ── Section Header ── */}
+      <div className="px-8 md:px-14 lg:px-20 pt-24 pb-16 max-w-[1600px] mx-auto">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div className="space-y-4">
+            <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold font-sans">Our Expertise</p>
+            <h2 className="font-display font-light text-white leading-tight" style={{ fontSize: 'clamp(2.4rem, 5vw, 4.5rem)', lineHeight: 1.05 }}>
               Tailored Visualization<br />
-              <em className="italic font-light text-text-muted">for Every Scale</em>
+              <em className="font-light not-italic" style={{ color: 'rgba(255,255,255,0.3)' }}>for Every Scale</em>
             </h2>
           </div>
-          <p className="max-w-sm text-text-secondary leading-relaxed text-sm font-sans text-left">
+          <p className="max-w-sm text-white/45 leading-relaxed text-sm font-sans md:text-right">
             We combine technical precision with artistic flair to produce results that captivate decision-makers and close deals.
           </p>
         </div>
+      </div>
 
-        {/* Cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {services.map((service, idx) => (
-            <article
-              key={service.id}
-              className="group card p-7 space-y-5 rounded-2xl cursor-default text-left"
-            >
-              {/* Number + icon */}
-              <div className="flex items-start justify-between">
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300"
-                  style={{
-                    background: 'rgba(240,122,58,0.12)',
-                    color: '#F07A3A',
-                  }}
+      {/* ── Interactive Service Viewer ── */}
+      <div className="px-8 md:px-14 lg:px-20 pb-24 max-w-[1600px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-border-ui overflow-hidden">
+
+          {/* Left: Tab list */}
+          <div className="flex flex-col border-r border-border-ui">
+            {SERVICES.map((s, i) => {
+              const isActive = i === active;
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => setActive(i)}
+                  className={`group relative flex items-start gap-6 px-8 py-8 text-left transition-all duration-300 border-b border-border-ui last:border-none focus:outline-none ${
+                    isActive ? 'bg-surface' : 'hover:bg-surface/50'
+                  }`}
                 >
-                  <span className="material-symbols-outlined text-[22px] group-hover:scale-110 transition-transform duration-300">
-                    {service.icon}
+                  {/* Active indicator line */}
+                  <div
+                    className={`absolute left-0 top-0 bottom-0 w-[2px] transition-all duration-300 ${
+                      isActive ? 'bg-primary' : 'bg-transparent'
+                    }`}
+                  />
+
+                  <span
+                    className={`font-display font-light text-3xl leading-none flex-shrink-0 pt-1 transition-colors duration-300 ${
+                      isActive ? 'text-primary/50' : 'text-white/10 group-hover:text-white/20'
+                    }`}
+                  >
+                    {s.id}
                   </span>
-                </div>
-                <span className="font-display text-4xl font-light" style={{ color: 'rgba(255,255,255,0.07)' }}>
-                  {String(idx + 1).padStart(2, '0')}
-                </span>
-              </div>
 
-              <div className="space-y-2.5">
-                <h3 className="text-base font-semibold text-white font-sans tracking-wide">
-                  {service.title}
-                </h3>
-                <p className="text-sm text-text-secondary leading-relaxed font-sans">{service.description}</p>
-              </div>
+                  <div className="flex-1 space-y-2">
+                    <h3
+                      className={`text-sm font-semibold tracking-wide font-sans transition-colors duration-300 ${
+                        isActive ? 'text-white' : 'text-white/50 group-hover:text-white/70'
+                      }`}
+                    >
+                      {s.title}
+                    </h3>
+                    <p
+                      className={`text-sm leading-relaxed font-sans transition-all duration-300 ${
+                        isActive ? 'text-white/50 max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+                      }`}
+                    >
+                      {s.description}
+                    </p>
+                    {isActive && (
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {s.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-[10px] tracking-[0.15em] uppercase border border-primary/25 text-primary/70 px-3 py-1 font-sans font-medium"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
-              <div className="flex items-center gap-1.5 text-primary text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-sans">
-                <span>Learn more</span>
-                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                  <span
+                    className={`material-symbols-outlined text-[18px] flex-shrink-0 mt-0.5 transition-all duration-300 ${
+                      isActive ? 'text-primary rotate-45' : 'text-white/20 rotate-0 group-hover:text-white/40'
+                    }`}
+                  >
+                    add
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Right: Image panel */}
+          <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden bg-surface min-h-[320px]">
+            {SERVICES.map((s, i) => (
+              <img
+                key={s.id}
+                src={s.image}
+                alt={s.title}
+                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+                style={{ opacity: i === active ? 1 : 0 }}
+              />
+            ))}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+            <div className="absolute bottom-0 left-0 p-8">
+              <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold font-sans mb-2">
+                {svc.short}
+              </p>
+              <h3 className="font-display font-light text-white text-2xl leading-tight">{svc.title}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Stats bar ── */}
+      <div className="border-t border-border-ui">
+        <div className="px-8 md:px-14 lg:px-20 py-12 max-w-[1600px] mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { num: '200+', label: 'Projects Delivered' },
+              { num: '8+', label: 'Years of Excellence' },
+              { num: '4K', label: 'Max Render Resolution' },
+              { num: '98%', label: 'Client Satisfaction' },
+            ].map((stat) => (
+              <div key={stat.label} className="space-y-2 text-left">
+                <p className="font-display font-light text-white" style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)', lineHeight: 1 }}>
+                  {stat.num}
+                </p>
+                <p className="text-[11px] tracking-[0.18em] uppercase text-white/35 font-sans font-medium">{stat.label}</p>
               </div>
-            </article>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
