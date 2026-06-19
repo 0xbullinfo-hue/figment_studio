@@ -62,7 +62,7 @@ async function* streamWithPrompt(
   const ai = new GoogleGenAI({ apiKey });
   
   // Format history for generateContentStream (since chat.sendMessageStream only takes text)
-  const contents = history
+  const contents: any[] = history
     .filter(m => m.role !== 'system')
     .map(msg => ({
       role: msg.role === 'assistant' ? 'model' : 'user',

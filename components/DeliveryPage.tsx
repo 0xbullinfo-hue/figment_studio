@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStudioStore } from '../store';
 import BeforeAfterSlider from './BeforeAfterSlider';
+import Logo from './Logo.tsx';
 
 const DeliveryPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,12 +32,13 @@ const DeliveryPage: React.FC = () => {
               <span className="text-[10px] font-black uppercase tracking-widest">Project Completed</span>
             </div>
           </div>
-          <div className="flex items-center gap-4 text-primary">
-            <div className="w-10 h-10 bg-brand-dark rounded-xl flex items-center justify-center text-white">
-              <span className="material-symbols-outlined font-bold">architecture</span>
-            </div>
-            <h2 className="text-xl font-black tracking-tighter uppercase text-slate-900">FIGMENT</h2>
-          </div>
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity focus:outline-none"
+            aria-label="Figment Creative Studio Home"
+          >
+            <Logo size={32} iconOnly />
+          </button>
         </div>
       </header>
 

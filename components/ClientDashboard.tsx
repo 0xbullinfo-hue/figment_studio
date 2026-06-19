@@ -39,8 +39,8 @@ const ClientDashboard: React.FC<DashboardProps> = ({ onOpenVision }) => {
     <div className="flex h-screen bg-gray-50 overflow-hidden font-display text-left relative">
       <aside className="hidden md:flex w-64 bg-white border-r border-[#e8dbce] flex-col justify-between p-8 shrink-0">
         <div className="space-y-12">
-          <button onClick={() => navigate('/')} className="hover:opacity-80 transition-opacity">
-            <Logo size={36} showWordmark color="#F07A3A" />
+          <button onClick={() => navigate('/')} className="hover:opacity-80 transition-opacity focus:outline-none">
+            <Logo size={36} showWordmark showTagline textColor="#1a1a1a" />
           </button>
           <nav className="space-y-4">
             <button className="w-full flex items-center gap-4 text-primary font-bold text-sm uppercase tracking-widest bg-primary/5 p-3 rounded-xl text-left">
@@ -76,8 +76,13 @@ const ClientDashboard: React.FC<DashboardProps> = ({ onOpenVision }) => {
       </aside>
 
       <main className="flex-1 flex flex-col overflow-hidden bg-white relative">
-        <header className="h-16 bg-white/80 backdrop-blur-md border-b border-[#e8dbce] px-10 flex items-center justify-between shrink-0 z-10">
-          <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Client Portal / Overview</h2>
+        <header className="h-16 bg-white/80 backdrop-blur-md border-b border-[#e8dbce] px-6 md:px-10 flex items-center justify-between shrink-0 z-10">
+          <div className="flex items-center gap-3">
+            <button onClick={() => navigate('/')} className="md:hidden hover:opacity-80 transition-opacity focus:outline-none">
+              <Logo size={28} iconOnly />
+            </button>
+            <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Client Portal / Overview</h2>
+          </div>
           <div className="flex items-center gap-6">
             <button
               onClick={onOpenVision}

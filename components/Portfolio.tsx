@@ -26,6 +26,7 @@ const GALLERY_EXTRAS = [
 const ALL_PROJECTS = [...signatureProjects, ...GALLERY_EXTRAS];
 
 const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
+  const navigate = useNavigate();
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
 
   return (
@@ -150,7 +151,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
               <button onClick={() => setSelectedProject(null)} className="px-10 py-3.5 border border-white/15 text-[10px] font-bold uppercase tracking-widest hover:border-white/40 hover:text-white/90 transition-all font-sans text-white/50">
                 Close Preview
               </button>
-              <button onClick={() => { setSelectedProject(null); window.location.href = '/contact'; }} className="px-10 py-3.5 bg-primary text-white text-[10px] font-bold uppercase tracking-widest hover:brightness-110 transition-all font-sans">
+              <button onClick={() => { setSelectedProject(null); navigate('/contact'); }} className="px-10 py-3.5 bg-primary text-white text-[10px] font-bold uppercase tracking-widest hover:brightness-110 transition-all font-sans">
                 Project Inquiry
               </button>
             </div>

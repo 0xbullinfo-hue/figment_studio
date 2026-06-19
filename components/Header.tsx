@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from './Logo.tsx';
 import { useStudioStore } from '../store.ts';
@@ -16,6 +16,8 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
   const { auth, logout } = useStudioStore();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [aiDropdownOpen, setAiDropdownOpen] = useState(false);
+  const aiDropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -25,15 +27,70 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
 
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (aiDropdownTimer.current) clearTimeout(aiDropdownTimer.current);
+    };
+  }, []);
+
+  const handleAiDropdownEnter = () => {
+    if (!window.matchMedia('(hover: hover)').matches) return;
+    if (aiDropdownTimer.current) {
+      clearTimeout(aiDropdownTimer.current);
+      aiDropdownTimer.current = null;
+    }
+    setAiDropdownOpen(true);
+  };
+
+  const handleAiDropdownLeave = () => {
+    if (!window.matchMedia('(hover: hover)').matches) return;
+    aiDropdownTimer.current = setTimeout(() => {
+      setAiDropdownOpen(false);
+    }, 350); // 350ms delay before closing so user has time to move to the dropdown
+  };
+
+  const handleAiToolsClick = (e: React.MouseEvent) => {
+    if (window.matchMedia('(hover: hover)').matches) {
+      e.preventDefault();
+      return;
+    }
+    setAiDropdownOpen((v) => !v);
+  };
+
   const navItems = [
+    { label: 'Home', path: '/' },
     { label: 'About', path: '/about' },
-    { label: 'Services', path: '/arcviz' },
+    { label: 'Services', path: '/#services' },
     { label: 'Works', path: '/portfolio' },
     { label: 'Estimates', path: '/estimator' },
     { label: 'Contact', path: '/contact' },
   ];
 
-  const isActive = (path: string) => currentPath === path || (path !== '/' && currentPath.startsWith(path));
+  const isActive = (path: string) => {
+    if (path.includes('#')) {
+      return currentPath === path.split('#')[0] && window.location.hash === '#' + path.split('#')[1];
+    }
+    return currentPath === path || (path !== '/' && currentPath.startsWith(path));
+  };
+
+  const handleNavClick = (item: { label: string; path: string }, isMobile = false) => {
+    if (isMobile) {
+      setMobileOpen(false);
+    }
+    if (item.label === 'Services') {
+      if (location.pathname === '/') {
+        const el = document.getElementById('services');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else {
+        navigate('/?scroll=services');
+      }
+    } else {
+      navigate(item.path);
+    }
+  };
 
   return (
     <>
@@ -46,17 +103,16 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
       >
         <div className="flex items-center justify-between h-[72px] px-6 md:px-10 lg:px-16 max-w-[1600px] mx-auto">
 
-          {/* Logo — full (mark + figment + creative studio) on home; compact on others */}
+          {/* Logo — show wordmark + tagline consistently across all pages */}
           <button
             onClick={() => navigate('/')}
             className="flex-shrink-0 group focus:outline-none"
             aria-label="Figment Creative Studio Home"
           >
             <Logo
-              size={isHome ? 38 : 32}
+              size={36}
               showWordmark
-              showTagline={isHome}
-              color="#F07A3A"
+              showTagline
             />
           </button>
 
@@ -67,7 +123,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
               return (
                 <button
                   key={item.path}
-                  onClick={() => navigate(item.path)}
+                  onClick={() => handleNavClick(item)}
                   className={`relative flex items-center gap-2 px-4 py-2 text-[12px] tracking-[0.16em] uppercase font-medium transition-all duration-300 focus:outline-none ${
                     active ? 'text-white' : 'text-text-muted hover:text-text-secondary'
                   }`}
@@ -83,13 +139,46 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
                 </button>
               );
             })}
-            <button
-              onClick={onOpenVision}
-              className="relative flex items-center gap-2 px-4 py-2 text-[12px] tracking-[0.16em] uppercase font-medium text-text-muted hover:text-primary transition-all duration-300 focus:outline-none"
+            
+            {/* AI Tools Dropdown Menu — with delayed close */}
+            <div
+              className="relative"
+              onMouseEnter={handleAiDropdownEnter}
+              onMouseLeave={handleAiDropdownLeave}
             >
-              <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
-              Vision AI
-            </button>
+              <button
+                onClick={handleAiToolsClick}
+                className="relative flex items-center gap-1.5 px-4 py-2 text-[12px] tracking-[0.16em] uppercase font-medium text-text-muted hover:text-primary transition-all duration-300 focus:outline-none"
+              >
+                <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
+                AI Tools
+                <span className="material-symbols-outlined" style={{ fontSize: '10px' }}>keyboard_arrow_down</span>
+              </button>
+              
+              {aiDropdownOpen && (
+                <div 
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-44 rounded-xl bg-zinc-950 border border-white/5 shadow-2xl p-1.5 flex flex-col gap-0.5 z-50"
+                  style={{ animation: 'fadeInDown 0.2s ease-out' }}
+                  onMouseEnter={handleAiDropdownEnter}
+                  onMouseLeave={handleAiDropdownLeave}
+                >
+                  <button
+                    onClick={() => { onOpenVision(); setAiDropdownOpen(false); }}
+                    className="w-full text-left flex items-center gap-2 px-3 py-2.5 text-[10px] tracking-wider uppercase text-text-muted hover:text-primary hover:bg-white/5 rounded-lg transition-all focus:outline-none font-semibold"
+                  >
+                    <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
+                    Vision AI
+                  </button>
+                  <button
+                    onClick={() => { navigate('/arcviz'); setAiDropdownOpen(false); }}
+                    className="w-full text-left flex items-center gap-2 px-3 py-2.5 text-[10px] tracking-wider uppercase text-text-muted hover:text-primary hover:bg-white/5 rounded-lg transition-all focus:outline-none font-semibold"
+                  >
+                    <span className="material-symbols-outlined text-[14px]">travel_explore</span>
+                    ArcViz AI
+                  </button>
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Right CTA – desktop */}
@@ -154,7 +243,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
               return (
                 <button
                   key={item.path}
-                  onClick={() => navigate(item.path)}
+                  onClick={() => handleNavClick(item, true)}
                   className={`w-full text-left flex items-center justify-between px-3 py-3.5 text-[12px] tracking-[0.2em] uppercase font-medium transition-all duration-200 border-b border-border-ui last:border-none ${
                     active ? 'text-primary' : 'text-text-muted hover:text-white'
                   }`}
@@ -164,13 +253,27 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
                 </button>
               );
             })}
-            <button
-              onClick={() => { onOpenVision(); setMobileOpen(false); }}
-              className="w-full text-left flex items-center gap-2 px-3 py-3.5 text-[12px] tracking-[0.2em] uppercase font-medium text-primary"
-            >
-              <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
-              Vision AI
-            </button>
+            
+            {/* Mobile AI Tools Sub-menu */}
+            <div className="border-t border-border-ui/50 pt-2 mt-2 text-left">
+              <p className="px-3 py-1 text-[9px] tracking-[0.25em] uppercase text-text-faint font-bold font-sans">AI Tools</p>
+              <div className="pl-3 space-y-0.5 mt-1">
+                <button
+                  onClick={() => { onOpenVision(); setMobileOpen(false); }}
+                  className="w-full text-left flex items-center gap-2.5 px-3 py-3 text-[12px] tracking-[0.2em] uppercase font-medium text-text-muted hover:text-white transition-colors focus:outline-none"
+                >
+                  <span className="material-symbols-outlined text-[14px] text-primary">auto_awesome</span>
+                  Vision AI
+                </button>
+                <button
+                  onClick={() => { navigate('/arcviz'); setMobileOpen(false); }}
+                  className="w-full text-left flex items-center gap-2.5 px-3 py-3 text-[12px] tracking-[0.2em] uppercase font-medium text-text-muted hover:text-white transition-colors focus:outline-none"
+                >
+                  <span className="material-symbols-outlined text-[14px] text-primary">travel_explore</span>
+                  ArcViz AI
+                </button>
+              </div>
+            </div>
             <div className="pt-4 mt-2 space-y-2.5">
               {auth.isAuthenticated ? (
                 <button onClick={() => navigate(auth.role === 'admin' ? '/admin' : '/dashboard')} className="w-full bg-primary text-white text-[11px] tracking-[0.2em] uppercase font-semibold py-3">

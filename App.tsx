@@ -1,11 +1,23 @@
-import React, { useState, Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, Outlet, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header.tsx';
 import Footer from './components/Footer.tsx';
 import VisionAssistant from './components/VisionAssistant.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 import { useStudioStore } from './store.ts';
+
+/**
+ * Scrolls to the top of the page on every route change.
+ * Placed inside BrowserRouter so useLocation() works.
+ */
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+  }, [pathname]);
+  return null;
+};
 
 // Lazy loaded components
 const LandingPage = lazy(() => import('./components/LandingPage.tsx'));
@@ -65,7 +77,12 @@ const DashboardLayout = () => {
 const AppRoutes = () => {
   const [isVisionAssistantOpen, setIsVisionAssistantOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { addProposal } = useStudioStore();
+
+  useEffect(() => {
+    setIsVisionAssistantOpen(false);
+  }, [location.pathname]);
 
   const handleNewProjectSubmit = (data: { projectName: string; type: string; total: number; details: string }) => {
     const id = `FIG-${Math.floor(Math.random() * 10000) + 10000}`;
@@ -128,6 +145,7 @@ const App: React.FC = () => {
     <ErrorBoundary>
       <HelmetProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <AppRoutes />
         </BrowserRouter>
       </HelmetProvider>

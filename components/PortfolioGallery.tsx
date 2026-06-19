@@ -1,10 +1,31 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PortfolioItem } from '../types.ts';
 import { useStudioStore } from '../store';
 
 const PortfolioGallery: React.FC = () => {
+  const navigate = useNavigate();
   const { portfolioItems: items } = useStudioStore();
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
+  const [activeFilter, setActiveFilter] = useState('All');
+
+  // Filter items based on selected category button
+  const filteredItems = items.filter(item => {
+    if (activeFilter === 'All') return true;
+    if (activeFilter === 'Animation') return item.hasPlay;
+    return item.type.toLowerCase() === activeFilter.toLowerCase();
+  });
+
+  const handleDownloadFrame = (item: PortfolioItem) => {
+    // Simple helper to download or view the image
+    const link = document.createElement('a');
+    link.href = item.url;
+    link.target = '_blank';
+    link.download = `${item.title.replace(/\s+/g, '_')}_Master.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <section className="max-w-[1600px] mx-auto px-8 lg:px-16 py-20 bg-white min-h-screen">
@@ -16,16 +37,28 @@ const PortfolioGallery: React.FC = () => {
         </div>
       </div>
 
+      {/* Stateful Filter Buttons */}
       <div className="flex flex-wrap gap-4 mb-20 border-b border-zinc-100 pb-12">
-        {['All', 'Exterior', 'Interior', 'Animation'].map(f => (
-          <button key={f} className={`text-xs font-bold uppercase tracking-[0.2em] px-8 py-3 border-2 transition-all ${f === 'All' ? 'border-primary text-primary' : 'border-zinc-200 text-zinc-400 hover:border-primary hover:text-primary'}`}>
-            {f}
-          </button>
-        ))}
+        {['All', 'Exterior', 'Interior', 'Animation'].map(f => {
+          const isActive = f === activeFilter;
+          return (
+            <button
+              key={f}
+              onClick={() => setActiveFilter(f)}
+              className={`text-xs font-bold uppercase tracking-[0.2em] px-8 py-3 border-2 transition-all focus:outline-none ${
+                isActive
+                  ? 'border-primary bg-primary text-white shadow-lg shadow-primary/10'
+                  : 'border-zinc-200 text-zinc-400 hover:border-primary hover:text-primary'
+              }`}
+            >
+              {f}
+            </button>
+          );
+        })}
       </div>
 
       <div className="masonry-grid">
-        {items.map(item => (
+        {filteredItems.map(item => (
           <div key={item.id} onClick={() => setSelectedItem(item)} className="masonry-item relative group cursor-pointer border border-transparent hover:border-primary p-2 transition-all duration-500 text-left">
             <div className={`${item.class} bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-700 relative overflow-hidden`} style={{ backgroundImage: `url(${item.url})` }}>
               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -49,7 +82,7 @@ const PortfolioGallery: React.FC = () => {
         <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4 md:p-12 animate-in fade-in duration-300">
           <button
             onClick={() => setSelectedItem(null)}
-            className="absolute top-8 right-8 text-white hover:text-primary transition-colors z-[110]"
+            className="absolute top-8 right-8 text-white hover:text-primary transition-colors z-[110] focus:outline-none"
           >
             <span className="material-symbols-outlined text-4xl">close</span>
           </button>
@@ -69,17 +102,23 @@ const PortfolioGallery: React.FC = () => {
           </div>
 
           <div className="mt-10 text-center text-white space-y-3 animate-in slide-in-from-bottom-4 duration-500">
-            <p className="text-primary font-bold uppercase tracking-[0.3em] text-xs">
+            <p className="text-primary font-bold uppercase tracking-[0.3em] text-xs font-sans">
               {selectedItem.type} • Master Series
             </p>
             <h3 className="text-2xl md:text-4xl font-bold uppercase tracking-tighter">
               {selectedItem.title}
             </h3>
             <div className="flex justify-center gap-6 pt-4">
-              <button className="px-6 py-2 bg-white/10 border border-white/20 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+              <button
+                onClick={() => handleDownloadFrame(selectedItem)}
+                className="px-6 py-2 bg-white/10 border border-white/20 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all focus:outline-none"
+              >
                 Download Frame
               </button>
-              <button className="px-6 py-2 bg-primary rounded-full text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all">
+              <button
+                onClick={() => { setSelectedItem(null); navigate('/contact'); }}
+                className="px-6 py-2 bg-primary rounded-full text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all focus:outline-none"
+              >
                 Project Inquiry
               </button>
             </div>

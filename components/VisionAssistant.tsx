@@ -91,7 +91,7 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
       <div className="bg-white rounded-[2rem] shadow-[0_30px_70px_-12px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col border border-gray-100 h-full relative">
         <div className="bg-[#1a1a1a] p-6 flex items-center justify-between text-white shrink-0 border-b border-white/5">
           <div className="flex items-center gap-3">
-            <Logo size={22} iconOnly color="#F07A3A" />
+            <Logo size={22} iconOnly />
             <div className="text-left">
               <h3 className="font-display font-black text-base uppercase tracking-widest leading-none">Vision AI</h3>
               <p className="text-primary text-[9px] font-black uppercase tracking-[0.25em] mt-1">Basic Assistant</p>
