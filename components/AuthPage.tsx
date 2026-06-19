@@ -53,7 +53,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
           }}
         >
           <button onClick={onBack}>
-            <Logo className="w-8 h-8" />
+            <Logo size={30} showWordmark color="#F07A3A" />
           </button>
           <div className="flex gap-3">
             <button
@@ -166,7 +166,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
       <div className="relative z-10 w-full max-w-md flex flex-col items-center gap-8">
         {/* Logo */}
         <button onClick={onBack} className="flex flex-col items-center gap-2 group">
-          <Logo className="w-12 h-12" iconOnly />
+          <Logo size={52} iconOnly color="#F07A3A" />
           <p className="label-xs text-primary group-hover:text-primary-hover transition-colors" style={{ letterSpacing: '0.18em' }}>
             CREATIVE STUDIO
           </p>

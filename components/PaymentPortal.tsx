@@ -134,7 +134,7 @@ const PaymentPortal: React.FC<PaymentPortalProps> = ({ onBack }) => {
           <span className="material-symbols-outlined text-primary group-hover:translate-x-[-2px] transition-transform">arrow_back</span>
           <span className="text-[10px] font-semibold uppercase tracking-widest text-text-muted">Back to Billing</span>
         </button>
-        <Logo className="h-8" />
+        <Logo size={30} iconOnly color="#F07A3A" />
         <div className="size-8 rounded-full border border-primary/30 bg-primary/10 flex items-center justify-center font-semibold text-primary text-[10px] font-body">JT</div>
       </header>
 

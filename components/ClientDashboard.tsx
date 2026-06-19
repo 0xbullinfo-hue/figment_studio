@@ -40,7 +40,7 @@ const ClientDashboard: React.FC<DashboardProps> = ({ onOpenVision }) => {
       <aside className="hidden md:flex w-64 bg-white border-r border-[#e8dbce] flex-col justify-between p-8 shrink-0">
         <div className="space-y-12">
           <button onClick={() => navigate('/')} className="hover:opacity-80 transition-opacity">
-            <Logo iconOnly />
+            <Logo size={36} showWordmark color="#F07A3A" />
           </button>
           <nav className="space-y-4">
             <button className="w-full flex items-center gap-4 text-primary font-bold text-sm uppercase tracking-widest bg-primary/5 p-3 rounded-xl text-left">

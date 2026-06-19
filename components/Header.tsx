@@ -12,6 +12,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+  const isHome = currentPath === '/';
   const { auth, logout } = useStudioStore();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -45,13 +46,18 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
       >
         <div className="flex items-center justify-between h-[72px] px-6 md:px-10 lg:px-16 max-w-[1600px] mx-auto">
 
-          {/* Logo */}
+          {/* Logo — full (mark + figment + creative studio) on home; compact on others */}
           <button
             onClick={() => navigate('/')}
             className="flex-shrink-0 group focus:outline-none"
-            aria-label="Figment Studio Home"
+            aria-label="Figment Creative Studio Home"
           >
-            <Logo showWordmark size={32} color="#F07A3A" />
+            <Logo
+              size={isHome ? 38 : 32}
+              showWordmark
+              showTagline={isHome}
+              color="#F07A3A"
+            />
           </button>
 
           {/* Center Nav – desktop */}

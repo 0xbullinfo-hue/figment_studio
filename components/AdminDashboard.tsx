@@ -382,7 +382,7 @@ const AdminDashboard: React.FC = () => {
     <div className="flex h-screen bg-[#0c0c0c] font-display text-left overflow-hidden">
       <aside className="w-80 bg-zinc-950 border-r border-zinc-900 p-10 flex flex-col justify-between shrink-0">
         <div className="space-y-16">
-          <Logo />
+          <Logo size={36} showWordmark showTagline color="#F07A3A" />
           <nav className="space-y-4">
             {menuItems.map(item => (
               <button

@@ -260,7 +260,7 @@ const ArcVizPage: React.FC = () => {
       <header className="sticky top-0 z-40 border-b border-border-ui bg-background/95 backdrop-blur-sm">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <Logo className="size-6" />
+            <Logo size={28} iconOnly color="#F07A3A" />
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">ArcViz Workspace</p>
               <h1 className="text-xl md:text-2xl font-bold tracking-tight">Architectural Visualization Agent</h1>

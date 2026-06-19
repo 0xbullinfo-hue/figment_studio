@@ -57,7 +57,7 @@ const BillingManager: React.FC<BillingManagerProps> = ({ onBack, onNavigate }) =
             <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Return to Portal</span>
           </button>
         </div>
-        <Logo className="size-6" iconOnly />
+        <Logo size={30} iconOnly color="#F07A3A" />
         <div className="size-8 rounded-full border-2 border-primary/20 bg-primary/10 flex items-center justify-center font-black text-primary text-[10px]">JT</div>
       </header>
 
