@@ -32,7 +32,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onOpenVision }) => {
           className="flex items-center gap-3 group focus:outline-none text-left"
           aria-label="Figment Studio Logo"
         >
-          <Logo showWordmark size={36} color="#F07A3A" />
+          <Logo showWordmark showTagline size={32} />
         </button>
 
         <div className="h-px bg-border-ui w-full" />

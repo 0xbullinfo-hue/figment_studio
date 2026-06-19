@@ -12,7 +12,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ onBack, onNavigate })
   return (
     <div className="bg-[#fcfaf8] min-h-screen font-display text-left">
       <header className="sticky top-0 z-50 w-full border-b border-[#e9dace] bg-white px-6 h-16 flex items-center justify-between">
-        <Logo size={28} iconOnly color="#F07A3A" />
+        <Logo size={28} iconOnly />
         <nav className="flex items-center gap-8">
           <button onClick={onBack} className="text-sm font-semibold hover:text-primary transition-colors uppercase tracking-widest">Dashboard</button>
           <button onClick={() => onNavigate('billing')} className="text-sm font-semibold hover:text-primary transition-colors uppercase tracking-widest">Billing</button>

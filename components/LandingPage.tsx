@@ -1,9 +1,9 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Hero from './Hero';
 import Services from './Services';
 import Portfolio from './Portfolio';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
 interface LandingPageProps {
@@ -115,8 +115,21 @@ const SectionHeading: React.FC<{ children: React.ReactNode; dim?: string }> = ({
 
 const LandingPage: React.FC<LandingPageProps> = ({ onOpenVision }) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [openProcess, setOpenProcess] = useState<number | null>(0);
+
+  useEffect(() => {
+    const scrollTarget = searchParams.get('scroll');
+    if (scrollTarget) {
+      const el = document.getElementById(scrollTarget);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 150);
+      }
+    }
+  }, [searchParams]);
 
   return (
     <>

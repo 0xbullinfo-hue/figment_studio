@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
 
           {/* Brand */}
           <div className="lg:col-span-4 space-y-8">
-            <Logo showWordmark showTagline size={42} color="#F07A3A" />
+            <Logo showWordmark showTagline size={38} />
             <p className="text-sm leading-relaxed max-w-xs font-sans" style={{ color: 'rgba(255,255,255,0.3)' }}>
               Nigeria's leading architectural visualization house. Cinematic renders, AI-guided design, and private delivery for world-class projects.
             </p>
@@ -100,11 +100,9 @@ const Footer: React.FC = () => {
                   {items.map((item) => (
                     <li key={item.label}>
                       <button
-                        onClick={() => navigate(item.path)}
-                        className="text-sm font-sans transition-colors duration-200"
-                        style={{ color: 'rgba(255,255,255,0.35)' }}
-                        onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.75)')}
-                        onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.35)')}
+                        onClick={() => { window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior }); navigate(item.path); }}
+                        className="text-sm font-sans transition-colors duration-200 cursor-pointer hover:text-white/75"
+                        style={{ color: 'rgba(255,255,255,0.35)', background: 'none', border: 'none', padding: 0, textAlign: 'left' }}
                       >
                         {item.label}
                       </button>

@@ -149,12 +149,8 @@ const Hero: React.FC<HeroProps> = ({ onOpenVision, onStartProject, onOpenArcViz 
               ArcViz AI
             </button>
           </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="space-y-6">
-          {/* Progress + slide controls */}
-          <div className="flex items-center gap-4">
+          {/* Progress + slide controls aligned under the buttons */}
+          <div className="flex items-center gap-4 pt-4">
             {SLIDES.map((s, i) => (
               <button
                 key={s.id}
@@ -176,6 +172,10 @@ const Hero: React.FC<HeroProps> = ({ onOpenVision, onStartProject, onOpenArcViz 
               {String(current + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
             </span>
           </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="space-y-6">
 
           {/* Info bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/[0.08] pt-6">

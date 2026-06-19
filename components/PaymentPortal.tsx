@@ -32,7 +32,7 @@ const PaymentPortal: React.FC<PaymentPortalProps> = ({ onBack }) => {
   const [isInitializing, setIsInitializing] = useState(false);
   const [fxRate, setFxRate] = useState(FX_RATES.NGN);
 
-  const backendBaseUrl = (import.meta.env.VITE_BACKEND_URL as string | undefined) || 'http://localhost:8787';
+  const backendBaseUrl = ((import.meta as any).env.VITE_BACKEND_URL as string | undefined) || 'http://localhost:8787';
 
   const convertedAmount = useMemo(() => {
     return currency === 'USD' ? amount : amount * fxRate;
@@ -47,8 +47,8 @@ const PaymentPortal: React.FC<PaymentPortalProps> = ({ onBack }) => {
   };
 
   const checkoutUrl = useMemo(() => {
-    const paystackBase = import.meta.env.VITE_PAYSTACK_CHECKOUT_URL as string | undefined;
-    const flutterwaveBase = import.meta.env.VITE_FLUTTERWAVE_CHECKOUT_URL as string | undefined;
+    const paystackBase = (import.meta as any).env.VITE_PAYSTACK_CHECKOUT_URL as string | undefined;
+    const flutterwaveBase = (import.meta as any).env.VITE_FLUTTERWAVE_CHECKOUT_URL as string | undefined;
     const baseUrl = provider === 'paystack' ? paystackBase : flutterwaveBase;
 
     if (!baseUrl) {
@@ -134,7 +134,7 @@ const PaymentPortal: React.FC<PaymentPortalProps> = ({ onBack }) => {
           <span className="material-symbols-outlined text-primary group-hover:translate-x-[-2px] transition-transform">arrow_back</span>
           <span className="text-[10px] font-semibold uppercase tracking-widest text-text-muted">Back to Billing</span>
         </button>
-        <Logo size={30} iconOnly color="#F07A3A" />
+        <Logo size={30} iconOnly />
         <div className="size-8 rounded-full border border-primary/30 bg-primary/10 flex items-center justify-center font-semibold text-primary text-[10px] font-body">JT</div>
       </header>
 

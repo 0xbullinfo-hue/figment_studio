@@ -276,6 +276,12 @@
       .anim-in-2 { animation: fadeInUp 0.7s 0.15s ease both; }
       .anim-in-3 { animation: fadeInUp 0.7s 0.3s ease both; }
 
+      /* ── Fade in down animation (dropdown) ── */
+      @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-8px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
       /* ── Status pills ── */
       .pill-prog { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
       .pill-done { background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }

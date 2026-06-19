@@ -196,7 +196,7 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
   };
 
   return (
-    <div className="bg-white min-h-screen font-display text-left pb-40">
+    <div className="bg-white min-h-screen font-display text-left pb-60">
       <main className="mx-auto max-w-[1200px] px-6 py-12">
         <div className="mb-12 flex flex-col gap-4 text-left">
           <button onClick={onBack} className="flex items-center gap-2 text-primary font-bold text-sm mb-4 hover:translate-x-[-4px] transition-all w-fit">
@@ -347,23 +347,23 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
       </main>
 
       <footer className="fixed bottom-0 left-0 z-50 w-full border-t border-gray-100 bg-white/95 backdrop-blur-xl shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
-        <div className="mx-auto flex max-w-[1200px] flex-col md:flex-row items-center justify-between px-6 py-6 gap-6 md:gap-0">
-          <div className="flex flex-col gap-2 w-full md:w-auto text-left">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted/60">Selected Package • {pricing.timeline}</span>
+        <div className="mx-auto flex max-w-[1200px] flex-col md:flex-row items-center justify-between px-6 py-3.5 gap-4 md:gap-0">
+          <div className="flex flex-col gap-0.5 w-full md:w-auto text-left">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted/60">Selected Package • {pricing.timeline}</span>
             <div className="flex items-baseline gap-2">
-              <span className="text-4xl font-black text-primary">${pricing.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-              <span className="text-[10px] font-black text-text-muted uppercase">Excl. Taxes</span>
+              <span className="text-2xl font-bold text-primary">${pricing.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+              <span className="text-[10px] font-semibold text-text-muted uppercase">Excl. Taxes</span>
             </div>
           </div>
-          <div className="flex items-center gap-4 w-full md:w-auto">
+          <div className="flex items-center gap-3 w-full md:w-auto">
             <button
               onClick={handleDownloadQuote}
-              className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl border-2 border-primary text-primary px-8 py-4 text-xs font-black uppercase tracking-widest hover:bg-primary/5 transition-all"
+              className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl border-2 border-primary text-primary px-6 py-2.5 text-[11px] font-bold uppercase tracking-widest hover:bg-primary/5 transition-all"
             >
               <span className="material-symbols-outlined text-lg font-bold">picture_as_pdf</span>
               SAVE PDF
             </button>
-            <button onClick={handleRequestFinish} disabled={pricing.total === 0} className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl bg-primary px-10 py-4 text-xs font-black uppercase tracking-widest text-white shadow-lg shadow-primary/20 hover:bg-orange-600 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50">
+            <button onClick={handleRequestFinish} disabled={pricing.total === 0} className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl bg-primary px-8 py-2.5 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg shadow-primary/20 hover:bg-orange-600 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50">
               <span className="material-symbols-outlined text-lg font-bold">send</span>
               REQUEST PROPOSAL
             </button>
