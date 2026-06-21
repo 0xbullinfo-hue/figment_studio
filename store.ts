@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Project, ProjectProposal, PortfolioItem } from './types';
+import { Project, ProjectProposal, PortfolioItem, AcademyRegistration } from './types';
 import { INITIAL_PROJECTS, IMAGES } from './constants';
 
 type UserRole = 'guest' | 'client' | 'admin';
@@ -19,6 +19,7 @@ interface StudioState {
   projects: Project[];
   proposals: ProjectProposal[];
   portfolioItems: PortfolioItem[];
+  academyRegistrations: AcademyRegistration[];
   login: (role: 'client' | 'admin', plan?: SubscriptionPlan, name?: string) => void;
   logout: () => void;
   setPlan: (plan: SubscriptionPlan) => void;
@@ -30,6 +31,9 @@ interface StudioState {
   updateProposalStatus: (id: string, status: 'Approved' | 'Rejected') => void;
   addPortfolioItem: (item: PortfolioItem) => void;
   commitRevision: (projectId: string, comments: string) => void;
+  addAcademyRegistration: (reg: AcademyRegistration) => void;
+  updateAcademyRegistrationStatus: (id: string, status: AcademyRegistration['status']) => void;
+  updateAcademyRegistrationNotes: (id: string, notes: string) => void;
 }
 
 export const useStudioStore = create<StudioState>()(persist((set) => ({
@@ -55,6 +59,34 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
     }
   ],
   portfolioItems: IMAGES.gallery,
+  academyRegistrations: [
+    {
+      id: 'REG-101',
+      name: 'Chinedu Okafor',
+      email: 'chinedu@example.com',
+      phone: '+234 803 123 4567',
+      experienceLevel: 'Intermediate',
+      preferredFormat: 'Onsite Abuja Studio',
+      courseInterest: 'Revit + D5 rendering (interior/exterior)',
+      status: 'Pending',
+      date: '2026-06-20',
+      message: 'I want to master realism in architectural visualisations using Revit and D5 Render.',
+      notes: 'Awaiting portfolio review.'
+    },
+    {
+      id: 'REG-102',
+      name: 'Amina Yusuf',
+      email: 'amina.y@example.com',
+      phone: '+234 812 987 6543',
+      experienceLevel: 'Beginner',
+      preferredFormat: 'Live Online Interactive',
+      courseInterest: 'D5 Rendering only (interior/exterior ) + Animation',
+      status: 'Contacted',
+      date: '2026-06-19',
+      message: 'Looking to transition from architecture to full-time real-time D5 rendering and animation.',
+      notes: 'Spoke on WhatsApp. Planning to join the upcoming July cohort.'
+    }
+  ],
 
   login: (role, plan = 'trial', name = role === 'admin' ? 'Studio Admin' : 'Client User') => set(() => ({
     auth: {
@@ -144,11 +176,24 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
       }
       return p;
     })
+  })),
+
+  addAcademyRegistration: (reg) => set((state) => ({
+    academyRegistrations: [reg, ...state.academyRegistrations]
+  })),
+
+  updateAcademyRegistrationStatus: (id, status) => set((state) => ({
+    academyRegistrations: state.academyRegistrations.map(r => r.id === id ? { ...r, status } : r)
+  })),
+
+  updateAcademyRegistrationNotes: (id, notes) => set((state) => ({
+    academyRegistrations: state.academyRegistrations.map(r => r.id === id ? { ...r, notes } : r)
   }))
 }), {
   name: 'figment-studio-store',
   partialize: (state) => ({
     auth: state.auth,
     arcvizTrialUsed: state.arcvizTrialUsed,
+    academyRegistrations: state.academyRegistrations,
   }),
 }));

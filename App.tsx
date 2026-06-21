@@ -43,6 +43,7 @@ const NewProjectRequest = lazy(() => import('./components/NewProjectRequest.tsx'
 const AdminDashboard = lazy(() => import('./components/AdminDashboard.tsx'));
 const ProfileSettings = lazy(() => import('./components/ProfileSettings.tsx'));
 const NotFound = lazy(() => import('./components/NotFound.tsx'));
+const AcademyPage = lazy(() => import('./components/AcademyPage.tsx'));
 
 const AppOutlet = () => (
   <div className="flex-1 flex flex-col w-full h-full">
@@ -112,6 +113,7 @@ const AppRoutes = () => {
           <Route path="arcviz" element={<ArcVizPage />} />
           <Route path="insights" element={<InsightsPage />} />
           <Route path="feedback" element={<FeedbackForm onFinish={() => navigate(-1)} />} />
+          <Route path="academy" element={<AcademyPage />} />
         </Route>
 
         <Route element={<DashboardLayout />}>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import Logo from './Logo.tsx';
-import { Project, ProjectProposal } from '../types.ts';
+import { Project, ProjectProposal, AcademyRegistration } from '../types.ts';
 import { useStudioStore } from '../store';
 
 interface ChatMessage {
@@ -19,11 +19,19 @@ const AdminDashboard: React.FC = () => {
     projects,
     proposals,
     portfolioItems,
+    academyRegistrations,
     updateProject,
     updateProposalStatus,
-    addPortfolioItem
+    addPortfolioItem,
+    updateAcademyRegistrationStatus,
+    updateAcademyRegistrationNotes
   } = useStudioStore();
-  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'proposals' | 'chat' | 'portfolio' | 'payments'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'proposals' | 'chat' | 'portfolio' | 'payments' | 'academy'>('overview');
+  
+  // Academy registration filters & note state
+  const [academyStatusFilter, setAcademyStatusFilter] = useState<'All' | 'Pending' | 'Contacted' | 'Enrolled'>('All');
+  const [academyLevelFilter, setAcademyLevelFilter] = useState<'All' | 'Beginner' | 'Intermediate' | 'Advanced'>('All');
+  const [tempNotes, setTempNotes] = useState<Record<string, string>>({});
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [viewingProposal, setViewingProposal] = useState<ProjectProposal | null>(null);
   const [activeChatId, setActiveChatId] = useState<string | null>(projects[0]?.id || null);
@@ -57,8 +65,8 @@ const AdminDashboard: React.FC = () => {
         {[
           { label: 'Active Projects', value: projects.filter(p => p.status !== 'Completed').length, icon: 'architecture', color: 'text-blue-500' },
           { label: 'Pending Proposals', value: proposals.filter(p => p.status === 'Received').length, icon: 'mark_as_unread', color: 'text-orange-500' },
+          { label: 'Academy Leads', value: academyRegistrations.length, icon: 'school', color: 'text-amber-500' },
           { label: 'Studio Revenue', value: `$${projects.reduce((acc, p) => acc + (p.status === 'Completed' ? 5000 : 0), 0) + 124000}`, icon: 'trending_up', color: 'text-emerald-500' },
-          { label: 'Client Satisfaction', value: '4.9/5', icon: 'star', color: 'text-amber-500' },
         ].map((stat, i) => (
           <div key={i} className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl shadow-xl space-y-4">
             <div className="flex justify-between items-start">
@@ -370,10 +378,188 @@ const AdminDashboard: React.FC = () => {
     );
   };
 
+  const filteredAcademyRegs = academyRegistrations.filter(reg => {
+    const matchesStatus = academyStatusFilter === 'All' || reg.status === academyStatusFilter;
+    const matchesLevel = academyLevelFilter === 'All' || reg.experienceLevel === academyLevelFilter;
+    return matchesStatus && matchesLevel;
+  });
+
+  const renderAcademyRegs = () => {
+    const totalLeads = academyRegistrations.length;
+    const onsiteLeads = academyRegistrations.filter(r => r.preferredFormat === 'Onsite Abuja Studio').length;
+    const onlineLeads = academyRegistrations.filter(r => r.preferredFormat === 'Live Online Interactive').length;
+    const enrolledLeads = academyRegistrations.filter(r => r.status === 'Enrolled').length;
+
+    return (
+      <div className="space-y-12">
+        {/* Academy Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { label: 'Academy Leads', value: totalLeads, icon: 'school', color: 'text-orange-500' },
+            { label: 'Abuja Onsite Leads', value: onsiteLeads, icon: 'location_on', color: 'text-blue-500' },
+            { label: 'Live Online Leads', value: onlineLeads, icon: 'computer', color: 'text-purple-500' },
+            { label: 'Enrolled Cohort', value: enrolledLeads, icon: 'task_alt', color: 'text-emerald-500' },
+          ].map((stat, i) => (
+            <div key={i} className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl shadow-xl space-y-4">
+              <div className="flex justify-between items-start">
+                <span className={`material-symbols-outlined text-3xl ${stat.color}`}>{stat.icon}</span>
+                <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest font-sans">Academy</span>
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-1 font-sans">{stat.label}</p>
+                <p className="text-4xl font-black text-white">{stat.value}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-zinc-900 border border-zinc-800 p-6 rounded-3xl">
+          <div className="text-left">
+            <h3 className="text-xl font-black uppercase text-white leading-none">Subscribers Queue</h3>
+            <p className="text-xs text-zinc-500 mt-2 font-bold uppercase tracking-widest font-sans">Onboarding interest declarations</p>
+          </div>
+          <div className="flex flex-wrap gap-3 font-sans">
+            {/* Status Filters */}
+            <div className="flex gap-1.5 bg-zinc-950 p-1 rounded-xl border border-zinc-800">
+              {(['All', 'Pending', 'Contacted', 'Enrolled'] as const).map(f => (
+                <button
+                  key={f}
+                  onClick={() => setAcademyStatusFilter(f)}
+                  className={`px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all ${academyStatusFilter === f ? 'bg-primary text-white' : 'text-zinc-500 hover:text-white'}`}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
+            
+            {/* Level Filters */}
+            <div className="flex gap-1.5 bg-zinc-950 p-1 rounded-xl border border-zinc-800">
+              {(['All', 'Beginner', 'Intermediate', 'Advanced'] as const).map(l => (
+                <button
+                  key={l}
+                  onClick={() => setAcademyLevelFilter(l)}
+                  className={`px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all ${academyLevelFilter === l ? 'bg-primary text-white' : 'text-zinc-500 hover:text-white'}`}
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Leads List */}
+        <div className="space-y-6">
+          {filteredAcademyRegs.length === 0 ? (
+            <div className="p-20 text-center text-zinc-600 bg-zinc-900 rounded-3xl border border-dashed border-zinc-800 italic text-sm">
+              No matching registrations in queue.
+            </div>
+          ) : (
+            filteredAcademyRegs.map(reg => (
+              <div 
+                key={reg.id} 
+                className={`bg-zinc-900 border border-zinc-800 p-8 rounded-3xl flex flex-col gap-6 text-left transition-all ${reg.status === 'Pending' ? 'ring-1 ring-primary/20' : 'opacity-85'}`}
+              >
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-zinc-800/60 pb-6">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <h4 className="text-2xl font-black text-white uppercase leading-none">{reg.name}</h4>
+                      <span className="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-[8px] font-black uppercase rounded tracking-widest">{reg.id}</span>
+                      <span className={`px-2.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
+                        reg.status === 'Enrolled' ? 'bg-emerald-600 text-white' : 
+                        reg.status === 'Contacted' ? 'bg-blue-600 text-white' : 
+                        'bg-primary text-white'
+                      }`}>
+                        {reg.status}
+                      </span>
+                    </div>
+                    <p className="text-xs text-zinc-400 mt-2 font-medium font-sans">
+                      Email: <span className="text-white">{reg.email}</span> • Phone: <span className="text-white">{reg.phone}</span>
+                    </p>
+                  </div>
+                  
+                  {/* Status update actions */}
+                  <div className="flex items-center gap-2 font-sans">
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mr-2">Update Stage:</span>
+                    {(['Pending', 'Contacted', 'Enrolled'] as const).map(st => (
+                      <button
+                        key={st}
+                        onClick={() => updateAcademyRegistrationStatus(reg.id, st)}
+                        className={`px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-widest border transition-all ${
+                          reg.status === st 
+                            ? 'bg-primary/10 border-primary text-primary' 
+                            : 'border-zinc-800 text-zinc-500 hover:border-zinc-700 hover:text-white'
+                        }`}
+                      >
+                        {st}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  {/* Left Specs */}
+                  <div className="space-y-4 font-sans text-xs">
+                    <div className="flex justify-between py-1 border-b border-zinc-800/40">
+                      <span className="text-zinc-500 uppercase font-semibold text-[10px] tracking-wider">Registration Date</span>
+                      <span className="text-white font-medium">{reg.date}</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-zinc-800/40">
+                      <span className="text-zinc-500 uppercase font-semibold text-[10px] tracking-wider">Format Preference</span>
+                      <span className="text-white font-medium">{reg.preferredFormat}</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-zinc-800/40">
+                      <span className="text-zinc-500 uppercase font-semibold text-[10px] tracking-wider">Experience Level</span>
+                      <span className="text-white font-medium">{reg.experienceLevel}</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-zinc-800/40">
+                      <span className="text-zinc-500 uppercase font-semibold text-[10px] tracking-wider">What to Learn</span>
+                      <span className="text-white font-medium truncate max-w-[140px]" title={reg.courseInterest}>{reg.courseInterest}</span>
+                    </div>
+                  </div>
+
+                  {/* Middle Cover Letter message */}
+                  <div className="space-y-2">
+                    <p className="text-[9px] font-black uppercase text-zinc-500 tracking-widest font-sans">Candidate Cover Statement</p>
+                    <div className="bg-zinc-800/30 p-4 rounded-xl border border-zinc-800 text-zinc-450 font-sans text-xs leading-relaxed italic h-[110px] overflow-y-auto">
+                      {reg.message ? `"${reg.message}"` : <span className="text-zinc-600 font-normal">No message provided.</span>}
+                    </div>
+                  </div>
+
+                  {/* Right Follow-up Notes */}
+                  <div className="space-y-2 flex flex-col justify-between">
+                    <div className="space-y-2 text-left">
+                      <p className="text-[9px] font-black uppercase text-zinc-500 tracking-widest font-sans">Follow-up Notes (Internal)</p>
+                      <textarea
+                        className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl p-3 text-xs text-white placeholder:text-zinc-600 outline-none focus:border-primary/50 transition-colors resize-none font-sans h-[68px]"
+                        value={tempNotes[reg.id] !== undefined ? tempNotes[reg.id] : (reg.notes || '')}
+                        onChange={(e) => setTempNotes({ ...tempNotes, [reg.id]: e.target.value })}
+                        placeholder="Add candidate notes..."
+                      />
+                    </div>
+                    <button
+                      onClick={() => {
+                        updateAcademyRegistrationNotes(reg.id, tempNotes[reg.id] || '');
+                      }}
+                      className="w-full py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all font-sans"
+                    >
+                      Save Notes
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: 'dashboard' },
     { id: 'projects', label: 'Projects', icon: 'architecture' },
     { id: 'proposals', label: 'Inquiries', icon: 'mark_as_unread' },
+    { id: 'academy', label: 'Academy', icon: 'school' },
     { id: 'chat', label: 'Chat', icon: 'forum' },
     { id: 'portfolio', label: 'Portfolio', icon: 'gallery_thumbnail' },
     { id: 'payments', label: 'Payments', icon: 'payments' },
@@ -428,6 +614,7 @@ const AdminDashboard: React.FC = () => {
           {activeTab === 'payments' && renderPayments()}
           {activeTab === 'proposals' && renderProposals()}
           {activeTab === 'chat' && renderChat()}
+          {activeTab === 'academy' && renderAcademyRegs()}
         </div>
       </main>
 

@@ -60,9 +60,10 @@ const Footer: React.FC = () => {
             {/* Socials */}
             <div className="flex items-center gap-3">
               {[
-                { icon: 'photo_camera', label: 'Instagram', href: 'https://instagram.com' },
-                { icon: 'work', label: 'LinkedIn', href: 'https://linkedin.com' },
-                { icon: 'brush', label: 'Behance', href: 'https://behance.net' },
+                { icon: 'play_circle', label: 'TikTok', href: 'https://www.tiktok.com/@figment_cs' },
+                { icon: 'alternate_email', label: 'X', href: 'https://x.com/figment_cs' },
+                { icon: 'photo_camera', label: 'Instagram', href: 'https://www.instagram.com/figment_cs' },
+                { icon: 'thumb_up', label: 'Facebook', href: 'https://www.facebook.com/figmentCstudio' },
               ].map((s) => (
                 <a
                   key={s.label}

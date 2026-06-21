@@ -62,6 +62,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
     { label: 'About', path: '/about' },
     { label: 'Services', path: '/#services' },
     { label: 'Works', path: '/portfolio' },
+    { label: 'Academy', path: '/academy' },
     { label: 'Estimates', path: '/estimator' },
     { label: 'Contact', path: '/contact' },
   ];

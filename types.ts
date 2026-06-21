@@ -89,3 +89,18 @@ export interface PortfolioItem {
   class: string;
   hasPlay?: boolean;
 }
+
+export interface AcademyRegistration {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  experienceLevel: 'Beginner' | 'Intermediate' | 'Advanced';
+  preferredFormat: 'Onsite Abuja Studio' | 'Live Online Interactive';
+  courseInterest: string;
+  status: 'Pending' | 'Contacted' | 'Enrolled';
+  date: string;
+  notes?: string;
+  message?: string;
+}
+
