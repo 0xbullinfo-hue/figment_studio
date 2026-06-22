@@ -206,8 +206,8 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
         <title>Instant Quote Estimator | Figment Studio</title>
         <meta name="description" content="Calculate your architectural rendering, cinematic 3D animation, or scale model project cost instantly with Figment Studio's transparent pricing tool." />
       </Helmet>
-      <main className="mx-auto max-w-[1200px] px-6 pt-6 pb-12">
-        <div className="mb-6 flex flex-col gap-3 text-left">
+      <main className="mx-auto max-w-[1200px] px-6 pt-4 pb-12">
+        <div className="mb-4 flex flex-col gap-2 text-left">
           <button onClick={onBack} className="flex items-center gap-2 text-primary font-bold text-sm hover:translate-x-[-4px] transition-all w-fit">
             <span className="material-symbols-outlined text-sm font-bold">arrow_back</span>
             Return to Homepage
@@ -237,7 +237,7 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
         </div>
 
         {/* Total Estimate Bar */}
-        <div className="mb-6 flex flex-col md:flex-row items-center justify-between py-4 px-6 rounded-2xl border border-gray-200 bg-white/40 backdrop-blur-2xl shadow-xl">
+        <div className="mb-4 flex flex-col md:flex-row items-center justify-between py-2.5 px-6 rounded-2xl border border-gray-200 bg-white/40 backdrop-blur-2xl shadow-xl">
           <div className="flex flex-col gap-0.5 w-full md:w-auto text-left">
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">Selected Package • {pricing.timeline}</span>
             <div className="flex items-baseline gap-2">
@@ -248,12 +248,12 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
           <div className="flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
             <button
               onClick={handleDownloadQuote}
-              className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl border-2 border-primary text-primary px-6 py-2.5 text-[11px] font-bold uppercase tracking-widest hover:bg-primary/5 transition-all"
+              className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl border-2 border-primary text-primary px-6 py-2 text-[11px] font-bold uppercase tracking-widest hover:bg-primary/5 transition-all"
             >
               <span className="material-symbols-outlined text-lg font-bold">picture_as_pdf</span>
               SAVE PDF
             </button>
-            <button onClick={handleRequestFinish} disabled={pricing.total === 0} className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl bg-primary px-8 py-2.5 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg shadow-primary/20 hover:bg-orange-600 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50">
+            <button onClick={handleRequestFinish} disabled={pricing.total === 0} className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl bg-primary px-8 py-2 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg shadow-primary/20 hover:bg-orange-600 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50">
               <span className="material-symbols-outlined text-lg font-bold">send</span>
               REQUEST PROPOSAL
             </button>
