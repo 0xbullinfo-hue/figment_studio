@@ -206,38 +206,38 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
         <title>Instant Quote Estimator | Figment Studio</title>
         <meta name="description" content="Calculate your architectural rendering, cinematic 3D animation, or scale model project cost instantly with Figment Studio's transparent pricing tool." />
       </Helmet>
-      <main className="mx-auto max-w-[1200px] px-6 py-12">
-        <div className="mb-12 flex flex-col gap-4 text-left">
-          <button onClick={onBack} className="flex items-center gap-2 text-primary font-bold text-sm mb-4 hover:translate-x-[-4px] transition-all w-fit">
+      <main className="mx-auto max-w-[1200px] px-6 pt-6 pb-12">
+        <div className="mb-6 flex flex-col gap-3 text-left">
+          <button onClick={onBack} className="flex items-center gap-2 text-primary font-bold text-sm hover:translate-x-[-4px] transition-all w-fit">
             <span className="material-symbols-outlined text-sm font-bold">arrow_back</span>
             Return to Homepage
           </button>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-4">
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <h2 className="text-4xl font-black tracking-tight lg:text-5xl text-text-main uppercase leading-tight">Instant Estimate</h2>
-              <p className="max-w-2xl text-lg text-text-muted font-medium leading-relaxed">
-                Tailor your architectural visualization package. Select the services you need to build your custom bundle.
-              </p>
+              <div className="bg-gray-100 p-1 rounded-xl flex h-fit">
+                <button
+                  onClick={() => setPriority('Standard')}
+                  className={`px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${priority === 'Standard' ? 'bg-white text-primary shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                >
+                  Standard
+                </button>
+                <button
+                  onClick={() => setPriority('Urgent')}
+                  className={`px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${priority === 'Urgent' ? 'bg-white text-primary shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                >
+                  Urgent
+                </button>
+              </div>
             </div>
-            <div className="bg-gray-100 p-1 rounded-xl flex h-fit">
-              <button
-                onClick={() => setPriority('Standard')}
-                className={`px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${priority === 'Standard' ? 'bg-white text-primary shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-              >
-                Standard
-              </button>
-              <button
-                onClick={() => setPriority('Urgent')}
-                className={`px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${priority === 'Urgent' ? 'bg-white text-primary shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-              >
-                Urgent
-              </button>
-            </div>
+            <p className="max-w-2xl text-lg text-text-muted font-medium leading-relaxed">
+              Tailor your architectural visualization package. Select the services you need to build your custom bundle.
+            </p>
           </div>
         </div>
 
         {/* Total Estimate Bar */}
-        <div className="mb-8 flex flex-col md:flex-row items-center justify-between p-6 rounded-2xl border border-gray-200 bg-white/40 backdrop-blur-2xl shadow-xl">
+        <div className="mb-6 flex flex-col md:flex-row items-center justify-between py-4 px-6 rounded-2xl border border-gray-200 bg-white/40 backdrop-blur-2xl shadow-xl">
           <div className="flex flex-col gap-0.5 w-full md:w-auto text-left">
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">Selected Package • {pricing.timeline}</span>
             <div className="flex items-baseline gap-2">
