@@ -236,100 +236,100 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <ServiceCard
-            enabled={vizEnabled} onToggle={() => setVizEnabled(!vizEnabled)}
-            title="3D Visualization" priceLabel="$75 per view" icon="camera_indoor"
-            img={IMAGES.services.rendering}
-            val={views} setVal={setViews} min={1} max={50} unit="Views" subtotal={views * PRICE_PER_VIEW}
-          />
-          <ServiceCard
-            enabled={animEnabled} onToggle={() => setAnimEnabled(!animEnabled)}
-            title="3D Animation" priceLabel="$300 per 60s" icon="movie_edit"
-            img={IMAGES.services.animation}
-            val={animationSecs} setVal={setAnimationSecs} min={30} max={600} step={30} unit="Sec" subtotal={(animationSecs / 60) * PRICE_PER_60S_ANIMATION}
-          />
-          <ServiceCard
-            enabled={modelEnabled} onToggle={() => setModelEnabled(!modelEnabled)}
-            title="Physical Model" priceLabel="$500 per 300m²" icon="layers"
-            img={IMAGES.services.printing}
-            val={scale} setVal={setScale} min={100} max={2000} step={50} unit="m²" subtotal={(scale / 300) * PRICE_PER_300M2_MODEL}
-          />
-        </div>
-
-        <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-12 border-t border-gray-100 pt-16 text-left">
-          <div className="lg:col-span-7 flex flex-col gap-6">
-            <h3 className="text-3xl font-black text-text-main uppercase">Official Proposal</h3>
-            <p className="text-text-muted font-medium">Upload your 2D CAD drawings or site plans. Our project managers will provide a formal invoice within 24 hours.</p>
-            <div className="flex flex-col gap-5">
-              <input
-                className="rounded-xl bg-gray-50 border border-gray-200 p-4 focus:ring-2 focus:ring-primary/20 outline-none font-bold"
-                placeholder="Project Name"
-                type="text"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 text-left mt-8">
+          {/* Left Pane: Services and Form */}
+          <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-12">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+              <ServiceCard
+                enabled={vizEnabled} onToggle={() => setVizEnabled(!vizEnabled)}
+                title="3D Visualization" priceLabel="$75 per view" icon="camera_indoor"
+                img={IMAGES.services.rendering}
+                val={views} setVal={setViews} min={1} max={50} unit="Views" subtotal={views * PRICE_PER_VIEW}
               />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                  className="rounded-xl bg-gray-50 border border-gray-200 p-4 focus:ring-2 focus:ring-primary/20 outline-none font-bold"
-                  placeholder="Full Name"
-                  type="text"
-                  value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
-                />
-                <input
-                  className="rounded-xl bg-gray-50 border border-gray-200 p-4 focus:ring-2 focus:ring-primary/20 outline-none font-bold"
-                  placeholder="Work Email"
-                  type="email"
-                  value={clientEmail}
-                  onChange={(e) => setClientEmail(e.target.value)}
-                />
-              </div>
+              <ServiceCard
+                enabled={animEnabled} onToggle={() => setAnimEnabled(!animEnabled)}
+                title="3D Animation" priceLabel="$300 per 60s" icon="movie_edit"
+                img={IMAGES.services.animation}
+                val={animationSecs} setVal={setAnimationSecs} min={30} max={600} step={30} unit="Sec" subtotal={(animationSecs / 60) * PRICE_PER_60S_ANIMATION}
+              />
+              <ServiceCard
+                enabled={modelEnabled} onToggle={() => setModelEnabled(!modelEnabled)}
+                title="Physical Model" priceLabel="$500 per 300m²" icon="layers"
+                img={IMAGES.services.printing}
+                val={scale} setVal={setScale} min={100} max={2000} step={50} unit="m²" subtotal={(scale / 300) * PRICE_PER_300M2_MODEL}
+              />
             </div>
 
-            <div className="group relative flex h-full min-h-[200px] cursor-pointer flex-col items-center justify-center gap-4 rounded-3xl border-2 border-dashed border-gray-200 bg-gray-50 hover:border-primary/50 transition-all">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm group-hover:bg-primary group-hover:text-white transition-all">
-                <span className="material-symbols-outlined text-3xl">cloud_upload</span>
+            <div className="flex flex-col gap-6 pt-12 border-t border-gray-100">
+              <h3 className="text-3xl font-black text-text-main uppercase">Official Proposal</h3>
+              <p className="text-text-muted font-medium">Upload your 2D CAD drawings or site plans. Our project managers will provide a formal invoice within 24 hours.</p>
+              <div className="flex flex-col gap-5">
+                <input
+                  className="rounded-xl bg-gray-50 border border-gray-200 p-4 focus:ring-2 focus:ring-primary/20 outline-none font-bold"
+                  placeholder="Project Name"
+                  type="text"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input
+                    className="rounded-xl bg-gray-50 border border-gray-200 p-4 focus:ring-2 focus:ring-primary/20 outline-none font-bold"
+                    placeholder="Full Name"
+                    type="text"
+                    value={clientName}
+                    onChange={(e) => setClientName(e.target.value)}
+                  />
+                  <input
+                    className="rounded-xl bg-gray-50 border border-gray-200 p-4 focus:ring-2 focus:ring-primary/20 outline-none font-bold"
+                    placeholder="Work Email"
+                    type="email"
+                    value={clientEmail}
+                    onChange={(e) => setClientEmail(e.target.value)}
+                  />
+                </div>
               </div>
-              <div className="text-center px-6">
-                <p className="font-black text-text-main uppercase text-xs tracking-widest">Attach Drawings (PDF, DWG, RVT)</p>
-                <p className="text-[10px] text-text-muted mt-1 uppercase tracking-widest font-bold">Max file size: 50MB</p>
+
+              <div className="group relative flex h-full min-h-[200px] cursor-pointer flex-col items-center justify-center gap-4 rounded-3xl border-2 border-dashed border-gray-200 bg-gray-50 hover:border-primary/50 transition-all">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm group-hover:bg-primary group-hover:text-white transition-all">
+                  <span className="material-symbols-outlined text-3xl">cloud_upload</span>
+                </div>
+                <div className="text-center px-6">
+                  <p className="font-black text-text-main uppercase text-xs tracking-widest">Attach Drawings (PDF, DWG, RVT)</p>
+                  <p className="text-[10px] text-text-muted mt-1 uppercase tracking-widest font-bold">Max file size: 50MB</p>
+                </div>
+                <input className="absolute inset-0 cursor-pointer opacity-0" type="file" />
               </div>
-              <input className="absolute inset-0 cursor-pointer opacity-0" type="file" />
             </div>
           </div>
 
-          <div className="lg:col-span-5">
-            <div className="bg-[#1c140d] text-white p-8 rounded-3xl shadow-2xl space-y-8 sticky top-32">
+          {/* Right Pane: Quote Summary */}
+          <div className="lg:col-span-5 xl:col-span-4">
+            <div className="bg-white border border-gray-200 text-text-main p-8 rounded-3xl shadow-2xl space-y-8 sticky top-32">
               <div className="flex justify-between items-start">
                 <div>
-                  <h4 className="text-lg font-black uppercase tracking-tight text-primary">Quote Summary</h4>
-                  <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">{pricing.timeline} Est. Delivery</p>
+                  <h4 className="text-lg font-black uppercase tracking-tight text-text-main">Quote Summary</h4>
+                  <p className="text-[10px] text-text-muted font-black uppercase tracking-widest">{pricing.timeline} Est. Delivery</p>
                 </div>
-                <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${priority === 'Urgent' ? 'bg-red-500/20 text-red-500 border border-red-500/20' : 'bg-primary/20 text-primary border border-primary/20'}`}>
+                <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${priority === 'Urgent' ? 'bg-red-50 text-red-600 border border-red-200' : 'bg-primary/10 text-primary border border-primary/20'}`}>
                   {priority} Priority
                 </div>
               </div>
 
               <div className="space-y-4">
                 {pricing.items.length > 0 ? pricing.items.map((item, i) => (
-                  <div key={i} className="flex justify-between text-sm py-2 border-b border-white/5">
-                    <span className="text-gray-400 font-medium">{item.label}</span>
+                  <div key={i} className="flex justify-between text-sm py-2 border-b border-gray-100">
+                    <span className="text-text-muted font-medium">{item.label}</span>
                     <span className="font-bold">${item.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                   </div>
                 )) : (
-                  <p className="text-xs text-gray-500 italic">No services selected.</p>
+                  <p className="text-xs text-text-muted italic">No services selected.</p>
                 )}
               </div>
 
               <div className="flex justify-between items-center pt-4">
                 <div>
-                  <p className="text-[10px] font-black uppercase text-gray-500 tracking-widest">Total Projected Investment</p>
-                  <p className="text-4xl font-black text-white">${pricing.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-[10px] font-black uppercase text-gray-500 tracking-widest">Timeline</p>
-                  <p className="text-xl font-bold text-primary">{pricing.timeline}</p>
+                  <p className="text-[10px] font-black uppercase text-text-muted tracking-widest">Total Projected Investment</p>
+                  <p className="text-4xl font-black text-primary">${pricing.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
                 </div>
               </div>
 
@@ -337,10 +337,10 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
                 <button
                   onClick={handleDownloadQuote}
                   disabled={isDownloading || pricing.total === 0}
-                  className="w-full py-4 border-2 border-primary text-primary rounded-xl text-xs font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="w-full py-4 border-2 border-primary text-primary rounded-xl text-xs font-black uppercase tracking-widest hover:bg-primary/5 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   <span className="material-symbols-outlined text-lg">{isDownloading ? 'sync' : 'picture_as_pdf'}</span>
-                  {isDownloading ? 'Generating Quote...' : 'Download Quote PDF'}
+                  {isDownloading ? 'Generating Quote...' : 'Save PDF'}
                 </button>
                 <button
                   onClick={handleRequestFinish}
@@ -354,31 +354,6 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
           </div>
         </div>
       </main>
-
-      <footer className="fixed bottom-0 left-0 z-50 w-full border-t border-gray-100 bg-white/95 backdrop-blur-xl shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
-        <div className="mx-auto flex max-w-[1200px] flex-col md:flex-row items-center justify-between px-6 py-3.5 gap-4 md:gap-0">
-          <div className="flex flex-col gap-0.5 w-full md:w-auto text-left">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted/60">Selected Package • {pricing.timeline}</span>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-primary">${pricing.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-              <span className="text-[10px] font-semibold text-text-muted uppercase">Excl. Taxes</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <button
-              onClick={handleDownloadQuote}
-              className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl border-2 border-primary text-primary px-6 py-2.5 text-[11px] font-bold uppercase tracking-widest hover:bg-primary/5 transition-all"
-            >
-              <span className="material-symbols-outlined text-lg font-bold">picture_as_pdf</span>
-              SAVE PDF
-            </button>
-            <button onClick={handleRequestFinish} disabled={pricing.total === 0} className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl bg-primary px-8 py-2.5 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg shadow-primary/20 hover:bg-orange-600 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50">
-              <span className="material-symbols-outlined text-lg font-bold">send</span>
-              REQUEST PROPOSAL
-            </button>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
