@@ -106,7 +106,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Layout onOpenVision={() => setIsVisionAssistantOpen(true)} />}>
           <Route index element={<LandingPage />} />
-          <Route path="estimator" element={<Estimator onBack={() => navigate(-1)} onFinish={() => navigate('/success')} />} />
+          <Route path="estimator" element={<Estimator onBack={() => navigate(-1)} onFinish={(data) => navigate('/success', { state: { invoiceId: data.id, amount: data.total, project: data.projectName } })} />} />
           <Route path="portfolio" element={<PortfolioGallery />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="contact" element={<ContactPage />} />
