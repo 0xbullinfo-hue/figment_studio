@@ -201,7 +201,7 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
   };
 
   return (
-    <div className="bg-white min-h-screen font-display text-left pb-60">
+    <div className="bg-white min-h-screen font-display text-left pb-16">
       <Helmet>
         <title>Instant Quote Estimator | Figment Studio</title>
         <meta name="description" content="Calculate your architectural rendering, cinematic 3D animation, or scale model project cost instantly with Figment Studio's transparent pricing tool." />
@@ -233,6 +233,30 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
                 Urgent
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* Total Estimate Bar */}
+        <div className="mb-8 flex flex-col md:flex-row items-center justify-between p-6 rounded-2xl border border-gray-200 bg-white/40 backdrop-blur-2xl shadow-xl">
+          <div className="flex flex-col gap-0.5 w-full md:w-auto text-left">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">Selected Package • {pricing.timeline}</span>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-bold text-primary">${pricing.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+              <span className="text-[10px] font-semibold text-text-muted uppercase">Excl. Taxes</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
+            <button
+              onClick={handleDownloadQuote}
+              className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl border-2 border-primary text-primary px-6 py-2.5 text-[11px] font-bold uppercase tracking-widest hover:bg-primary/5 transition-all"
+            >
+              <span className="material-symbols-outlined text-lg font-bold">picture_as_pdf</span>
+              SAVE PDF
+            </button>
+            <button onClick={handleRequestFinish} disabled={pricing.total === 0} className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl bg-primary px-8 py-2.5 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg shadow-primary/20 hover:bg-orange-600 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50">
+              <span className="material-symbols-outlined text-lg font-bold">send</span>
+              REQUEST PROPOSAL
+            </button>
           </div>
         </div>
 
@@ -353,32 +377,6 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
             </div>
           </div>
         </div>
-      </main>
-
-      <footer className="fixed bottom-0 left-0 z-50 w-full border-t border-gray-100 bg-white/40 backdrop-blur-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.05)] pointer-events-auto">
-        <div className="mx-auto flex max-w-[1200px] flex-col md:flex-row items-center justify-between px-6 py-3.5 gap-4 md:gap-0">
-          <div className="flex flex-col gap-0.5 w-full md:w-auto text-left">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted/60">Selected Package • {pricing.timeline}</span>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-primary">${pricing.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-              <span className="text-[10px] font-semibold text-text-muted uppercase">Excl. Taxes</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <button
-              onClick={handleDownloadQuote}
-              className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl border-2 border-primary text-primary px-6 py-2.5 text-[11px] font-bold uppercase tracking-widest hover:bg-primary/5 transition-all"
-            >
-              <span className="material-symbols-outlined text-lg font-bold">picture_as_pdf</span>
-              SAVE PDF
-            </button>
-            <button onClick={handleRequestFinish} disabled={pricing.total === 0} className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl bg-primary px-8 py-2.5 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg shadow-primary/20 hover:bg-orange-600 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50">
-              <span className="material-symbols-outlined text-lg font-bold">send</span>
-              REQUEST PROPOSAL
-            </button>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
