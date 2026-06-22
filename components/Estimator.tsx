@@ -377,6 +377,7 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
             </div>
           </div>
         </div>
+      </main>
     </div>
   );
 };
