@@ -87,15 +87,6 @@ const PLANS = [
     ctaPath: '/auth?upgrade=pro',
     featured: true,
   },
-  {
-    tier: 'Enterprise',
-    price: 'Custom',
-    sub: 'Private consultation',
-    features: ['Dedicated design strategist', 'SLA + priority render queue', 'Confidential delivery pipeline', 'Advanced revision governance', 'Unlimited AI credits'],
-    cta: 'Book Consultation',
-    ctaPath: '/contact',
-    featured: false,
-  },
 ];
 
 const SectionLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -340,7 +331,7 @@ const LandingPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border-ui">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border-ui max-w-4xl mx-auto">
             {PLANS.map((plan) => (
               <article
                 key={plan.tier}
@@ -383,6 +374,18 @@ const LandingPage: React.FC = () => {
                 >
                   {plan.cta}
                 </button>
+
+                {/* Coming Soon overlay for all plans */}
+                <div className={`absolute inset-0 ${plan.featured ? 'bg-surface' : 'bg-[#0E0E0E]'} z-20 flex flex-col items-center justify-center p-6 text-center`}>
+                  <span className="bg-primary/20 text-primary border border-primary/30 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.25em] mb-3">
+                    Coming Soon
+                  </span>
+                  <p className="text-xs text-text-secondary max-w-[220px] leading-relaxed font-sans">
+                    {plan.tier === 'Studio Pro' 
+                      ? 'Mentorship cohorts and GPU cloud renders are currently in closed preview.'
+                      : 'Free public AI teaser tools and conceptual sketch planning are launching soon.'}
+                  </p>
+                </div>
               </article>
             ))}
           </div>
@@ -407,7 +410,14 @@ const LandingPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border-ui">
             {INSIGHTS.map((post, i) => (
-              <article key={i} className="group bg-background cursor-pointer" onClick={() => navigate('/insights')}>
+              <article 
+                key={i} 
+                className="group bg-background cursor-pointer" 
+                onClick={() => {
+                  const slug = post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                  navigate(`/insights?read=${slug}`);
+                }}
+              >
                 <div className="aspect-[16/10] overflow-hidden">
                   <img
                     src={post.img}

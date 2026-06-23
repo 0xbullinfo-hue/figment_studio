@@ -421,13 +421,20 @@ const ArcVizPage: React.FC = () => {
               <p className="text-[10px] font-bold uppercase tracking-widest text-primary font-sans">2. Image Upload (Sketch, Clay render or Facade)</p>
               <input type="file" ref={fileInputRef} onChange={handleImageUpload} className="hidden" accept="image/*" />
               {!selectedImage ? (
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="w-full rounded-2xl border-2 border-dashed border-border-ui/80 bg-background-alt py-16 text-xs uppercase tracking-widest font-bold text-text-muted hover:border-primary/40 hover:text-primary transition-all duration-300 flex flex-col items-center justify-center gap-4"
-                >
-                  <span className="material-symbols-outlined text-4xl">upload_file</span>
-                  Click to select sketch or facade file
-                </button>
+                <div className="relative overflow-hidden rounded-2xl">
+                  <button
+                    disabled
+                    className="w-full rounded-2xl border-2 border-dashed border-border-ui/80 bg-background-alt py-16 text-xs uppercase tracking-widest font-bold text-text-muted/30 flex flex-col items-center justify-center gap-4 cursor-not-allowed"
+                  >
+                    <span className="material-symbols-outlined text-4xl opacity-20">upload_file</span>
+                    Click to select sketch or facade file
+                  </button>
+                  <div className="absolute inset-0 bg-black/60 backdrop-blur-[2.5px] z-10 flex flex-col items-center justify-center p-4 text-center">
+                    <span className="bg-primary/20 text-primary border border-primary/30 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.25em]">
+                      Coming Soon
+                    </span>
+                  </div>
+                </div>
               ) : (
                 <div className="rounded-2xl border border-border-ui bg-background-alt p-5 flex flex-col sm:flex-row items-center gap-6">
                   <img src={selectedImage.preview} alt="Room preview" className="h-24 w-24 rounded-xl object-cover border border-border-ui" />

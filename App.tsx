@@ -15,7 +15,25 @@ import CustomCursor from './components/CustomCursor.tsx';
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+    const resetScroll = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTo(0, 0);
+      document.body.scrollTo(0, 0);
+
+      const scrollableContainers = document.querySelectorAll('.overflow-y-auto, main, .custom-scrollbar, [class*="overflow-y-scroll"]');
+      scrollableContainers.forEach(container => {
+        container.scrollTop = 0;
+      });
+    };
+
+    resetScroll();
+
+    // Run at staggered delays to capture lazy route loads and component mounts
+    const timeouts = [20, 50, 100, 200, 400, 800].map(delay =>
+      setTimeout(resetScroll, delay)
+    );
+
+    return () => timeouts.forEach(clearTimeout);
   }, [pathname]);
   return null;
 };

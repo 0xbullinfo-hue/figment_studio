@@ -85,7 +85,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     </div>
     <div className="mt-auto border-t border-gray-100 pt-4 flex justify-between items-center">
       <span className="text-xs font-black uppercase text-text-muted">Sub-total</span>
-      <span className={`text-2xl font-black ${enabled ? 'text-text-main' : 'text-gray-300'}`}>
+      <span className={`text-2xl font-black ${enabled ? 'text-slate-900' : 'text-gray-300'}`}>
         ${subtotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}
       </span>
     </div>
@@ -214,7 +214,7 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
           </button>
           <div className="flex flex-col gap-2">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <h2 className="text-4xl font-black tracking-tight lg:text-5xl text-text-main uppercase leading-tight">Instant Estimate</h2>
+              <h2 className="text-4xl font-black tracking-tight lg:text-5xl text-slate-900 uppercase leading-tight">Instant Estimate</h2>
               <div className="bg-gray-100 p-1 rounded-xl flex h-fit">
                 <button
                   onClick={() => setPriority('Standard')}
@@ -237,23 +237,26 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
         </div>
 
         {/* Total Estimate Bar */}
-        <div className="mb-4 flex flex-col md:flex-row items-center justify-between py-2.5 px-6 rounded-2xl border border-gray-200 bg-white/40 backdrop-blur-2xl shadow-xl">
-          <div className="flex flex-col gap-0.5 w-full md:w-auto text-left">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">Selected Package • {pricing.timeline}</span>
+        <div className="mb-8 flex flex-col md:flex-row items-center justify-between py-5 px-8 rounded-2xl bg-gradient-to-r from-[#1c140d] via-[#14110f] to-[#121212] border border-[#F07A3A]/25 shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative overflow-hidden backdrop-blur-xl">
+          {/* Ambient Glow */}
+          <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="flex flex-col gap-1 w-full md:w-auto text-left relative z-10">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Selected Package • {pricing.timeline}</span>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-primary">${pricing.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-              <span className="text-[10px] font-semibold text-text-muted uppercase">Excl. Taxes</span>
+              <span className="text-3xl md:text-4xl font-black text-primary">${pricing.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+              <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">Excl. Taxes</span>
             </div>
           </div>
-          <div className="flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
+          <div className="flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0 relative z-10">
             <button
               onClick={handleDownloadQuote}
-              className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl border-2 border-primary text-primary px-6 py-2 text-[11px] font-bold uppercase tracking-widest hover:bg-primary/5 transition-all"
+              className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl border border-primary/30 text-primary px-6 py-2.5 text-[11px] font-bold uppercase tracking-widest hover:border-primary hover:bg-primary/10 transition-all duration-300"
             >
               <span className="material-symbols-outlined text-lg font-bold">picture_as_pdf</span>
               SAVE PDF
             </button>
-            <button onClick={handleRequestFinish} disabled={pricing.total === 0} className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl bg-primary px-8 py-2 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg shadow-primary/20 hover:bg-orange-600 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50">
+            <button onClick={handleRequestFinish} disabled={pricing.total === 0} className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl bg-primary px-8 py-2.5 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg shadow-primary/20 hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50">
               <span className="material-symbols-outlined text-lg font-bold">send</span>
               REQUEST PROPOSAL
             </button>
@@ -283,7 +286,7 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
 
         <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-12 border-t border-gray-100 pt-16 text-left">
           <div className="lg:col-span-7 flex flex-col gap-6">
-            <h3 className="text-3xl font-black text-text-main uppercase">Official Proposal</h3>
+            <h3 className="text-3xl font-black text-slate-900 uppercase">Official Proposal</h3>
             <p className="text-text-muted font-medium">Upload your 2D CAD drawings or site plans. Our project managers will provide a formal invoice within 24 hours.</p>
             <div className="flex flex-col gap-5">
               <input
@@ -316,7 +319,7 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
                 <span className="material-symbols-outlined text-3xl">cloud_upload</span>
               </div>
               <div className="text-center px-6">
-                <p className="font-black text-text-main uppercase text-xs tracking-widest">Attach Drawings (PDF, DWG, RVT)</p>
+                <p className="font-black text-slate-900 uppercase text-xs tracking-widest">Attach Drawings (PDF, DWG, RVT)</p>
                 <p className="text-[10px] text-text-muted mt-1 uppercase tracking-widest font-bold">Max file size: 50MB</p>
               </div>
               <input className="absolute inset-0 cursor-pointer opacity-0" type="file" />

@@ -113,7 +113,7 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
               <div className={`max-w-[85%] px-5 py-3 rounded-[1.25rem] text-sm leading-relaxed shadow-sm ${
                 msg.role === 'user'
                   ? 'bg-primary text-white font-bold rounded-tr-none'
-                  : 'bg-white text-text-main border border-gray-100 rounded-tl-none font-medium whitespace-pre-wrap'
+                  : 'bg-white text-slate-800 border border-gray-100 rounded-tl-none font-medium whitespace-pre-wrap'
               }`}>
                 {msg.content}
               </div>
@@ -122,7 +122,7 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
 
           {(isLoading || streamingContent) && (
             <div className="flex justify-start">
-              <div className="max-w-[85%] px-5 py-3 rounded-[1.25rem] rounded-tl-none bg-white text-text-main border border-gray-100 shadow-sm text-sm font-medium whitespace-pre-wrap">
+              <div className="max-w-[85%] px-5 py-3 rounded-[1.25rem] rounded-tl-none bg-white text-slate-800 border border-gray-100 shadow-sm text-sm font-medium whitespace-pre-wrap">
                 {streamingContent || 'Thinking...'}
               </div>
             </div>

@@ -75,7 +75,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     </div>
     <div className="mt-auto border-t border-gray-100 pt-4 flex justify-between items-center">
       <span className="text-[10px] font-black uppercase text-text-muted tracking-widest">Sub-total</span>
-      <span className={`text-xl font-black ${enabled ? 'text-text-main' : 'text-gray-300'}`}>
+      <span className={`text-xl font-black ${enabled ? 'text-[#1c140d]' : 'text-gray-300'}`}>
         ${subtotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}
       </span>
     </div>
