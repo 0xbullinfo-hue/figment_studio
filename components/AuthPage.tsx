@@ -10,18 +10,7 @@ interface AuthPageProps {
   onBack: () => void;
 }
 
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  borderRadius: '0.625rem',
-  border: '1px solid #272018',
-  background: '#0A0805',
-  padding: '0.875rem 1rem 0.875rem 3rem',
-  fontSize: '0.875rem',
-  color: '#F2EDE6',
-  fontFamily: 'Inter, sans-serif',
-  outline: 'none',
-  transition: 'all 0.2s ease',
-};
+const INPUT_CLASS = "w-full rounded-xl border border-border-ui bg-background px-4 py-3.5 text-sm text-text-main placeholder:text-text-faint focus:border-primary/50 focus:ring-1 focus:ring-primary/20 outline-none transition-all";
 
 const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
   const [searchParams] = useSearchParams();
@@ -104,7 +93,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
                     required
                     type={field.type}
                     placeholder={field.placeholder}
-                    className="input-base"
+                    className={INPUT_CLASS}
                   />
                 </div>
               ))}
@@ -118,8 +107,8 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
                   <input
                     required
                     type={showPassword ? 'text' : 'password'}
-                    defaultValue="hardpassword123"
-                    className="input-base pr-12"
+                    placeholder="••••••••"
+                    className={`${INPUT_CLASS} pr-12`}
                   />
                   <button
                     type="button"
@@ -227,15 +216,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
                     required
                     type="email"
                     placeholder="name@company.com"
-                    style={{ ...inputStyle, paddingLeft: '2.75rem' }}
-                    onFocus={e => {
-                      e.currentTarget.style.borderColor = 'rgba(240,122,58,0.4)';
-                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(240,122,58,0.07)';
-                    }}
-                    onBlur={e => {
-                      e.currentTarget.style.borderColor = '#272018';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }}
+                    className={`${INPUT_CLASS} pl-11`}
                   />
                 </div>
               </div>
@@ -254,15 +235,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
                     required
                     type={showPassword ? 'text' : 'password'}
                     placeholder="••••••••"
-                    style={{ ...inputStyle, paddingLeft: '2.75rem', paddingRight: '2.75rem' }}
-                    onFocus={e => {
-                      e.currentTarget.style.borderColor = 'rgba(240,122,58,0.4)';
-                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(240,122,58,0.07)';
-                    }}
-                    onBlur={e => {
-                      e.currentTarget.style.borderColor = '#272018';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }}
+                    className={`${INPUT_CLASS} pl-11 pr-11`}
                   />
                   <button
                     type="button"

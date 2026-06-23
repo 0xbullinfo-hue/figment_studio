@@ -6,19 +6,33 @@ const CustomCursor: React.FC = () => {
     const [isHovering, setIsHovering] = useState(false);
 
     useEffect(() => {
+        // Disable custom cursor listeners entirely on touchscreen/coarse-pointer devices
+        if (window.matchMedia('(pointer: coarse)').matches) {
+            return;
+        }
+
         const updateMousePosition = (e: MouseEvent) => {
             setMousePosition({ x: e.clientX, y: e.clientY });
         };
 
         const handleMouseOver = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
+            if (!target) return;
+
+            const tagName = target.tagName.toLowerCase();
+            const isInteractiveTag =
+                tagName === 'button' ||
+                tagName === 'a' ||
+                tagName === 'input' ||
+                tagName === 'select' ||
+                tagName === 'textarea';
+
             if (
-                window.getComputedStyle(target).cursor === 'pointer' ||
-                target.tagName.toLowerCase() === 'button' ||
-                target.tagName.toLowerCase() === 'a' ||
-                target.tagName.toLowerCase() === 'input' ||
+                isInteractiveTag ||
                 target.closest('button') ||
-                target.closest('a')
+                target.closest('a') ||
+                target.closest('.cursor-pointer') ||
+                target.getAttribute('role') === 'button'
             ) {
                 setIsHovering(true);
             } else {
@@ -26,8 +40,8 @@ const CustomCursor: React.FC = () => {
             }
         };
 
-        window.addEventListener('mousemove', updateMousePosition);
-        window.addEventListener('mouseover', handleMouseOver);
+        window.addEventListener('mousemove', updateMousePosition, { passive: true });
+        window.addEventListener('mouseover', handleMouseOver, { passive: true });
 
         return () => {
             window.removeEventListener('mousemove', updateMousePosition);
@@ -62,3 +76,4 @@ const CustomCursor: React.FC = () => {
 };
 
 export default CustomCursor;
+

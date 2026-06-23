@@ -45,13 +45,16 @@ const ProfileSettings = lazy(() => import('./components/ProfileSettings.tsx'));
 const NotFound = lazy(() => import('./components/NotFound.tsx'));
 const AcademyPage = lazy(() => import('./components/AcademyPage.tsx'));
 
-const AppOutlet = () => (
-  <div className="flex-1 flex flex-col w-full h-full">
-    <Suspense fallback={<div className="h-[50vh] flex items-center justify-center"><div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>}>
-      <Outlet />
-    </Suspense>
-  </div>
-);
+const AppOutlet = () => {
+  const location = useLocation();
+  return (
+    <div className="flex-1 flex flex-col w-full h-full" key={location.pathname}>
+      <Suspense fallback={<div className="h-[50vh] flex items-center justify-center"><div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>}>
+        <Outlet />
+      </Suspense>
+    </div>
+  );
+};
 
 const Layout = ({ onOpenVision }: { onOpenVision: () => void }) => {
   return (

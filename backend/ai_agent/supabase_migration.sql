@@ -59,7 +59,7 @@ CREATE POLICY "Users can read their own logs"
     ON public.usage_logs FOR SELECT
     USING (
         (auth.uid() = user_id) OR 
-        (user_id IS NULL AND ip_address = CURRENT_SETTING('request.headers', true)::json->>'x-forwarded-for')
+        (user_id IS NULL AND ip_address = (NULLIF(CURRENT_SETTING('request.headers', true), '')::jsonb ->> 'x-forwarded-for'))
     );
 
 -- 7. Core Transaction Function: Check Usage and Allocate Pending Status Atomically
