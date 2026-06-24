@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,53 +11,17 @@ const PortfolioGallery: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
   const [activeFilter, setActiveFilter] = useState('All');
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Dynamic filter categories based on actual items present
   const filterCategories = ['All', 'Exterior', 'Interior', 'Animation', 'Scale Models'];
 
-  // Filter items based on selected category
+  // Filter items based on selected category & search query
   const filteredItems = items.filter(item => {
-    if (activeFilter === 'All') return true;
-    if (activeFilter === 'Animation') return !!item.hasPlay;
-    return item.type.toLowerCase() === activeFilter.toLowerCase();
+    const matchesCategory = activeFilter === 'All' || (activeFilter === 'Animation' ? !!item.hasPlay : item.type.toLowerCase() === activeFilter.toLowerCase());
+    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || item.type.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
   });
-
-  // Reset scroll to 0 when filter changes
-  useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-    }
-  }, [activeFilter]);
-
-  // Bind desktop vertical wheel event to horizontal scroll translation
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const handleWheel = (e: WheelEvent) => {
-      // Do not hijack scroll if detail viewer is open
-      if (selectedItem) return;
-
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        e.preventDefault();
-        container.scrollLeft += e.deltaY * 1.2;
-      }
-    };
-
-    container.addEventListener('wheel', handleWheel, { passive: false });
-    return () => {
-      container.removeEventListener('wheel', handleWheel);
-    };
-  }, [selectedItem]);
-
-  // Scroll controls for desktop arrows
-  const scrollGallery = (direction: 'left' | 'right') => {
-    if (containerRef.current) {
-      const scrollOffset = direction === 'left' ? -600 : 600;
-      containerRef.current.scrollBy({ left: scrollOffset, behavior: 'smooth' });
-    }
-  };
 
   // Helper to trigger file download of the rendering
   const handleDownloadFrame = (item: PortfolioItem) => {
@@ -103,7 +67,7 @@ const PortfolioGallery: React.FC = () => {
   };
 
   return (
-    <section className="relative w-full min-h-screen bg-background text-white overflow-hidden flex flex-col justify-between py-24 lg:py-32">
+    <section className="relative w-full min-h-screen bg-background text-white py-24 lg:py-32 flex flex-col justify-between">
       <Helmet>
         <title>Portfolio | Figment Studio</title>
         <meta name="description" content="Browse Figment Studio's curated collection of premium 3D renderings, cinematic animations, and interior visualizations for real estate in Abuja and beyond." />
@@ -126,7 +90,7 @@ const PortfolioGallery: React.FC = () => {
             return (
               <button
                 key={cat}
-                onClick={() => setActiveFilter(cat)}
+                onClick={() => { setActiveFilter(cat); setSearchQuery(''); }}
                 className={`relative text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] pb-1 transition-colors focus:outline-none ${
                   isActive ? 'text-primary' : 'text-text-muted hover:text-white'
                 }`}
@@ -145,69 +109,68 @@ const PortfolioGallery: React.FC = () => {
         </div>
       </div>
 
-      {/* Option 1: Horizontal Parallax Scrolling Container */}
-      <div className="relative w-full flex-1 flex items-center justify-center my-6">
-        {/* Navigation Boundary Arrows (Desktop Helper) */}
+      {/* Search and Settings Controls Bar */}
+      <div className="px-8 md:px-14 lg:px-20 max-w-[1600px] w-full mx-auto mb-10 flex flex-col sm:flex-row items-center gap-4">
+        <div className="relative flex-1 w-full">
+          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-white/40">search</span>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search image by title, category..."
+            className="w-full bg-[#141416] border border-white/5 rounded-xl py-3.5 pl-12 pr-4 text-sm text-white placeholder-white/30 focus:outline-none focus:border-primary/50 transition-all font-sans"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors"
+            >
+              <span className="material-symbols-outlined text-base">close</span>
+            </button>
+          )}
+        </div>
         <button
-          onClick={() => scrollGallery('left')}
-          className="absolute left-6 z-20 w-12 h-12 rounded-full bg-black/40 border border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary transition-all duration-300 backdrop-blur-md hidden lg:flex group"
+          className="flex items-center justify-center gap-2 border border-white/5 hover:border-white/20 bg-[#141416] px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider text-white/70 hover:text-white transition-all font-sans w-full sm:w-auto cursor-pointer"
         >
-          <span className="material-symbols-outlined text-white text-xl group-hover:-translate-x-0.5 transition-transform">arrow_back_ios_new</span>
+          <span className="material-symbols-outlined text-base">settings</span>
+          Settings
         </button>
+      </div>
 
-        <button
-          onClick={() => scrollGallery('right')}
-          className="absolute right-6 z-20 w-12 h-12 rounded-full bg-black/40 border border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary transition-all duration-300 backdrop-blur-md hidden lg:flex group"
-        >
-          <span className="material-symbols-outlined text-white text-xl group-hover:translate-x-0.5 transition-transform">arrow_forward_ios</span>
-        </button>
-
-        <div
-          ref={containerRef}
-          className="w-full flex items-center gap-12 overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-none px-8 md:px-20 lg:px-44 py-8 select-none"
-        >
+      {/* Vertical Masonry Grid Container */}
+      <div className="px-8 md:px-14 lg:px-20 max-w-[1600px] w-full mx-auto mb-16 flex-1">
+        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6">
           {filteredItems.map((item, index) => {
-            const displayIndex = String(index + 1).padStart(2, '0');
-            // Stagger layout aspect ratios for asymmetrical gallery design
-            const isEven = index % 2 === 0;
-            const containerClass = isEven
-              ? 'min-w-[320px] md:min-w-[440px] aspect-[4/5] self-start mt-6'
-              : 'min-w-[420px] md:min-w-[620px] aspect-video self-center';
-
             return (
               <motion.div
                 key={item.id}
                 layoutId={`card-container-${item.id}`}
                 onClick={() => { setSelectedItem(item); setIsPlayingVideo(false); }}
-                className={`snap-center relative group cursor-pointer border border-border-ui/40 hover:border-primary/50 bg-surface-alt/40 p-4 transition-all duration-500 overflow-hidden flex flex-col justify-between ${containerClass}`}
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.05 }}
+                className="break-inside-avoid relative group cursor-pointer border border-border-ui/40 hover:border-primary/50 bg-[#0E0E0E] p-4 transition-all duration-500 overflow-hidden flex flex-col mb-6"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: (index % 10) * 0.05 }}
               >
-                {/* Visual Outline Number Index */}
-                <span className="absolute bottom-16 right-4 font-display text-[12vw] lg:text-[10rem] font-bold text-white/5 leading-none select-none z-0">
-                  {displayIndex}
-                </span>
-
                 {/* Main Render Card Frame */}
-                <div className="relative w-full flex-1 overflow-hidden bg-background">
-                  <div
-                    className="w-full h-full bg-cover bg-center transition-all duration-[900ms] group-hover:scale-105"
-                    style={{ backgroundImage: `url(${item.url})` }}
+                <div className="relative w-full overflow-hidden bg-background rounded-lg mb-4">
+                  <img
+                    src={item.url}
+                    alt={item.title}
+                    className="w-full h-auto object-cover transition-all duration-[900ms] group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-all duration-500" />
                   
                   {item.hasPlay && (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all duration-500 shadow-lg shadow-black/20">
-                        <span className="material-symbols-outlined text-white text-3xl">play_arrow</span>
+                      <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all duration-500 shadow-lg shadow-black/20">
+                        <span className="material-symbols-outlined text-white text-2xl">play_arrow</span>
                       </div>
                     </div>
                   )}
                 </div>
 
                 {/* Text Metadata */}
-                <div className="mt-4 flex items-center justify-between relative z-10 text-left">
+                <div className="flex items-center justify-between relative z-10 text-left">
                   <div>
                     <span className="text-primary text-[9px] font-bold uppercase tracking-[0.25em] block mb-1 font-sans">{item.type}</span>
                     <h3 className="font-display text-white text-base lg:text-lg tracking-wide uppercase leading-snug">{item.title}</h3>
@@ -218,11 +181,16 @@ const PortfolioGallery: React.FC = () => {
             );
           })}
         </div>
+        {filteredItems.length === 0 && (
+          <div className="py-20 text-center text-text-muted text-sm font-sans">
+            No items matched your search query.
+          </div>
+        )}
       </div>
 
-      {/* Subtle bottom scroll timeline marker */}
-      <div className="px-8 md:px-14 lg:px-20 max-w-[1600px] w-full mx-auto flex items-center justify-between text-text-muted text-[10px] tracking-widest font-sans">
-        <span className="uppercase">Swipe or Scroll Wheel to Browse</span>
+      {/* Subtle bottom count timeline marker */}
+      <div className="px-8 md:px-14 lg:px-20 max-w-[1600px] w-full mx-auto flex items-center justify-between text-text-muted text-[10px] tracking-widest font-sans mb-16">
+        <span className="uppercase">Click any card to view details</span>
         <span className="font-semibold text-primary">{filteredItems.length} Series Items</span>
       </div>
 
