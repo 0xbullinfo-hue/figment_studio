@@ -38,12 +38,14 @@ export const IMAGES = {
     { id: 2, type: 'Exterior', title: 'The Abuja Nexus Tower', url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop', class: 'aspect-[2/3]' },
     { id: 3, type: 'Animation', title: 'CBD Flyover', url: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=2070&auto=format&fit=crop', class: 'aspect-video', hasPlay: true },
     { id: 4, type: 'Scale Models', title: 'Lekki Masterplan', url: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2069&auto=format&fit=crop', class: 'aspect-square' },
-    { id: 5, type: 'Exterior', title: 'Asokoro Villa Project', url: '/work-placeholder.svg', class: 'aspect-[4/5]' },
-    { id: 6, type: 'Interior', title: 'Wuse Penthouse Complex', url: '/work-placeholder.svg', class: 'aspect-video' },
-    { id: 7, type: 'Animation', title: 'Garki Commercial Hub', url: '/work-placeholder.svg', class: 'aspect-square', hasPlay: true },
-    { id: 8, type: 'Exterior', title: 'Katampe Heights Tower', url: '/work-placeholder.svg', class: 'aspect-[2/3]' },
-    { id: 9, type: 'Interior', title: 'Jabi Lakefront Lounge', url: '/work-placeholder.svg', class: 'aspect-video' },
-    { id: 10, type: 'Scale Models', title: 'Guzape Masterplan Volume', url: '/work-placeholder.svg', class: 'aspect-[4/5]' },
+    { id: 5, type: 'Exterior', title: 'Maitama Hillside Villas', url: '/maitama-hillside-villas.jpg', class: 'aspect-[4/3]' },
+    { id: 6, type: 'Exterior', title: 'Asokoro Villa - Front View', url: '/asokoro-villa-front.jpg', class: 'aspect-[4/3]' },
+    { id: 7, type: 'Exterior', title: 'Asokoro Villa - Perspective', url: '/asokoro-villa-angle.jpg', class: 'aspect-[4/3]' },
+    { id: 8, type: 'Interior', title: 'Jabi Lakefront Dining', url: '/jabi-lakefront-dining.jpg', class: 'aspect-[4/3]' },
+    { id: 9, type: 'Interior', title: 'Jabi Penthouse Living', url: '/jabi-penthouse-living.jpg', class: 'aspect-[4/3]' },
+    { id: 10, type: 'Exterior', title: 'Maitama Luxury Villa - Dusk', url: '/maitama-villa-dusk.jpg', class: 'aspect-[3/2]' },
+    { id: 11, type: 'Exterior', title: 'Maitama Luxury Villa - Day', url: '/maitama-villa-day.jpg', class: 'aspect-[3/2]' },
+    { id: 12, type: 'Exterior', title: 'Asokoro Villa - Low Angle', url: '/asokoro-villa-low-angle.jpg', class: 'aspect-[4/3]' },
   ]
 };
 
