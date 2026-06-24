@@ -69,7 +69,7 @@ const ContactPage: React.FC = () => {
                 <span className="material-symbols-outlined text-sm font-bold">location_on</span>
               </div>
               <div className="absolute top-10 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-lg shadow-xl whitespace-nowrap border border-gray-100">
-                <p className="text-xs font-black uppercase tracking-widest">Plot 442, CBD Abuja</p>
+                <p className="text-xs font-black uppercase tracking-widest">Abuja, FCT, Nigeria</p>
               </div>
             </div>
           </div>

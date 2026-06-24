@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" fill="#0A0A0B" />
+  <path d="M40 40 L760 40 L760 560 L40 560 Z" stroke="#1D1D21" stroke-width="1" />
+  <path d="M40 40 L760 560" stroke="#141416" stroke-width="1" />
+  <path d="M760 40 L40 560" stroke="#141416" stroke-width="1" />
+  <circle cx="400" cy="300" r="120" stroke="#1D1D21" stroke-width="1" stroke-dasharray="4 4" />
+  <path d="M150 480 L320 220 L480 340 L650 140" stroke="#F07A3A" stroke-opacity="0.25" stroke-width="1.5" />
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#4A4B53" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="bold" letter-spacing="6">WORK PLACEHOLDER</text>
+</svg>

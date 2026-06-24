@@ -13,9 +13,12 @@ export const IMAGES = {
 
   staff: [
     { name: 'Ikechukwu Onuegbu', role: 'Managing Director', url: '/ikechukwu-onuegbu.jpg' },
-    { name: 'Amara Okafor', role: 'Lead 3D Artist', url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600' },
-    { name: 'Ibrahim Bello', role: 'Arch Consultant', url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600' },
-    { name: 'Fatima Yusuf', role: 'VR Developer', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600' },
+    { name: 'Amara Okafor', role: 'Lead 3D Artist', url: '/avatar-silhouette.svg' },
+    { name: 'Ibrahim Bello', role: 'Arch Consultant', url: '/avatar-silhouette.svg' },
+    { name: 'Fatima Yusuf', role: 'VR Developer', url: '/avatar-silhouette.svg' },
+    { name: 'Loveth', role: 'Admin', url: '/avatar-silhouette.svg' },
+    { name: 'Chinedu', role: 'Developer', url: '/avatar-silhouette.svg' },
+    { name: 'Amara', role: 'Media Manager', url: '/avatar-silhouette.svg' },
   ],
 
   about: {
@@ -35,6 +38,12 @@ export const IMAGES = {
     { id: 2, type: 'Exterior', title: 'The Abuja Nexus Tower', url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop', class: 'aspect-[2/3]' },
     { id: 3, type: 'Animation', title: 'CBD Flyover', url: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=2070&auto=format&fit=crop', class: 'aspect-video', hasPlay: true },
     { id: 4, type: 'Scale Models', title: 'Lekki Masterplan', url: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2069&auto=format&fit=crop', class: 'aspect-square' },
+    { id: 5, type: 'Exterior', title: 'Asokoro Villa Project', url: '/work-placeholder.svg', class: 'aspect-[4/5]' },
+    { id: 6, type: 'Interior', title: 'Wuse Penthouse Complex', url: '/work-placeholder.svg', class: 'aspect-video' },
+    { id: 7, type: 'Animation', title: 'Garki Commercial Hub', url: '/work-placeholder.svg', class: 'aspect-square', hasPlay: true },
+    { id: 8, type: 'Exterior', title: 'Katampe Heights Tower', url: '/work-placeholder.svg', class: 'aspect-[2/3]' },
+    { id: 9, type: 'Interior', title: 'Jabi Lakefront Lounge', url: '/work-placeholder.svg', class: 'aspect-video' },
+    { id: 10, type: 'Scale Models', title: 'Guzape Masterplan Volume', url: '/work-placeholder.svg', class: 'aspect-[4/5]' },
   ]
 };
 

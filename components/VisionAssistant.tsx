@@ -129,7 +129,14 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
           )}
         </div>
 
-        <div className="p-6 bg-white border-t border-gray-100">
+        <div className="p-6 bg-white border-t border-gray-100 relative">
+          {/* Coming Soon Overlay */}
+          <div className="absolute inset-0 bg-white/80 backdrop-blur-[1px] flex items-center justify-center z-10">
+            <div className="bg-[#1A1A1A] text-white px-5 py-2.5 rounded-full flex items-center gap-2 shadow-lg border border-white/5">
+              <span className="material-symbols-outlined text-[14px] text-primary">auto_awesome</span>
+              <span className="text-[10px] tracking-[0.2em] uppercase font-bold">Coming Soon</span>
+            </div>
+          </div>
           {selectedImage && (
             <div className="mb-4 flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-primary/20">
               <div className="size-12 rounded-lg overflow-hidden">

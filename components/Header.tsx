@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
     { label: 'Services', path: '/#services' },
     { label: 'Works', path: '/portfolio' },
     { label: 'Academy', path: '/academy' },
-    { label: 'Estimates', path: '/estimator' },
+    { label: 'Estimates (soon)', path: '/estimator', disabled: true },
     { label: 'Contact', path: '/contact' },
   ];
 
@@ -119,6 +119,17 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
           {/* Center Nav – desktop */}
           <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
             {navItems.map((item) => {
+              if (item.disabled) {
+                return (
+                  <button
+                    key={item.label}
+                    disabled
+                    className="relative flex items-center gap-2 px-4 py-2 text-[12px] tracking-[0.16em] uppercase font-medium text-text-muted/40 cursor-not-allowed"
+                  >
+                    {item.label}
+                  </button>
+                );
+              }
               const active = isActive(item.path);
               return (
                 <button
@@ -202,16 +213,16 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
             ) : (
               <>
                 <button
-                  onClick={() => navigate('/auth')}
-                  className="text-[11px] tracking-[0.2em] uppercase text-text-muted hover:text-text-secondary transition-colors font-medium"
+                  disabled
+                  className="text-[11px] tracking-[0.2em] uppercase text-text-muted/40 cursor-not-allowed font-medium"
                 >
-                  Client Portal
+                  Client (soon)
                 </button>
                 <button
-                  onClick={() => navigate('/estimator')}
-                  className="text-[11px] tracking-[0.2em] uppercase bg-primary hover:bg-primary-hover text-white px-5 py-2.5 font-semibold transition-all duration-300 hover:shadow-[0_4px_14px_rgba(240,122,58,0.3)]"
+                  disabled
+                  className="text-[11px] tracking-[0.2em] uppercase bg-zinc-800 text-zinc-500 px-5 py-2.5 font-semibold cursor-not-allowed transition-all duration-300"
                 >
-                  Get Estimate
+                  Coming Soon
                 </button>
               </>
             )}
@@ -239,6 +250,17 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
           />
           <div className="relative bg-[#0E0E0E] border-b border-border-ui shadow-2xl p-6 space-y-1">
             {navItems.map((item) => {
+              if (item.disabled) {
+                return (
+                  <button
+                    key={item.label}
+                    disabled
+                    className="w-full text-left flex items-center justify-between px-3 py-3.5 text-[12px] tracking-[0.2em] uppercase font-medium text-text-muted/40 cursor-not-allowed border-b border-border-ui last:border-none"
+                  >
+                    {item.label}
+                  </button>
+                );
+              }
               const active = isActive(item.path);
               return (
                 <button
@@ -281,11 +303,11 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
                 </button>
               ) : (
                 <>
-                  <button onClick={() => navigate('/auth')} className="w-full border border-border-ui text-text-secondary text-[11px] tracking-[0.2em] uppercase font-semibold py-3">
-                    Client Portal
+                  <button disabled className="w-full border border-border-ui/50 text-text-faint text-[11px] tracking-[0.2em] uppercase font-semibold py-3 cursor-not-allowed">
+                    Client (soon)
                   </button>
-                  <button onClick={() => navigate('/estimator')} className="w-full bg-primary text-white text-[11px] tracking-[0.2em] uppercase font-semibold py-3">
-                    Get Estimate
+                  <button disabled className="w-full bg-zinc-800 text-zinc-500 text-[11px] tracking-[0.2em] uppercase font-semibold py-3 cursor-not-allowed">
+                    Coming Soon
                   </button>
                 </>
               )}

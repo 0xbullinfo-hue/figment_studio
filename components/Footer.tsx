@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
       { label: '3D Rendering', path: '/arcviz' },
       { label: 'Cinematic Animation', path: '/arcviz' },
       { label: 'Interior Design', path: '/arcviz' },
-      { label: 'Scale Models', path: '/estimator' },
+      { label: 'Scale Models', path: '#', disabled: true },
     ],
     Company: [
       { label: 'About Us', path: '/about' },
@@ -21,8 +21,8 @@ const Footer: React.FC = () => {
       { label: 'Contact', path: '/contact' },
     ],
     Client: [
-      { label: 'Client Login', path: '/auth' },
-      { label: 'Get Estimate', path: '/estimator' },
+      { label: 'Client (soon)', path: '/auth', disabled: true },
+      { label: 'Coming Soon', path: '/estimator', disabled: true },
       { label: 'ArcViz AI', path: '/arcviz' },
       { label: 'Support', path: '/support' },
     ],
@@ -46,13 +46,13 @@ const Footer: React.FC = () => {
             <div className="space-y-3">
               <div>
                 <p className="text-[9px] tracking-[0.22em] uppercase font-semibold font-sans mb-1" style={{ color: 'rgba(255,255,255,0.18)' }}>Location</p>
-                <p className="text-xs font-sans" style={{ color: 'rgba(255,255,255,0.35)' }}>Plot 442, Central Business District<br />Abuja, FCT, Nigeria</p>
+                <p className="text-xs font-sans" style={{ color: 'rgba(255,255,255,0.35)' }}>Abuja, FCT, Nigeria</p>
               </div>
               <div>
                 <p className="text-[9px] tracking-[0.22em] uppercase font-semibold font-sans mb-1" style={{ color: 'rgba(255,255,255,0.18)' }}>Contact</p>
                 <p className="text-xs font-sans" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                  T. +234 813 900 0000<br />
-                  <a href="mailto:hello@figment.co" className="hover:text-[#F07A3A] transition-colors">hello@figment.co</a>
+                  T. +234 810 000 0000<br />
+                  <a href="mailto:hello@figmentstudio7@gmail.com" className="hover:text-[#F07A3A] transition-colors">hello@figmentstudio7@gmail.com</a>
                 </p>
               </div>
             </div>
@@ -100,13 +100,23 @@ const Footer: React.FC = () => {
                 <ul className="space-y-3.5">
                   {items.map((item) => (
                     <li key={item.label}>
-                      <button
-                        onClick={() => { window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior }); navigate(item.path); }}
-                        className="text-sm font-sans transition-colors duration-200 cursor-pointer hover:text-white/75"
-                        style={{ color: 'rgba(255,255,255,0.35)', background: 'none', border: 'none', padding: 0, textAlign: 'left' }}
-                      >
-                        {item.label}
-                      </button>
+                      {item.disabled ? (
+                        <button
+                          disabled
+                          className="text-sm font-sans cursor-not-allowed text-left opacity-30"
+                          style={{ color: 'rgba(255,255,255,0.35)', background: 'none', border: 'none', padding: 0 }}
+                        >
+                          {item.label}
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => { window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior }); navigate(item.path); }}
+                          className="text-sm font-sans transition-colors duration-200 cursor-pointer hover:text-white/75"
+                          style={{ color: 'rgba(255,255,255,0.35)', background: 'none', border: 'none', padding: 0, textAlign: 'left' }}
+                        >
+                          {item.label}
+                        </button>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -129,19 +139,11 @@ const Footer: React.FC = () => {
                 Contact Studio
               </button>
               <button
-                onClick={() => navigate('/estimator')}
-                className="text-[10px] tracking-[0.2em] uppercase border font-bold font-sans px-8 py-3 transition-all duration-300"
+                disabled
+                className="text-[10px] tracking-[0.2em] uppercase border font-bold font-sans px-8 py-3 transition-all duration-300 opacity-30 cursor-not-allowed"
                 style={{ borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.45)' }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.3)';
-                  (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.7)';
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)';
-                  (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.45)';
-                }}
               >
-                Get Estimate
+                Coming Soon
               </button>
             </div>
           </div>

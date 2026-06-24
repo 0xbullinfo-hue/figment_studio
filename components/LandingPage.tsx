@@ -194,9 +194,9 @@ const LandingPage: React.FC = () => {
               <p className="text-white/45 text-sm leading-relaxed max-w-md font-sans">
                 Every premium project moves through a secure, auditable flow designed for serious developers and architects — from intake to final asset handoff.
               </p>
-              <button onClick={() => navigate('/estimator')} className="flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase bg-primary hover:bg-primary-hover text-white px-7 py-3.5 font-semibold transition-all duration-300 hover:shadow-[0_4px_14px_rgba(240,122,58,0.3)] mt-2">
+              <button disabled className="flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase bg-zinc-800 text-zinc-500 px-7 py-3.5 font-semibold cursor-not-allowed transition-all duration-300 mt-2">
                 <span className="material-symbols-outlined text-base">calculate</span>
-                Get Your Estimate
+                Coming Soon
               </button>
             </div>
 
@@ -482,10 +482,10 @@ const LandingPage: React.FC = () => {
                 Contact the Studio
               </button>
               <button
-                onClick={() => navigate('/estimator')}
-                className="border border-white/15 hover:border-white/35 text-white/60 hover:text-white text-[11px] font-bold uppercase tracking-[0.2em] px-10 py-4 transition-all duration-300"
+                disabled
+                className="border border-white/15 text-white/30 text-[11px] font-bold uppercase tracking-[0.2em] px-10 py-4 cursor-not-allowed transition-all duration-300 opacity-40"
               >
-                Instant Estimate
+                Coming Soon
               </button>
             </div>
           </div>

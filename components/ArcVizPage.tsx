@@ -369,10 +369,10 @@ const ArcVizPage: React.FC = () => {
               Back To Home
             </button>
             <button
-              onClick={() => navigate('/estimator')}
-              className="px-4 py-2 bg-primary text-white text-[10px] font-bold uppercase tracking-widest hover:brightness-110 transition-all font-sans"
+              disabled
+              className="px-4 py-2 bg-zinc-800 text-zinc-500 text-[10px] font-bold uppercase tracking-widest cursor-not-allowed transition-all font-sans"
             >
-              Get Estimate
+              Coming Soon
             </button>
           </div>
         </div>

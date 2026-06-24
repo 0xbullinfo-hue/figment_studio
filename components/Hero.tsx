@@ -180,13 +180,13 @@ const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenArcViz }) => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/[0.08] pt-6">
             <div className="space-y-1.5">
               <h4 className="text-[10px] tracking-[0.22em] uppercase text-white/35 font-bold font-sans">Studio</h4>
-              <p className="text-xs text-white/60 leading-relaxed font-sans">Plot 442, Central Business District<br />Abuja, FCT, Nigeria</p>
+              <p className="text-xs text-white/60 leading-relaxed font-sans">Abuja, FCT, Nigeria</p>
             </div>
             <div className="space-y-1.5">
               <h4 className="text-[10px] tracking-[0.22em] uppercase text-white/35 font-bold font-sans">Contact</h4>
               <p className="text-xs text-white/60 leading-relaxed font-sans">
-                T. +234 813 900 0000<br />
-                <a href="mailto:hello@figment.co" className="hover:text-primary transition-colors">hello@figment.co</a>
+                T. +234 810 000 0000<br />
+                <a href="mailto:hello@figmentstudio7@gmail.com" className="hover:text-primary transition-colors">hello@figmentstudio7@gmail.com</a>
               </p>
             </div>
             <div className="space-y-1.5 flex items-center">
