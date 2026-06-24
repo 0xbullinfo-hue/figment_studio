@@ -366,11 +366,10 @@ const LandingPage: React.FC = () => {
 
                 <button
                   onClick={() => navigate(plan.ctaPath)}
-                  className={`text-[11px] tracking-[0.2em] uppercase font-bold font-sans py-3.5 transition-all duration-300 ${
-                    plan.featured
+                  className={`text-[11px] tracking-[0.2em] uppercase font-bold font-sans py-3.5 transition-all duration-300 ${plan.featured
                       ? 'bg-primary hover:bg-primary-hover text-white hover:shadow-[0_4px_14px_rgba(240,122,58,0.3)]'
                       : 'border border-border-strong text-white/60 hover:text-white hover:border-white/30'
-                  }`}
+                    }`}
                 >
                   {plan.cta}
                 </button>
@@ -381,7 +380,7 @@ const LandingPage: React.FC = () => {
                     Coming Soon
                   </span>
                   <p className="text-xs text-text-secondary max-w-[220px] leading-relaxed font-sans">
-                    {plan.tier === 'Studio Pro' 
+                    {plan.tier === 'Studio Pro'
                       ? 'Mentorship cohorts and GPU cloud renders are currently in closed preview.'
                       : 'Free public AI teaser tools and conceptual sketch planning are launching soon.'}
                   </p>
@@ -410,9 +409,9 @@ const LandingPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border-ui">
             {INSIGHTS.map((post, i) => (
-              <article 
-                key={i} 
-                className="group bg-background cursor-pointer" 
+              <article
+                key={i}
+                className="group bg-background cursor-pointer"
                 onClick={() => {
                   const slug = post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
                   navigate(`/insights?read=${slug}`);
