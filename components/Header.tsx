@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
     { label: 'Services', path: '/#services' },
     { label: 'Works', path: '/portfolio' },
     { label: 'Academy', path: '/academy' },
-    { label: 'Estimates (soon)', path: '/estimator', disabled: true },
+    { label: 'Estimates', path: '/estimator' },
     { label: 'Contact', path: '/contact' },
   ];
 
@@ -219,10 +219,10 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
                   Client (soon)
                 </button>
                 <button
-                  disabled
-                  className="text-[11px] tracking-[0.2em] uppercase bg-zinc-800 text-zinc-500 px-5 py-2.5 font-semibold cursor-not-allowed transition-all duration-300"
+                  onClick={() => navigate('/estimator')}
+                  className="text-[11px] tracking-[0.2em] uppercase bg-primary hover:bg-primary-hover text-white px-5 py-2.5 font-semibold transition-all duration-300 hover:shadow-[0_4px_14px_rgba(240,122,58,0.3)]"
                 >
-                  Coming Soon
+                  Get Estimate
                 </button>
               </>
             )}
@@ -306,8 +306,8 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
                   <button disabled className="w-full border border-border-ui/50 text-text-faint text-[11px] tracking-[0.2em] uppercase font-semibold py-3 cursor-not-allowed">
                     Client (soon)
                   </button>
-                  <button disabled className="w-full bg-zinc-800 text-zinc-500 text-[11px] tracking-[0.2em] uppercase font-semibold py-3 cursor-not-allowed">
-                    Coming Soon
+                  <button onClick={() => { navigate('/estimator'); setMobileOpen(false); }} className="w-full bg-primary text-white text-[11px] tracking-[0.2em] uppercase font-semibold py-3">
+                    Get Estimate
                   </button>
                 </>
               )}

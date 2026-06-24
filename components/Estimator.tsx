@@ -256,9 +256,9 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
               <span className="material-symbols-outlined text-lg font-bold">picture_as_pdf</span>
               SAVE PDF
             </button>
-            <button onClick={handleRequestFinish} disabled={pricing.total === 0} className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl bg-primary px-8 py-2.5 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg shadow-primary/20 hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50">
+            <button disabled className="flex items-center justify-center gap-2 flex-1 md:flex-initial rounded-xl bg-zinc-800 px-8 py-2.5 text-[11px] font-bold uppercase tracking-widest text-zinc-500 cursor-not-allowed transition-all duration-300">
               <span className="material-symbols-outlined text-lg font-bold">send</span>
-              REQUEST PROPOSAL
+              COMING SOON
             </button>
           </div>
         </div>
@@ -370,11 +370,10 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
                   {isDownloading ? 'Generating Quote...' : 'Download Quote PDF'}
                 </button>
                 <button
-                  onClick={handleRequestFinish}
-                  disabled={pricing.total === 0}
-                  className="w-full py-4 bg-primary text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:brightness-110 active:scale-95 transition-all disabled:opacity-50"
+                  disabled
+                  className="w-full py-4 bg-zinc-800 text-zinc-500 rounded-xl text-xs font-black uppercase tracking-widest cursor-not-allowed transition-all"
                 >
-                  Request Official Proposal
+                  Coming Soon
                 </button>
               </div>
             </div>

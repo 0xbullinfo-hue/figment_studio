@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
       { label: '3D Rendering', path: '/arcviz' },
       { label: 'Cinematic Animation', path: '/arcviz' },
       { label: 'Interior Design', path: '/arcviz' },
-      { label: 'Scale Models', path: '#', disabled: true },
+      { label: 'Scale Models', path: '/estimator' },
     ],
     Company: [
       { label: 'About Us', path: '/about' },
@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
     ],
     Client: [
       { label: 'Client (soon)', path: '/auth', disabled: true },
-      { label: 'Coming Soon', path: '/estimator', disabled: true },
+      { label: 'Get Estimate', path: '/estimator' },
       { label: 'ArcViz AI', path: '/arcviz' },
       { label: 'Support', path: '/support' },
     ],
@@ -139,11 +139,19 @@ const Footer: React.FC = () => {
                 Contact Studio
               </button>
               <button
-                disabled
-                className="text-[10px] tracking-[0.2em] uppercase border font-bold font-sans px-8 py-3 transition-all duration-300 opacity-30 cursor-not-allowed"
+                onClick={() => navigate('/estimator')}
+                className="text-[10px] tracking-[0.2em] uppercase border font-bold font-sans px-8 py-3 transition-all duration-300"
                 style={{ borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.45)' }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.3)';
+                  (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.7)';
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)';
+                  (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.45)';
+                }}
               >
-                Coming Soon
+                Get Estimate
               </button>
             </div>
           </div>
