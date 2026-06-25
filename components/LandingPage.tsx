@@ -169,10 +169,11 @@ const LandingPage: React.FC = () => {
             <div className="relative">
               <div className="absolute -top-4 -right-4 w-3/4 h-[110%] border border-border-ui -z-0 hidden lg:block" />
               <img
-                alt="Figment Studio"
+                alt="Figment Studio Abuja"
                 className="relative z-10 w-full h-[520px] object-cover"
-                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200&auto=format&fit=crop"
+                src="/asokoro-villa-front.jpg"
               />
+
               <div className="absolute bottom-0 left-0 z-20 p-6 bg-background/80 backdrop-blur-sm border-r border-t border-border-ui">
                 <p className="text-[10px] tracking-[0.22em] uppercase text-primary/70 font-sans font-semibold">Location</p>
                 <p className="text-white font-sans text-sm font-medium mt-1">Central Business District<br />Abuja, FCT, Nigeria</p>

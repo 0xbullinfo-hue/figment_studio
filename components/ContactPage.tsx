@@ -53,6 +53,20 @@ const ContactPage: React.FC = () => {
                   <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Message</label>
                   <textarea required rows={4} className="w-full rounded-xl border-gray-100 bg-gray-50 p-4 focus:ring-primary focus:border-primary transition-all outline-none resize-none" placeholder="Tell us about your project..."></textarea>
                 </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400">How did you hear about us?</label>
+                  <select required className="w-full rounded-xl border-gray-100 bg-gray-50 h-14 px-4 focus:ring-primary focus:border-primary transition-all outline-none text-slate-800 text-sm">
+                    <option value="">Select an option...</option>
+                    <option value="referral">Referral / Word of Mouth</option>
+                    <option value="internet">Search Engine / Internet</option>
+                    <option value="social">Social Media (Instagram/LinkedIn)</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Referrer Name / Website / Details (Optional)</label>
+                  <input type="text" className="w-full rounded-xl border-gray-100 bg-gray-50 h-14 px-4 focus:ring-primary focus:border-primary transition-all outline-none text-sm" placeholder="Who referred you or where did you find us?" />
+                </div>
                 <button type="submit" className="w-full flex items-center justify-center gap-2 rounded-xl h-14 bg-primary text-white text-lg font-bold tracking-wide hover:shadow-xl active:scale-95 transition-all">
                   Send Message <span className="material-symbols-outlined">send</span>
                 </button>
