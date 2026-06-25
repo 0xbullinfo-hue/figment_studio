@@ -102,5 +102,7 @@ export interface AcademyRegistration {
   date: string;
   notes?: string;
   message?: string;
+  referralSource?: string;
+  referrerName?: string;
 }
 

@@ -312,20 +312,6 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
                   onChange={(e) => setClientEmail(e.target.value)}
                 />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <select className="rounded-xl bg-gray-50 border border-gray-200 p-4 focus:ring-2 focus:ring-primary/20 outline-none font-bold text-gray-500 text-sm">
-                  <option value="">How did you hear about us?</option>
-                  <option value="referral">Referral / Word of Mouth</option>
-                  <option value="internet">Search Engine / Internet</option>
-                  <option value="social">Social Media (Instagram/LinkedIn)</option>
-                  <option value="other">Other</option>
-                </select>
-                <input
-                  className="rounded-xl bg-gray-50 border border-gray-200 p-4 focus:ring-2 focus:ring-primary/20 outline-none font-bold text-sm"
-                  placeholder="Referrer Name / Details (Optional)"
-                  type="text"
-                />
-              </div>
             </div>
 
             <div className="group relative flex h-full min-h-[200px] cursor-pointer flex-col items-center justify-center gap-4 rounded-3xl border-2 border-dashed border-gray-200 bg-gray-50 hover:border-primary/50 transition-all">

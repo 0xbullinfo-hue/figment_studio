@@ -18,7 +18,9 @@ const AcademyPage: React.FC = () => {
     experienceLevel: 'Beginner' as AcademyRegistration['experienceLevel'],
     preferredFormat: 'Onsite Abuja Studio' as AcademyRegistration['preferredFormat'],
     courseInterest: 'Revit + D5 rendering (interior/exterior)',
-    message: ''
+    message: '',
+    referralSource: '',
+    referrerName: ''
   });
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -158,13 +160,15 @@ const AcademyPage: React.FC = () => {
         status: 'Pending',
         date: new Date().toISOString().split('T')[0],
         message: formData.message,
+        referralSource: formData.referralSource || undefined,
+        referrerName: formData.referrerName || undefined,
         notes: 'New registration from website portal.'
       };
 
       addAcademyRegistration(submission);
 
       // Compose WhatsApp inquiry message with all selected data
-      const waText = `Hello Figment Academy Admissions,
+      let waText = `Hello Figment Academy Admissions,
 
 I want to declare my interest to subscribe for the architectural visualization sessions. Here are my registration details:
 
@@ -173,10 +177,19 @@ I want to declare my interest to subscribe for the architectural visualization s
 • WhatsApp Number: ${formData.phone}
 • Experience Level: ${formData.experienceLevel}
 • Mentorship Mode: ${formData.preferredFormat}
-• Course Selection: ${formData.courseInterest}
-${formData.message.trim() ? `• Cover Statement: "${formData.message.trim()}"` : ''}
+• Course Selection: ${formData.courseInterest}`;
 
-Please let me know the next steps for cohort onboarding.`;
+      if (formData.referralSource) {
+        waText += `\n• Referral Source: ${formData.referralSource}`;
+      }
+      if (formData.referrerName) {
+        waText += `\n• Referrer Details: ${formData.referrerName}`;
+      }
+      if (formData.message.trim()) {
+        waText += `\n• Cover Statement: "${formData.message.trim()}"`;
+      }
+
+      waText += `\n\nPlease let me know the next steps for cohort onboarding.`;
 
       const encodedText = encodeURIComponent(waText);
       const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodedText}`;
@@ -194,7 +207,9 @@ Please let me know the next steps for cohort onboarding.`;
         experienceLevel: 'Beginner',
         preferredFormat: 'Live Online Interactive',
         courseInterest: 'Revit + D5 rendering (interior/exterior)',
-        message: ''
+        message: '',
+        referralSource: '',
+        referrerName: ''
       });
     }, 1200);
   };
@@ -536,6 +551,39 @@ Please let me know the next steps for cohort onboarding.`;
                       <option value="Revit + D5 rendering (interior/exterior) + Animation" className="bg-[#1e1e1e] text-white">Revit + D5 rendering (interior/exterior) + Animation</option>
                       <option value="D5 Rendering only (interior/exterior) + Animation" className="bg-[#1e1e1e] text-white">D5 Rendering only (interior/exterior) + Animation</option>
                     </select>
+                  </div>
+
+                  {/* Referral Fields */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* How did you hear about us? */}
+                    <div className="space-y-2 text-left">
+                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">How did you hear about us?</label>
+                      <select 
+                        name="referralSource"
+                        value={formData.referralSource}
+                        onChange={handleChange}
+                        className="w-full bg-transparent border-b border-white/15 py-3 text-xs text-white outline-none focus:border-primary transition-colors cursor-pointer"
+                      >
+                        <option value="" className="bg-[#1e1e1e] text-white/50">Select option</option>
+                        <option value="Referral / Word of Mouth" className="bg-[#1e1e1e] text-white">Referral / Word of Mouth</option>
+                        <option value="Search Engine / Internet" className="bg-[#1e1e1e] text-white">Search Engine / Internet</option>
+                        <option value="Social Media (Instagram/LinkedIn)" className="bg-[#1e1e1e] text-white">Social Media (Instagram/LinkedIn)</option>
+                        <option value="Other" className="bg-[#1e1e1e] text-white">Other</option>
+                      </select>
+                    </div>
+
+                    {/* Referrer Details */}
+                    <div className="space-y-2 text-left">
+                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">Referrer Name / Details (Optional)</label>
+                      <input 
+                        type="text" 
+                        name="referrerName"
+                        value={formData.referrerName}
+                        onChange={handleChange}
+                        className="inp"
+                        placeholder="Name of person or platform..."
+                      />
+                    </div>
                   </div>
 
                   {/* Message requirements */}
