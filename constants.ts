@@ -13,9 +13,6 @@ export const IMAGES = {
 
   staff: [
     { name: 'Ikechukwu Onuegbu', role: 'Managing Director', url: '/ikechukwu-onuegbu.jpg' },
-    { name: 'Amara Okafor', role: 'Lead 3D Artist', url: '/avatar-silhouette.svg' },
-    { name: 'Ibrahim Bello', role: 'Arch Consultant', url: '/avatar-silhouette.svg' },
-    { name: 'Fatima Yusuf', role: 'VR Developer', url: '/avatar-silhouette.svg' },
     { name: 'Loveth', role: 'Admin', url: '/avatar-silhouette.svg' },
     { name: 'Chinedu', role: 'Developer', url: '/avatar-silhouette.svg' },
     { name: 'Amara', role: 'Media Manager', url: '/avatar-silhouette.svg' },
@@ -23,7 +20,7 @@ export const IMAGES = {
 
   about: {
     story1: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800",
-    story2: "https://images.unsplash.com/photo-1503387762-592dea58ef23?q=80&w=800"
+    story2: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800"
   },
 
   delivery: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000",

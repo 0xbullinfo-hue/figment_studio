@@ -80,7 +80,7 @@ const AcademyPage: React.FC = () => {
       student: "Ibrahim K.",
       cohort: "Autumn Cohort 2025",
       title: "Eko Atlantic Waterfront Concept",
-      url: "https://images.unsplash.com/photo-1503387762-592dea58ef23?q=80&w=800",
+      url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800",
       software: "Revit + D5 Render + AI",
       projectType: "Masterplan Aerial"
     }

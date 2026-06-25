@@ -8,9 +8,9 @@ import { Helmet } from 'react-helmet-async';
 
 const TEAM = [
   { name: 'Ikechukwu Onuegbu', role: 'Managing Director', specialty: 'Architectural Vision & Strategy', img: '/ikechukwu-onuegbu.jpg' },
-  { name: 'Amara Okafor', role: 'Lead 3D Artist', specialty: 'Photorealistic Rendering & Lighting', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600&auto=format&fit=crop' },
-  { name: 'Ibrahim Bello', role: 'Arch. Consultant', specialty: 'Structural Design & Planning', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop' },
-  { name: 'Fatima Yusuf', role: 'VR Developer', specialty: 'Immersive Experience & XR', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop' },
+  { name: 'Loveth', role: 'Admin', specialty: 'Studio Operations & Client Success', img: '/avatar-silhouette.svg' },
+  { name: 'Chinedu', role: 'Developer', specialty: 'Technical Pipeline & Web Systems', img: '/avatar-silhouette.svg' },
+  { name: 'Amara', role: 'Media Manager', specialty: 'Brand Identity & Media Outreach', img: '/avatar-silhouette.svg' },
 ];
 
 const PROCESS = [
@@ -171,7 +171,7 @@ const LandingPage: React.FC = () => {
               <img
                 alt="Figment Studio"
                 className="relative z-10 w-full h-[520px] object-cover"
-                src="https://images.unsplash.com/photo-1503387762-592dea58ef23?q=80&w=1200&auto=format&fit=crop"
+                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200&auto=format&fit=crop"
               />
               <div className="absolute bottom-0 left-0 z-20 p-6 bg-background/80 backdrop-blur-sm border-r border-t border-border-ui">
                 <p className="text-[10px] tracking-[0.22em] uppercase text-primary/70 font-sans font-semibold">Location</p>
