@@ -88,6 +88,7 @@ export interface PortfolioItem {
   url: string;
   class: string;
   hasPlay?: boolean;
+  videoUrl?: string;
 }
 
 export interface AcademyRegistration {

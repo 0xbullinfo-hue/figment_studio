@@ -52,10 +52,36 @@ const PortfolioGallery: React.FC = () => {
   // Generate dynamic contextual narrative and metadata fallbacks for details view
   const getProjectDetails = (title: string, type: string) => {
     const descriptions: Record<string, string> = {
-      'Maitama Luxury Suite': 'A premium private estate masterwork in Maitama, Islamabad District. Formulated with low-angle warm volumetric lights, high-end Italian oak facade textures, and customized reflection parameters to showcase premium interior spaciousness.',
-      'The Abuja Nexus Tower': 'A dynamic landmark high-rise rendering highlighting commercial facade glass detailing and atmospheric environment matching Abuja’s Central Business District skyline at sunset.',
-      'CBD Flyover': 'A high-impact cinematic rendering representing municipal flyover structural paths. Captured under high ambient occlusion filters to showcase traffic light trails, road textures, and concrete structural elements.',
-      'Lekki Masterplan': 'An scale-model visualization of Lagos coastal mixed-use expansions. Rendered with clean white clay materials alongside custom shoreline water refraction parameters to emphasize physical masterplan volume.'
+      // Lagos state apartment
+      'Lagos Luxury Apartments': 'High-fidelity exterior rendering of a multi story apartment, capturing warm textures and modern daylight refraction.',
+      'Lagos Penthouse Living': 'Exterior rendering of a multi story apartment, capturing warm textures and modern daylight refraction.',
+      'Lagos Apartment Walkthrough': 'Immersive 3D architectural animation detailing luxurious apartment, natural daylighting choreography, and high-end materials.',
+
+      // Edo state country home
+      'Edo Country Manor': 'High-contrast facade render of a premium country villa, blending traditional architectural volumes with contemporary concrete details.',
+      'Edo Country Manor - Side View': 'Angular perspective rendering showcasing country villa, blending traditional architectural volumes with contemporary concrete details.',
+      'Edo Country Manor - Aerial View': 'High-angle drone rendering highlighting geometric roof designs, security layout, and integration with the surrounding greenery.',
+      'Edo Suburban Estate Walkthrough': 'An animation outlining the design flow of a premium country home villa, highlighting clients texture choices.',
+
+      // Abuja FCT items
+      'Abuja Contemporary Duplex': 'Clean design lines and warm spotlights accentuate this double-story residential duplex rendering, perfect for modern urban developments.',
+      'Abuja Modern Residence': 'High-end exterior visual capturing dramatic window reflections, sunset ambiance, and a clean minimalist fence layout.',
+      'Abuja Luxury Villa Walkthrough': 'Cinematic exterior animation of a premium residential villa estate in Abuja, detailing cinematic shorts of the premium villa.',
+      'Abuja B2B Corporate Tower': 'Commercial glass high-rise facade visual set in the Central Business District, rendered under diffuse afternoon daylight.',
+      'Abuja Nexus Hub Complex': 'Dynamic multi-use commercial center rendering detailing public plazas, double-glazing window facades, and landscape features.',
+      'Abuja Executive Boardroom': 'High-end boardroom visualization with custom meeting tables, soundproofing wood panels, and smart curtain glass partitions.',
+      'Abuja Corporate Office Walkthrough': 'A cinematic walkthrough animation showcasing executive office and private lounge.',
+      'Abuja Apartment': 'Luxury residential Apartment with ground floor parking.',
+
+      // Ondo state items
+      'Ondo Corporate Plaza': 'Sleek exterior rendering featuring dynamic facade panels, dynamic glass glazing, and street-level pedestrian integration.',
+
+      // Scale Models
+      'Precision Maquette Printing': 'Physical maquette fabrication using high-precision additive manufacturing, showcasing architectural detailing directly in physical format.',
+      'Residential Development Scale Model': 'Residential Development Scale Model.',
+
+      // Bus terminal
+      'Bus Transit Terminal': 'AI-enhanced concept rendering of a modern transport interchange waiting area.'
     };
 
     return {
@@ -229,18 +255,36 @@ const PortfolioGallery: React.FC = () => {
                     )}
                   </>
                 ) : (
-                  <div className="relative w-full h-full bg-zinc-950 flex flex-col items-center justify-center rounded-2xl p-6 text-center border border-white/10">
-                    {/* Simulated Cinematic Loading state */}
-                    <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mb-6"></div>
-                    <h4 className="text-lg uppercase tracking-widest font-display text-white font-semibold">Streaming Walkthrough Film</h4>
-                    <p className="text-text-muted text-xs max-w-sm mt-2 font-sans">Connecting to rendering pipeline server. Frame buffers initializing...</p>
-                    <button
-                      onClick={() => setIsPlayingVideo(false)}
-                      className="mt-8 px-6 py-2 border border-white/20 text-[9px] uppercase tracking-widest font-sans hover:border-primary hover:text-primary transition-all rounded-full"
-                    >
-                      Return to Still Image
-                    </button>
-                  </div>
+                  selectedItem.videoUrl ? (
+                    <div className="relative w-full h-full bg-zinc-950 flex items-center justify-center rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                      <video 
+                        src={selectedItem.videoUrl} 
+                        controls 
+                        autoPlay 
+                        className="w-full h-full object-contain"
+                      />
+                      <button
+                        onClick={() => setIsPlayingVideo(false)}
+                        className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/80 text-white p-2 rounded-full transition-all focus:outline-none"
+                        title="Close Video"
+                      >
+                        <span className="material-symbols-outlined text-sm">close</span>
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="relative w-full h-full bg-zinc-950 flex flex-col items-center justify-center rounded-2xl p-6 text-center border border-white/10">
+                      {/* Simulated Cinematic Loading state */}
+                      <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mb-6"></div>
+                      <h4 className="text-lg uppercase tracking-widest font-display text-white font-semibold">Streaming Walkthrough Film</h4>
+                      <p className="text-text-muted text-xs max-w-sm mt-2 font-sans">Connecting to rendering pipeline server. Frame buffers initializing...</p>
+                      <button
+                        onClick={() => setIsPlayingVideo(false)}
+                        className="mt-8 px-6 py-2 border border-white/20 text-[9px] uppercase tracking-widest font-sans hover:border-primary hover:text-primary transition-all rounded-full"
+                      >
+                        Return to Still Image
+                      </button>
+                    </div>
+                  )
                 )}
               </div>
             </div>

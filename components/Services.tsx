@@ -7,7 +7,7 @@ const SERVICES = [
     title: '3D Architectural Rendering',
     short: '3D Rendering',
     description: 'High-fidelity photo-real stills at 4K+ resolution for marketing campaigns, investor decks, and stakeholder presentations. Every pixel tuned for maximum impact.',
-    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1200&auto=format&fit=crop',
+    image: '/figment_media/3D-Rendering-Abuja 2.png',
     tags: ['Still Image', '4K+', 'Marketing'],
   },
   {
@@ -15,7 +15,7 @@ const SERVICES = [
     title: 'Cinematic Animation',
     short: 'Animation',
     description: 'Immersive architectural walkthroughs and fly-through films with cinematic lighting, camera choreography, and spatial audio design.',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop',
+    image: '/figment_media/3D-Apartment-Rendering-Lagos-state 2.png',
     tags: ['Film', 'Fly-Through', 'Sound'],
   },
   {
@@ -23,7 +23,7 @@ const SERVICES = [
     title: 'Interior Design Visualization',
     short: 'Interiors',
     description: 'Detailed interior styling and spatial planning rendered with tactile material accuracy, mood-specific lighting, and furniture placement precision.',
-    image: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1200&auto=format&fit=crop',
+    image: '/figment_media/3D-Rendering-B2B-Abuja.png',
     tags: ['Materials', 'Lighting', 'Spatial'],
   },
   {
@@ -31,7 +31,7 @@ const SERVICES = [
     title: '3D Scale Models & Printing',
     short: 'Scale Models',
     description: 'Physical scale models with micro-detail precision — ideal for urban master-planning, property launch events, and client showrooms.',
-    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop',
+    image: '/figment_media/3D-Printing.png',
     tags: ['Physical', 'Master-Planning', 'Events'],
   },
 ];

@@ -2,13 +2,13 @@
 import { Project } from './types.ts';
 
 export const IMAGES = {
-  hero: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop",
+  hero: "/figment_media/3D-Rendering-Abuja.png",
 
   services: {
-    rendering: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=800&auto=format&fit=crop",
-    animation: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop",
-    interior: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=800&auto=format&fit=crop",
-    printing: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop"
+    rendering: "/figment_media/3D-Rendering-Abuja 2.png",
+    animation: "/figment_media/3D-Apartment-Rendering-Lagos-state 2.png",
+    interior: "/figment_media/3D-Rendering-B2B-Abuja.png",
+    printing: "/figment_media/3D-Printing.png"
   },
 
   staff: [
@@ -19,30 +19,53 @@ export const IMAGES = {
   ],
 
   about: {
-    story1: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800",
-    story2: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800"
+    story1: "/figment_media/3D-Rendering-B2B-Abuja 2.png",
+    story2: "/figment_media/3D-Rendering-B2B-Abuja 3.png"
   },
 
-  delivery: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000",
+  delivery: "/figment_media/3D-Apartment-Rendering-Lagos-state.png",
 
   portfolio: [
-    { id: 'P1', title: 'The Obsidian Retreat', category: 'Residential', location: 'Maitama', url: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071&auto=format&fit=crop', type: 'Still Image' },
-    { id: 'P2', title: 'Nexus Hub District', category: 'Commercial', location: 'Wuse II', url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop', type: 'Animation', hasPlay: true }
+    { 
+      id: 'P1', 
+      title: 'Abuja Modern Villa', 
+      category: 'Residential', 
+      location: 'Maitama', 
+      url: '/figment_media/3D-Rendering-Abuja.png', 
+      type: 'Still Image' 
+    },
+    { 
+      id: 'P2', 
+      title: 'Abuja Executive Lounge', 
+      category: 'Commercial', 
+      location: 'Central District', 
+      url: '/figment_media/3D-Rendering-B2B-Abuja 3.png', 
+      type: 'Animation', 
+      hasPlay: true,
+      videoUrl: '/figment_media/3D-Office-Interior -Animation-Abuja.mp4'
+    }
   ],
 
   gallery: [
-    { id: 1, type: 'Interior', title: 'Maitama Luxury Suite', url: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1974&auto=format&fit=crop', class: 'aspect-[4/5]' },
-    { id: 2, type: 'Exterior', title: 'The Abuja Nexus Tower', url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop', class: 'aspect-[2/3]' },
-    { id: 3, type: 'Animation', title: 'CBD Flyover', url: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=2070&auto=format&fit=crop', class: 'aspect-video', hasPlay: true },
-    { id: 4, type: 'Scale Models', title: 'Lekki Masterplan', url: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2069&auto=format&fit=crop', class: 'aspect-square' },
-    { id: 5, type: 'Exterior', title: 'Maitama Hillside Villas', url: '/maitama-hillside-villas.jpg', class: 'aspect-[4/3]' },
-    { id: 6, type: 'Exterior', title: 'Asokoro Villa - Front View', url: '/asokoro-villa-front.jpg', class: 'aspect-[4/3]' },
-    { id: 7, type: 'Exterior', title: 'Asokoro Villa - Perspective', url: '/asokoro-villa-angle.jpg', class: 'aspect-[4/3]' },
-    { id: 8, type: 'Interior', title: 'Jabi Lakefront Dining', url: '/jabi-lakefront-dining.jpg', class: 'aspect-[4/3]' },
-    { id: 9, type: 'Interior', title: 'Jabi Penthouse Living', url: '/jabi-penthouse-living.jpg', class: 'aspect-[4/3]' },
-    { id: 10, type: 'Exterior', title: 'Maitama Luxury Villa - Dusk', url: '/maitama-villa-dusk.jpg', class: 'aspect-[3/2]' },
-    { id: 11, type: 'Exterior', title: 'Maitama Luxury Villa - Day', url: '/maitama-villa-day.jpg', class: 'aspect-[3/2]' },
-    { id: 12, type: 'Exterior', title: 'Asokoro Villa - Low Angle', url: '/asokoro-villa-low-angle.jpg', class: 'aspect-[4/3]' },
+    { id: 1, type: 'Interior', title: 'Lagos Luxury Apartments', url: '/figment_media/3D-Apartment-Rendering-Lagos-state.png', class: 'aspect-[4/5]' },
+    { id: 2, type: 'Interior', title: 'Lagos Penthouse Living', url: '/figment_media/3D-Apartment-Rendering-Lagos-state 2.png', class: 'aspect-[2/3]' },
+    { id: 3, type: 'Animation', title: 'Lagos Apartment Walkthrough', url: '/figment_media/3D-Apartment-Rendering-Lagos-state.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Apartment-Animation-Lagos-state.mp4' },
+    { id: 4, type: 'Scale Models', title: 'Precision Maquette Printing', url: '/figment_media/3D-Printing.png', class: 'aspect-square' },
+    { id: 5, type: 'Scale Models', title: 'Residential Development Scale Model', url: '/figment_media/3D-Printing-2.png', class: 'aspect-[4/3]' },
+    { id: 6, type: 'Exterior', title: 'Edo Country Manor', url: '/figment_media/3D-Country-home-Rendering-Edo-state 1.png', class: 'aspect-[4/3]' },
+    { id: 7, type: 'Exterior', title: 'Edo Country Manor - Side View', url: '/figment_media/3D-Country-home-Rendering-Edo-state 2.png', class: 'aspect-[4/3]' },
+    { id: 8, type: 'Exterior', title: 'Edo Country Manor - Aerial View', url: '/figment_media/3D-Country-home-Rendering-Edo-state-Roof.png', class: 'aspect-[4/3]' },
+    { id: 9, type: 'Exterior', title: 'Abuja Contemporary Duplex', url: '/figment_media/3D-Duplex-Rendering-Abuja.png', class: 'aspect-[4/3]' },
+    { id: 10, type: 'Exterior', title: 'Abuja Modern Residence', url: '/figment_media/3D-Rendering-Abuja.png', class: 'aspect-[3/2]' },
+    { id: 11, type: 'Exterior', title: 'Abuja B2B Corporate Tower', url: '/figment_media/3D-Rendering-B2B-Abuja.png', class: 'aspect-[3/2]' },
+    { id: 12, type: 'Exterior', title: 'Abuja Nexus Hub Complex', url: '/figment_media/3D-Rendering-B2B-Abuja 2.png', class: 'aspect-[4/3]' },
+    { id: 13, type: 'Interior', title: 'Abuja Executive Boardroom', url: '/figment_media/3D-Rendering-B2B-Abuja 3.png', class: 'aspect-[4/3]' },
+    { id: 14, type: 'Exterior', title: 'Bus Transit Terminal', url: '/figment_media/Ai-Render-Bus-terminal.png', class: 'aspect-[3/2]' },
+    { id: 15, type: 'Animation', title: 'Edo Suburban Estate Walkthrough', url: '/figment_media/3D-Country-home-Rendering-Edo-state 1.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Villa-Animation-Edo-state.mp4' },
+    { id: 16, type: 'Animation', title: 'Abuja Luxury Villa Walkthrough', url: '/figment_media/3D-Rendering-Abuja.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Villa-Animation-Abuja.mp4' },
+    { id: 17, type: 'Exterior', title: 'Ondo Corporate Plaza', url: '/figment_media/3D-B2B-Rendering-Ondo-state.png', class: 'aspect-[3/2]' },
+    { id: 18, type: 'Animation', title: 'Abuja Corporate Office Walkthrough', url: '/figment_media/3D-Rendering-B2B-Abuja 3.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Office-Interior -Animation-Abuja.mp4' },
+    { id: 19, type: 'Exterior', title: 'Abuja Apartment', url: '/figment_media/3D-Rendering-Abuja 2.png', class: 'aspect-[4/3]' }
   ]
 };
 

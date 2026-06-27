@@ -33,21 +33,21 @@ const AcademyPage: React.FC = () => {
   // Instructor works (Admin portfolio items representing authority)
   const instructorWorks = [
     {
-      title: "The Obsidian Retreat",
-      category: "Residential (Maitama)",
-      url: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1200",
+      title: "Abuja Modern Residence",
+      category: "Residential (Abuja)",
+      url: "/figment_media/3D-Rendering-Abuja.png",
       software: "Revit + D5 Render + Post-Production"
     },
     {
-      title: "Nexus Hub District",
-      category: "Commercial (Wuse II)",
-      url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200",
+      title: "Abuja Corporate Complex",
+      category: "Commercial (Abuja)",
+      url: "/figment_media/3D-Rendering-B2B-Abuja 2.png",
       software: "Revit + D5 Render + D5 Animation"
     },
     {
-      title: "Maitama Luxury Suite",
+      title: "Abuja Executive Boardroom",
       category: "Interior (Abuja CBD)",
-      url: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1200",
+      url: "/figment_media/3D-Rendering-B2B-Abuja 3.png",
       software: "D5 Render + Photoshop + AI Enhancement"
     }
   ];
@@ -402,30 +402,29 @@ I want to declare my interest to subscribe for the architectural visualization s
             {studentWorks.map((work, idx) => (
               <div 
                 key={idx} 
-                onClick={() => setActiveLightboxImg({ url: work.url, title: work.title, subtitle: `Rendered by ${work.student} (${work.cohort}) • ${work.software}` })}
-                className="group border border-border-ui bg-surface rounded-2xl overflow-hidden flex flex-col justify-between h-full hover:border-primary/20 transition-all text-left cursor-pointer"
+                className="group border border-border-ui bg-surface rounded-2xl overflow-hidden flex flex-col justify-between h-full hover:border-primary/20 transition-all text-left cursor-default select-none"
               >
-                <div className="relative aspect-[4/5] bg-zinc-950 overflow-hidden">
-                  <img 
-                    src={work.url} 
-                    alt={work.title} 
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.03]" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity" />
+                <div className="relative aspect-[4/5] bg-zinc-950/60 overflow-hidden flex flex-col items-center justify-center p-6 text-center">
+                  {/* Blurry mask */}
+                  <div className="absolute inset-0 bg-zinc-900/50 backdrop-blur-md" />
                   
-                  {/* Subtle info on hover/overlay */}
-                  <div className="absolute bottom-4 left-4 right-4 z-10 text-left">
-                    <span className="text-primary text-[8px] font-bold uppercase tracking-[0.2em] font-sans">{work.projectType}</span>
-                    <h3 className="font-display text-white text-md uppercase leading-tight truncate mt-1">{work.title}</h3>
-                    <p className="text-[9px] text-zinc-300 font-sans mt-0.5 font-light">{work.software}</p>
+                  {/* Coming Soon badge */}
+                  <div className="relative z-10 flex flex-col items-center space-y-3">
+                    <span className="material-symbols-outlined text-primary/60 text-4xl animate-pulse">lock</span>
+                    <span className="text-[10px] text-primary font-bold uppercase tracking-[0.3em] font-sans bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
+                      Coming Soon
+                    </span>
+                    <p className="text-zinc-400 text-xs mt-2 font-sans font-light">
+                      {work.title}
+                    </p>
                   </div>
                 </div>
-                <div className="p-4 border-t border-border-ui/60 bg-black/15 flex items-center justify-between font-sans">
+                <div className="p-4 border-t border-border-ui/60 bg-black/15 flex items-center justify-between font-sans opacity-45">
                   <div>
                     <p className="text-xs font-bold text-white leading-none">{work.student}</p>
                     <p className="text-[9px] text-text-muted mt-1 leading-none font-light">{work.cohort}</p>
                   </div>
-                  <span className="material-symbols-outlined text-primary/30 text-lg">workspace_premium</span>
+                  <span className="material-symbols-outlined text-primary/30 text-lg">lock</span>
                 </div>
               </div>
             ))}

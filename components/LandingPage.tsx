@@ -47,7 +47,7 @@ const INSIGHTS = [
     date: 'June 2025',
     title: 'The Future of Architectural Rendering in Sub-Saharan Africa',
     excerpt: 'How AI tools are democratizing photorealistic visualization for architecture firms across Nigeria and beyond.',
-    img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop',
+    img: '/figment_media/3D-Rendering-B2B-Abuja 2.png',
     readTime: '5 min read',
   },
   {
@@ -55,7 +55,7 @@ const INSIGHTS = [
     date: 'May 2025',
     title: 'Why Cinematic Walkthroughs Close More Property Deals',
     excerpt: 'Data from 200+ projects reveals the compelling correlation between animation quality and investor conversion rates.',
-    img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop',
+    img: '/figment_media/3D-Apartment-Rendering-Lagos-state.png',
     readTime: '4 min read',
   },
   {
@@ -63,7 +63,7 @@ const INSIGHTS = [
     date: 'April 2025',
     title: 'Inside Figment: Our 4K Rendering Pipeline Explained',
     excerpt: 'A behind-the-scenes look at the hardware, software, and creative workflow that produces our signature renders.',
-    img: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=800&auto=format&fit=crop',
+    img: '/figment_media/3D-Rendering-Abuja 2.png',
     readTime: '6 min read',
   },
 ];
@@ -171,7 +171,7 @@ const LandingPage: React.FC = () => {
               <img
                 alt="Figment Studio Abuja"
                 className="relative z-10 w-full h-[520px] object-cover"
-                src="/asokoro-villa-front.jpg"
+                src="/figment_media/3D-Rendering-Abuja.png"
               />
 
               <div className="absolute bottom-0 left-0 z-20 p-6 bg-background/80 backdrop-blur-sm border-r border-t border-border-ui">

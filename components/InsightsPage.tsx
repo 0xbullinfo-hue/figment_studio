@@ -21,7 +21,7 @@ const ARTICLES: Article[] = [
     readTime: '5 min read',
     title: 'The Future of Architectural Rendering in Sub-Saharan Africa',
     excerpt: 'How AI tools are democratizing photorealistic visualization for architecture firms across Nigeria and beyond.',
-    img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop',
+    img: '/figment_media/3D-Rendering-B2B-Abuja 2.png',
     paragraphs: [
       'The architectural sector in Sub-Saharan Africa is experiencing a technology-driven renaissance. For decades, rendering high-fidelity photorealistic images required massive local server stacks or expensive outsource contracts to studios in Europe or Asia. Today, real-time engines and custom AI co-pilots are changing the game.',
       '### Democratizing Quality',
@@ -37,7 +37,7 @@ const ARTICLES: Article[] = [
     readTime: '4 min read',
     title: 'Why Cinematic Walkthroughs Close More Property Deals',
     excerpt: 'Data from 200+ projects reveals the compelling correlation between animation quality and investor conversion rates.',
-    img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop',
+    img: '/figment_media/3D-Apartment-Rendering-Lagos-state.png',
     paragraphs: [
       'Why do static renders sometimes fail to capture the imagination of real estate investors? The answer lies in the human brain\'s response to spatial dynamics. A study of over 200 developments across Nigeria shows a clear trend: projects backed by high-fidelity cinematic walkthroughs close deals 40% faster.',
       '### The Psychology of Motion',
@@ -53,7 +53,7 @@ const ARTICLES: Article[] = [
     readTime: '6 min read',
     title: 'Inside Figment: Our 4K Rendering Pipeline Explained',
     excerpt: 'A behind-the-scenes look at the hardware, software, and creative workflow that produces our signature renders.',
-    img: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=800&auto=format&fit=crop',
+    img: '/figment_media/3D-Rendering-Abuja 2.png',
     paragraphs: [
       'Achieving the signature Figment Studio look is a meticulous process combining artistic design with bleeding-edge rendering hardware. We pull back the curtain on the pipeline that processes our client\'s Revit and D5 assets.',
       '### Hardware Infrastructure',
@@ -69,7 +69,7 @@ const ARTICLES: Article[] = [
     readTime: '5 min read',
     title: 'Defining the Horizon: ArchViz Trends in Nigeria 2024',
     excerpt: 'Exploring how high-end 3D rendering and VR are reshaping the architectural landscape in West Africa.',
-    img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop',
+    img: '/figment_media/3D-Rendering-B2B-Abuja.png',
     paragraphs: [
       'The Nigerian real estate landscape is undergoing a massive shift. As developers compete for high-value investors in Lagos, Abuja, and Port Harcourt, standard 2D blueprints and simple static renders are no longer sufficient.',
       '### Off-Plan Sales Revolution',
@@ -85,7 +85,7 @@ const ARTICLES: Article[] = [
     readTime: '5 min read',
     title: 'The Future of 3D Printing in West African Construction',
     excerpt: 'An analysis of how additive manufacturing and concrete 3D printing are beginning to emerge in urban centers like Lagos and Accra.',
-    img: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2069&auto=format&fit=crop',
+    img: '/figment_media/3D-Printing-2.png',
     paragraphs: [
       'Additive manufacturing is transitioning from a high-tech novelty to a viable solution for the housing deficit in West Africa. Concrete 3D printing represents a paradigm shift in material efficiency and build speed.',
       '### Redefining Speed and Logistics',

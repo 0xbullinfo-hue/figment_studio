@@ -18,16 +18,14 @@ const signatureProjects = IMAGES.portfolio.map(p => ({
 }));
 
 // Expand with extra gallery images for a richer grid
-const GALLERY_EXTRAS = [
-  { id: 'G1', title: 'Maitama Luxury Suite', category: 'Interior', location: 'Maitama', imageUrl: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1200&auto=format&fit=crop', type: 'Interior', hasPlay: false },
-  { id: 'G2', title: 'Abuja Nexus Tower', category: 'Commercial', location: 'Central District', imageUrl: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=1200&auto=format&fit=crop', type: 'Exterior', hasPlay: false },
-];
+const GALLERY_EXTRAS: any[] = [];
 
 const ALL_PROJECTS = [...signatureProjects, ...GALLERY_EXTRAS];
 
 const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
   const navigate = useNavigate();
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
+  const [isPlayingVideo, setIsPlayingVideo] = useState(false);
 
   return (
     <section className="bg-background border-t border-border-ui" id="portfolio">
@@ -123,19 +121,33 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
       {selectedProject && (
         <div className="fixed inset-0 z-[100] bg-black/97 backdrop-blur-md flex flex-col items-center justify-center p-4 md:p-12">
           <button
-            onClick={() => setSelectedProject(null)}
+            onClick={() => { setSelectedProject(null); setIsPlayingVideo(false); }}
             className="absolute top-8 right-8 text-white/40 hover:text-white transition-all z-[110] focus:outline-none"
           >
             <span className="material-symbols-outlined text-4xl">close</span>
           </button>
 
-          <div className="w-full max-w-6xl aspect-video overflow-hidden relative">
-            <img src={selectedProject.imageUrl} className="w-full h-full object-cover" alt={selectedProject.title} />
-            {selectedProject.hasPlay && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/25 cursor-pointer hover:bg-black/15 transition-colors group">
-                <span className="material-symbols-outlined text-white text-9xl opacity-40 group-hover:opacity-100 transition-all duration-500 scale-90 group-hover:scale-100">play_circle</span>
-                <p className="text-white font-bold uppercase tracking-[0.4em] text-xs mt-6 group-hover:text-primary transition-colors font-sans">Start Film Walkthrough</p>
-              </div>
+          <div className="w-full max-w-6xl aspect-video overflow-hidden relative rounded-2xl border border-white/10 bg-black">
+            {isPlayingVideo && selectedProject.videoUrl ? (
+              <video 
+                src={selectedProject.videoUrl} 
+                controls 
+                autoPlay 
+                className="w-full h-full object-contain"
+              />
+            ) : (
+              <>
+                <img src={selectedProject.imageUrl} className="w-full h-full object-cover" alt={selectedProject.title} />
+                {selectedProject.hasPlay && (
+                  <div 
+                    onClick={() => setIsPlayingVideo(true)}
+                    className="absolute inset-0 flex flex-col items-center justify-center bg-black/25 cursor-pointer hover:bg-black/15 transition-colors group"
+                  >
+                    <span className="material-symbols-outlined text-white text-9xl opacity-40 group-hover:opacity-100 transition-all duration-500 scale-90 group-hover:scale-100">play_circle</span>
+                    <p className="text-white font-bold uppercase tracking-[0.4em] text-xs mt-6 group-hover:text-primary transition-colors font-sans">Start Film Walkthrough</p>
+                  </div>
+                )}
+              </>
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
           </div>
@@ -148,10 +160,10 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
               {selectedProject.title}
             </h3>
             <div className="flex justify-center gap-4 pt-6">
-              <button onClick={() => setSelectedProject(null)} className="px-10 py-3.5 border border-white/15 text-[10px] font-bold uppercase tracking-widest hover:border-white/40 hover:text-white/90 transition-all font-sans text-white/50">
+              <button onClick={() => { setSelectedProject(null); setIsPlayingVideo(false); }} className="px-10 py-3.5 border border-white/15 text-[10px] font-bold uppercase tracking-widest hover:border-white/40 hover:text-white/90 transition-all font-sans text-white/50">
                 Close Preview
               </button>
-              <button onClick={() => { setSelectedProject(null); navigate('/contact'); }} className="px-10 py-3.5 bg-primary text-white text-[10px] font-bold uppercase tracking-widest hover:brightness-110 transition-all font-sans">
+              <button onClick={() => { setSelectedProject(null); setIsPlayingVideo(false); navigate('/contact'); }} className="px-10 py-3.5 bg-primary text-white text-[10px] font-bold uppercase tracking-widest hover:brightness-110 transition-all font-sans">
                 Project Inquiry
               </button>
             </div>
