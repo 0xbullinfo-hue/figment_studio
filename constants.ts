@@ -28,21 +28,37 @@ export const IMAGES = {
   portfolio: [
     { 
       id: 'P1', 
-      title: 'Abuja Modern Villa', 
+      title: 'The Obsidian Retreat', 
       category: 'Residential', 
       location: 'Maitama', 
       url: '/figment_media/3D-Rendering-Abuja.png', 
-      type: 'Still Image' 
+      type: 'Still Image'
     },
     { 
       id: 'P2', 
-      title: 'Abuja Executive Lounge', 
+      title: 'Nexus Hub District', 
       category: 'Commercial', 
+      location: 'Wuse II', 
+      url: '/figment_media/3D-Rendering-B2B-Abuja 2.png', 
+      type: 'Still Image'
+    },
+    { 
+      id: 'P3', 
+      title: 'Abuja Corporate Office', 
+      category: 'Interior', 
       location: 'Central District', 
       url: '/figment_media/3D-Rendering-B2B-Abuja 3.png', 
       type: 'Animation', 
       hasPlay: true,
       videoUrl: '/figment_media/3D-Office-Interior -Animation-Abuja.mp4'
+    },
+    { 
+      id: 'P4', 
+      title: 'Maitama Luxury Suite', 
+      category: 'Interior', 
+      location: 'Maitama', 
+      url: '/figment_media/3D-Rendering-B2B-Abuja.png', 
+      type: 'Still Image'
     }
   ],
 

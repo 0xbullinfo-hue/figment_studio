@@ -33,9 +33,9 @@ const AcademyPage: React.FC = () => {
   // Instructor works (Admin portfolio items representing authority)
   const instructorWorks = [
     {
-      title: "Abuja Modern Residence",
-      category: "Residential (Abuja)",
-      url: "/figment_media/3D-Rendering-Abuja.png",
+      title: "Edo Country Manor",
+      category: "Residential (Edo State)",
+      url: "/figment_media/3D-Country-home-Rendering-Edo-state 1.png",
       software: "Revit + D5 Render + Post-Production"
     },
     {
@@ -45,9 +45,9 @@ const AcademyPage: React.FC = () => {
       software: "Revit + D5 Render + D5 Animation"
     },
     {
-      title: "Abuja Executive Boardroom",
-      category: "Interior (Abuja CBD)",
-      url: "/figment_media/3D-Rendering-B2B-Abuja 3.png",
+      title: "Lagos Apartment Block",
+      category: "Residential (Lagos State)",
+      url: "/figment_media/3D-Apartment-Rendering-Lagos-state.png",
       software: "D5 Render + Photoshop + AI Enhancement"
     }
   ];

@@ -9,7 +9,7 @@ interface HeroProps {
 const SLIDES = [
   {
     id: 0,
-    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=90&w=2400&auto=format&fit=crop',
+    image: '/figment_media/3D-Duplex-Rendering-Abuja.png',
     category: 'Residential',
     location: 'Maitama, Abuja',
     headline: ['We Make', 'Blueprints', 'Breathe.'],
@@ -18,21 +18,21 @@ const SLIDES = [
   },
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=90&w=2400&auto=format&fit=crop',
-    category: 'Commercial',
-    location: 'Wuse II, Abuja',
+    image: '/figment_media/3D-Apartment-Rendering-Lagos-state.png',
+    category: 'Residential',
+    location: 'Lagos State',
     headline: ['Vision', 'Made', 'Tangible.'],
     accent: 2,
-    sub: 'From concept sketch to photorealistic render — precision without compromise.',
+    sub: 'High-fidelity exterior rendering capturing warm textures and modern daylight refraction.',
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=90&w=2400&auto=format&fit=crop',
-    category: 'Interior Design',
-    location: 'Asokoro, Abuja',
+    image: '/figment_media/3D-Country-home-Rendering-Edo-state 1.png',
+    category: 'Residential',
+    location: 'Edo State',
     headline: ['Space', 'Becomes', 'Story.'],
     accent: 2,
-    sub: 'Tactile material accuracy and mood-specific lighting — crafted for impact.',
+    sub: 'Premium country home villa — client-chosen textures and landscaped pool decks.',
   },
 ];
 
