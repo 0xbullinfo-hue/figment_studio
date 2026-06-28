@@ -46,8 +46,8 @@ export const IMAGES = {
     },
     { 
       id: 'P3', 
-      title: 'Abuja Corporate Office', 
-      category: 'Interior', 
+      title: 'Abuja B2B Residential Suite', 
+      category: 'Residential (B2B)', 
       location: 'Central District', 
       url: '/figment_media/3D-Rendering-B2B-Abuja 3.png', 
       type: 'Animation', 
@@ -75,12 +75,12 @@ export const IMAGES = {
     { id: 10, type: 'Exterior', title: 'Abuja Modern Residence', url: '/figment_media/3D-Rendering-Abuja.png', class: 'aspect-[3/2]' },
     { id: 11, type: 'Exterior', title: 'Abuja B2B Corporate Tower', url: '/figment_media/3D-Rendering-B2B-Abuja.png', class: 'aspect-[3/2]' },
     { id: 12, type: 'Exterior', title: 'Abuja Nexus Hub Complex', url: '/figment_media/3D-Rendering-B2B-Abuja 2.png', class: 'aspect-[4/3]' },
-    { id: 13, type: 'Interior', title: 'Abuja Executive Boardroom', url: '/figment_media/3D-Rendering-B2B-Abuja 3.png', class: 'aspect-[4/3]' },
+    { id: 13, type: 'Interior', title: 'Abuja B2B Residential Suite', url: '/figment_media/3D-Rendering-B2B-Abuja 3.png', class: 'aspect-[4/3]' },
     { id: 14, type: 'Exterior', title: 'Bus Transit Terminal', url: '/figment_media/Ai-Render-Bus-terminal.png', class: 'aspect-[3/2]' },
     { id: 15, type: 'Animation', title: 'Edo Suburban Estate Walkthrough', url: '/figment_media/animation-cover-press-play.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Villa-Animation-Edo-state.mp4' },
     { id: 16, type: 'Animation', title: 'Abuja Luxury Villa Walkthrough', url: '/figment_media/animation-cover-press-play.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Villa-Animation-Abuja.mp4' },
     { id: 17, type: 'Exterior', title: 'Ondo Modern Residence', url: '/figment_media/3D-B2B-Rendering-Ondo-state.png', class: 'aspect-[3/2]' },
-    { id: 18, type: 'Animation', title: 'Abuja Corporate Office Walkthrough', url: '/figment_media/animation-cover-press-play.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Office-Interior -Animation-Abuja.mp4' },
+    { id: 18, type: 'Animation', title: 'Abuja B2B Residential Walkthrough', url: '/figment_media/animation-cover-press-play.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Office-Interior -Animation-Abuja.mp4' },
     { id: 19, type: 'Exterior', title: 'Abuja Apartment', url: '/figment_media/3D-Rendering-Abuja 2.png', class: 'aspect-[4/3]' }
   ]
 };
