@@ -54,17 +54,15 @@ export const IMAGES = {
     },
     { 
       id: 'P4', 
-      title: 'Maitama Luxury Suite', 
-      category: 'Interior', 
-      location: 'Maitama', 
-      url: '', 
+      title: 'Ondo Corporate Plaza', 
+      category: 'Commercial', 
+      location: 'Ondo State', 
+      url: '/figment_media/3D-B2B-Rendering-Ondo-state.png', 
       type: 'Still Image'
     }
   ],
 
   gallery: [
-    { id: 1, type: 'Interior', title: 'Maitama Luxury Suite', url: '', class: 'aspect-[4/5]' },
-    { id: 2, type: 'Exterior', title: 'Abuja Nexus Tower', url: '', class: 'aspect-[2/3]' },
     { id: 3, type: 'Animation', title: 'Lagos Apartment Walkthrough', url: '/figment_media/3D-Apartment-Rendering-Lagos-state.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Apartment-Animation-Lagos-state.mp4' },
     { id: 4, type: 'Scale Models', title: 'Precision Maquette Printing', url: '/figment_media/3D-Printing.png', class: 'aspect-square' },
     { id: 5, type: 'Scale Models', title: 'Residential Development Scale Model', url: '/figment_media/3D-Printing-2.png', class: 'aspect-[4/3]' },
