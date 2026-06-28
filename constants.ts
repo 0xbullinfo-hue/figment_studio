@@ -28,7 +28,7 @@ export const IMAGES = {
   portfolio: [
     { 
       id: 'P1', 
-      title: 'The Obsidian Retreat', 
+      title: 'Abuja Luxury Villa Walkthrough', 
       category: 'Residential', 
       location: 'Maitama', 
       url: '/figment_media/3D-Villa-Animation-Abuja-Cover.jpg', 

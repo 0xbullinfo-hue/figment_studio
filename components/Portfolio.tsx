@@ -15,6 +15,7 @@ const signatureProjects = IMAGES.portfolio.map(p => ({
   imageUrl: p.url,
   type: (p as any).type || 'Static Render',
   hasPlay: (p as any).hasPlay || false,
+  videoUrl: (p as any).videoUrl,
 }));
 
 // Expand with extra gallery images for a richer grid
