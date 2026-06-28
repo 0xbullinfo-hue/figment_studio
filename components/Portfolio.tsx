@@ -57,11 +57,23 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
               onClick={() => setSelectedProject(project)}
               className={`group relative overflow-hidden cursor-pointer ${idx === 0 ? 'md:row-span-2 aspect-[3/4]' : 'aspect-[16/10]'}`}
             >
-              <img
-                alt={project.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                src={project.imageUrl}
-              />
+              {project.imageUrl ? (
+                <img
+                  alt={project.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                  src={project.imageUrl}
+                />
+              ) : (
+                <div className="absolute inset-0 bg-zinc-950/60 overflow-hidden flex flex-col items-center justify-center p-6 text-center">
+                  <div className="absolute inset-0 bg-zinc-900/50 backdrop-blur-md" />
+                  <div className="relative z-10 flex flex-col items-center space-y-2">
+                    <span className="material-symbols-outlined text-primary/60 text-3xl animate-pulse">lock</span>
+                    <span className="text-[9px] text-primary font-bold uppercase tracking-[0.25em] font-sans bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
+                      Coming Soon
+                    </span>
+                  </div>
+                </div>
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-500" />
 
               {project.hasPlay && (
@@ -97,11 +109,23 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
                 onClick={() => setSelectedProject(project)}
                 className="group relative overflow-hidden cursor-pointer aspect-[16/9]"
               >
-                <img
-                  alt={project.title}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                  src={project.imageUrl}
-                />
+                {project.imageUrl ? (
+                  <img
+                    alt={project.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                    src={project.imageUrl}
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-zinc-950/60 overflow-hidden flex flex-col items-center justify-center p-6 text-center">
+                    <div className="absolute inset-0 bg-zinc-900/50 backdrop-blur-md" />
+                    <div className="relative z-10 flex flex-col items-center space-y-2">
+                      <span className="material-symbols-outlined text-primary/60 text-3xl animate-pulse">lock</span>
+                      <span className="text-[9px] text-primary font-bold uppercase tracking-[0.25em] font-sans bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
+                        Coming Soon
+                      </span>
+                    </div>
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-500" />
                 <div className="absolute bottom-0 left-0 p-6">
                   <p className="text-primary text-[9px] tracking-[0.22em] uppercase font-bold mb-1.5 font-sans">

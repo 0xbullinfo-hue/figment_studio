@@ -20,26 +20,6 @@ const PROCESS = [
   { n: '04', title: 'Private Delivery', body: 'Access assets, revisions, and handoff via your secure dashboard. Every file encrypted and watermark-free.' },
 ];
 
-const TESTIMONIALS = [
-  {
-    quote: 'Figment Studio completely transformed how we present projects to investors. The renders look so real our clients often ask if they are photographs.',
-    author: 'Chukwuma Eze',
-    role: 'Principal Architect',
-    firm: 'Eze & Associates, Lagos',
-  },
-  {
-    quote: 'The AI-guided scene planning tool saved us weeks of back-and-forth. The team understood our vision from the first brief.',
-    author: 'Ngozi Adeyemi',
-    role: 'Real Estate Developer',
-    firm: 'Pinnacle Homes, Abuja',
-  },
-  {
-    quote: 'Working with Figment is the closest thing I have found to having a world-class visualization studio in-house — without the overhead.',
-    author: 'Emeka Okonkwo',
-    role: 'Director of Projects',
-    firm: 'Landmark Group, Victoria Island',
-  },
-];
 
 const INSIGHTS = [
   {
@@ -93,6 +73,9 @@ const SectionLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold font-sans mb-4">{children}</p>
 );
 
+import { useStudioStore } from '../store.ts';
+import { ClientReview } from '../types.ts';
+
 const SectionHeading: React.FC<{ children: React.ReactNode; dim?: string }> = ({ children, dim }) => (
   <h2 className="font-display font-light text-white leading-tight" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4rem)', lineHeight: 1.06 }}>
     {children}
@@ -103,8 +86,44 @@ const SectionHeading: React.FC<{ children: React.ReactNode; dim?: string }> = ({
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { reviews, addReview, deleteReview, auth } = useStudioStore();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [openProcess, setOpenProcess] = useState<number | null>(0);
+
+  const [newReview, setNewReview] = useState({
+    name: '',
+    role: '',
+    company: '',
+    rating: 5 as 1 | 2 | 3 | 4 | 5,
+    comment: ''
+  });
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+
+  const handleReviewSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newReview.name.trim() || !newReview.comment.trim() || !newReview.role.trim()) {
+      alert("Please fill in your name, professional role, and comments.");
+      return;
+    }
+    const submittedReview: ClientReview = {
+      id: `REV-${Date.now()}`,
+      name: newReview.name,
+      role: newReview.role,
+      company: newReview.company || undefined,
+      rating: newReview.rating,
+      comment: newReview.comment,
+      date: new Date().toISOString().split('T')[0],
+      approved: true
+    };
+    addReview(submittedReview);
+    setReviewSubmitted(true);
+    setNewReview({ name: '', role: '', company: '', rating: 5, comment: '' });
+    setTimeout(() => {
+      setReviewSubmitted(false);
+      setShowForm(false);
+    }, 3000);
+  };
 
   useEffect(() => {
     const scrollTarget = searchParams.get('scroll');
@@ -267,53 +286,182 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ── */}
+      {/* ── CLIENT STORIES / REVIEWS ── */}
       <section className="bg-[#0E0E0E] border-t border-border-ui" id="testimonials">
-        <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-            <div className="space-y-4">
-              <SectionLabel>Client Stories</SectionLabel>
-              <SectionHeading dim="from Our Clients">
-                Words
-              </SectionHeading>
-              <div className="flex gap-2 pt-4">
-                {TESTIMONIALS.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveTestimonial(i)}
-                    className={`h-[2px] transition-all duration-300 focus:outline-none ${i === activeTestimonial ? 'bg-primary w-10' : 'bg-white/15 w-4 hover:bg-white/30'}`}
-                  />
-                ))}
+        <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto space-y-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            
+            <div className="space-y-6 text-left">
+              <div>
+                <SectionLabel>Client Stories</SectionLabel>
+                <SectionHeading dim="from Our Clients">
+                  Feedback
+                </SectionHeading>
+              </div>
+              
+              <div className="flex flex-wrap gap-4 pt-4 font-sans">
+                {reviews.length > 0 && (
+                  <div className="flex gap-2">
+                    {reviews.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setActiveTestimonial(i)}
+                        className={`h-[2px] transition-all duration-300 focus:outline-none ${i === activeTestimonial ? 'bg-primary w-10' : 'bg-white/15 w-4 hover:bg-white/30'}`}
+                      />
+                    ))}
+                  </div>
+                )}
+                <button
+                  onClick={() => setShowForm(!showForm)}
+                  className="px-6 py-2.5 bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-white rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer font-sans"
+                >
+                  {showForm ? "Cancel Review" : "Write a Review"}
+                </button>
               </div>
             </div>
 
-            <div className="relative min-h-[260px]">
-              {TESTIMONIALS.map((t, i) => (
-                <div
-                  key={i}
-                  className="absolute inset-0 flex flex-col justify-between transition-all duration-500"
-                  style={{ opacity: i === activeTestimonial ? 1 : 0, pointerEvents: i === activeTestimonial ? 'auto' : 'none' }}
-                >
-                  <div className="space-y-6">
-                    <span className="font-display text-6xl text-primary/20 leading-none select-none">"</span>
-                    <p className="text-white/70 text-lg font-light leading-relaxed font-sans">
-                      {t.quote}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-4 pt-8 border-t border-border-ui mt-6">
-                    <div className="w-10 h-10 rounded-full bg-primary/15 border border-primary/25 flex items-center justify-center text-primary text-sm font-bold font-display">
-                      {t.author[0]}
+            <div className="relative min-h-[260px] text-left">
+              {reviews.length === 0 ? (
+                <p className="text-zinc-550 italic text-sm font-sans pt-12">No client reviews posted yet. Be the first to share your experience!</p>
+              ) : (
+                reviews.map((rev, i) => {
+                  const isActive = i === (activeTestimonial % reviews.length);
+                  return (
+                    <div
+                      key={rev.id}
+                      className="absolute inset-0 flex flex-col justify-between transition-all duration-500"
+                      style={{ opacity: isActive ? 1 : 0, pointerEvents: isActive ? 'auto' : 'none' }}
+                    >
+                      <div className="space-y-6">
+                        <div className="flex justify-between items-center">
+                          <span className="font-display text-6xl text-primary/20 leading-none select-none">"</span>
+                          <span className="text-primary font-bold text-xs tracking-wider">
+                            {'★'.repeat(rev.rating)}{'☆'.repeat(5 - rev.rating)}
+                          </span>
+                        </div>
+                        <p className="text-white/70 text-lg font-light leading-relaxed font-sans italic">
+                          {rev.comment}
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-between pt-8 border-t border-border-ui mt-6 font-sans">
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-full bg-primary/15 border border-primary/25 flex items-center justify-center text-primary text-sm font-bold font-display uppercase">
+                            {rev.name[0]}
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-white font-sans">{rev.name}</p>
+                            <p className="text-[11px] text-white/35 font-sans">{rev.role} {rev.company ? `· ${rev.company}` : ''}</p>
+                          </div>
+                        </div>
+
+                        {auth.role === 'admin' && (
+                          <button
+                            onClick={() => {
+                              deleteReview(rev.id);
+                              setActiveTestimonial(0);
+                            }}
+                            className="text-red-500 border border-red-950/20 hover:border-red-650 bg-red-950/10 hover:bg-red-950/20 px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded transition-all cursor-pointer flex items-center gap-1"
+                          >
+                            <span className="material-symbols-outlined text-xs">delete</span>
+                            Delete
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold text-white font-sans">{t.author}</p>
-                      <p className="text-[11px] text-white/35 font-sans">{t.role} · {t.firm}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                  );
+                })
+              )}
             </div>
           </div>
+
+          {/* Form to submit review */}
+          {showForm && (
+            <div className="max-w-2xl mx-auto bg-surface/50 border border-border-ui/60 p-8 md:p-12 rounded-[2.5rem] backdrop-blur-md text-left transition-all animate-in slide-in-from-top-6 duration-300">
+              {reviewSubmitted ? (
+                <div className="text-center py-8 space-y-4">
+                  <div className="mx-auto w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-500">
+                    <span className="material-symbols-outlined">done</span>
+                  </div>
+                  <h3 className="font-display text-white text-xl uppercase tracking-widest">Review Published!</h3>
+                  <p className="text-zinc-400 text-xs font-sans font-light">Thank you for sharing your feedback with the Figment Studio community.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleReviewSubmit} className="space-y-6 font-sans">
+                  <h3 className="font-display text-white text-xl uppercase tracking-wider mb-6">Write a Client Review</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-text-muted">Your Name *</label>
+                      <input
+                        type="text"
+                        required
+                        className="inp"
+                        placeholder="John Doe"
+                        value={newReview.name}
+                        onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-text-muted">Professional Role *</label>
+                      <input
+                        type="text"
+                        required
+                        className="inp"
+                        placeholder="Lead Architect / Developer"
+                        value={newReview.role}
+                        onChange={(e) => setNewReview({ ...newReview, role: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-text-muted">Company (Optional)</label>
+                      <input
+                        type="text"
+                        className="inp"
+                        placeholder="e.g. Pinnacle Homes"
+                        value={newReview.company}
+                        onChange={(e) => setNewReview({ ...newReview, company: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[9px] font-bold uppercase tracking-widest text-text-muted">Rating *</label>
+                      <select
+                        className="w-full bg-transparent border-b border-white/15 py-3 text-xs text-white outline-none focus:border-primary transition-colors cursor-pointer"
+                        value={newReview.rating}
+                        onChange={(e) => setNewReview({ ...newReview, rating: parseInt(e.target.value) as any })}
+                      >
+                        <option value="5" className="bg-[#1e1e1e]">5 Stars (Excellent)</option>
+                        <option value="4" className="bg-[#1e1e1e]">4 Stars (Very Good)</option>
+                        <option value="3" className="bg-[#1e1e1e]">3 Stars (Good)</option>
+                        <option value="2" className="bg-[#1e1e1e]">2 Stars (Fair)</option>
+                        <option value="1" className="bg-[#1e1e1e]">1 Star (Poor)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-bold uppercase tracking-widest text-text-muted">Your Comment *</label>
+                    <textarea
+                      required
+                      className="w-full bg-transparent border-b border-white/15 py-3 text-xs text-white outline-none focus:border-primary transition-colors resize-none min-h-[100px]"
+                      placeholder="Share your detailed feedback on our design, renderings, animations, or workflow..."
+                      value={newReview.comment}
+                      onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-4 bg-primary hover:bg-primary-hover text-white font-bold text-xs uppercase tracking-widest rounded-lg shadow-lg shadow-primary/10 transition-all cursor-pointer"
+                  >
+                    Submit Review Live
+                  </button>
+                </form>
+              )}
+            </div>
+          )}
         </div>
       </section>
 

@@ -107,3 +107,13 @@ export interface AcademyRegistration {
   referrerName?: string;
 }
 
+export interface ClientReview {
+  id: string;
+  name: string;
+  role: string;          // e.g. "Architect", "Developer"
+  company?: string;
+  rating: 1 | 2 | 3 | 4 | 5;
+  comment: string;
+  date: string;          // ISO date string
+  approved: boolean;     // admin can hide/show
+}

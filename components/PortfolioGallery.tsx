@@ -171,25 +171,39 @@ const PortfolioGallery: React.FC = () => {
               <motion.div
                 key={item.id}
                 layoutId={`card-container-${item.id}`}
-                onClick={() => { setSelectedItem(item); setIsPlayingVideo(false); }}
-                className="break-inside-avoid relative group cursor-pointer border border-border-ui/40 hover:border-primary/50 bg-[#0E0E0E] p-4 transition-all duration-500 overflow-hidden flex flex-col mb-6"
+                onClick={() => { if (item.url) { setSelectedItem(item); setIsPlayingVideo(false); } }}
+                className={`break-inside-avoid relative group border border-border-ui/40 bg-[#0E0E0E] p-4 transition-all duration-500 overflow-hidden flex flex-col mb-6 ${item.url ? 'cursor-pointer hover:border-primary/50' : 'cursor-default'}`}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: (index % 10) * 0.05 }}
               >
                 {/* Main Render Card Frame */}
-                <div className="relative w-full overflow-hidden bg-background rounded-lg mb-4">
-                  <img
-                    src={item.url}
-                    alt={item.title}
-                    className="w-full h-auto object-cover transition-all duration-[900ms] group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-all duration-500" />
-                  
-                  {item.hasPlay && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all duration-500 shadow-lg shadow-black/20">
-                        <span className="material-symbols-outlined text-white text-2xl">play_arrow</span>
+                <div className="relative w-full overflow-hidden bg-background rounded-lg mb-4 aspect-[4/3]">
+                  {item.url ? (
+                    <>
+                      <img
+                        src={item.url}
+                        alt={item.title}
+                        className="w-full h-full object-cover transition-all duration-[900ms] group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                      
+                      {item.hasPlay && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all duration-500 shadow-lg shadow-black/20">
+                            <span className="material-symbols-outlined text-white text-2xl">play_arrow</span>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="absolute inset-0 bg-zinc-950/60 overflow-hidden flex flex-col items-center justify-center p-6 text-center select-none">
+                      <div className="absolute inset-0 bg-zinc-900/50 backdrop-blur-md" />
+                      <div className="relative z-10 flex flex-col items-center space-y-2">
+                        <span className="material-symbols-outlined text-primary/60 text-3xl animate-pulse">lock</span>
+                        <span className="text-[9px] text-primary font-bold uppercase tracking-[0.25em] font-sans bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
+                          Coming Soon
+                        </span>
                       </div>
                     </div>
                   )}
@@ -201,7 +215,7 @@ const PortfolioGallery: React.FC = () => {
                     <span className="text-primary text-[9px] font-bold uppercase tracking-[0.25em] block mb-1 font-sans">{item.type}</span>
                     <h3 className="font-display text-white text-base lg:text-lg tracking-wide uppercase leading-snug">{item.title}</h3>
                   </div>
-                  <span className="material-symbols-outlined text-white/20 group-hover:text-primary transition-colors text-2xl">arrow_outward</span>
+                  {item.url && <span className="material-symbols-outlined text-white/20 group-hover:text-primary transition-colors text-2xl">arrow_outward</span>}
                 </div>
               </motion.div>
             );

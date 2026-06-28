@@ -23,6 +23,3 @@ dist-ssr
 *.sln
 *.sw?
 
-# Large video files exceeding GitHub's 100MB limit
-# Host these on a CDN (Cloudinary/Bunny.net) and reference by URL instead
-public/figment_media/3D-Villa-Animation-Abuja.mp4

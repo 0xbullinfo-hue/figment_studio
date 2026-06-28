@@ -20,13 +20,15 @@ const AdminDashboard: React.FC = () => {
     proposals,
     portfolioItems,
     academyRegistrations,
+    reviews,
     updateProject,
     updateProposalStatus,
     addPortfolioItem,
     updateAcademyRegistrationStatus,
-    updateAcademyRegistrationNotes
+    updateAcademyRegistrationNotes,
+    deleteReview
   } = useStudioStore();
-  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'proposals' | 'chat' | 'portfolio' | 'payments' | 'academy'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'proposals' | 'chat' | 'portfolio' | 'payments' | 'academy' | 'reviews'>('overview');
   
   // Academy registration filters & note state
   const [academyStatusFilter, setAcademyStatusFilter] = useState<'All' | 'Pending' | 'Contacted' | 'Enrolled'>('All');
@@ -555,11 +557,61 @@ const AdminDashboard: React.FC = () => {
     );
   };
 
+  const renderReviewsMgmt = () => {
+    return (
+      <div className="space-y-8 text-left">
+        <div>
+          <h2 className="text-3xl font-black text-white uppercase tracking-tight">Client Reviews</h2>
+          <p className="text-zinc-500 font-bold uppercase text-xs tracking-widest mt-1">
+            Moderate guest comments and inappropriate feedback submissions.
+          </p>
+        </div>
+
+        <div className="space-y-6">
+          {reviews.length === 0 ? (
+            <div className="p-20 text-center text-zinc-600 bg-zinc-900 rounded-3xl border border-dashed border-zinc-800 italic text-sm font-sans">
+              No client reviews posted yet.
+            </div>
+          ) : (
+            reviews.map(rev => (
+              <div 
+                key={rev.id} 
+                className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-zinc-700 transition-all font-sans"
+              >
+                <div className="space-y-3 max-w-3xl">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <h4 className="text-lg font-bold text-white uppercase tracking-wide font-display">{rev.name}</h4>
+                    <span className="text-[10px] text-zinc-500 font-bold uppercase">{rev.role} {rev.company ? `· ${rev.company}` : ''}</span>
+                    <span className="text-primary font-bold text-xs">{'★'.repeat(rev.rating)}{'☆'.repeat(5 - rev.rating)}</span>
+                  </div>
+                  <p className="text-zinc-405 text-sm leading-relaxed italic text-zinc-300">
+                    "{rev.comment}"
+                  </p>
+                  <p className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">
+                    Posted on {rev.date}
+                  </p>
+                </div>
+                <button
+                  onClick={() => deleteReview(rev.id)}
+                  className="px-5 py-3 border border-red-900/30 hover:border-red-600 bg-red-950/10 hover:bg-red-955/30 text-red-500 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all self-start md:self-auto flex items-center gap-2 cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-sm">delete</span>
+                  Delete Comment
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: 'dashboard' },
     { id: 'projects', label: 'Projects', icon: 'architecture' },
     { id: 'proposals', label: 'Inquiries', icon: 'mark_as_unread' },
     { id: 'academy', label: 'Academy', icon: 'school' },
+    { id: 'reviews', label: 'Reviews', icon: 'rate_review' },
     { id: 'chat', label: 'Chat', icon: 'forum' },
     { id: 'portfolio', label: 'Portfolio', icon: 'gallery_thumbnail' },
     { id: 'payments', label: 'Payments', icon: 'payments' },
@@ -615,6 +667,7 @@ const AdminDashboard: React.FC = () => {
           {activeTab === 'proposals' && renderProposals()}
           {activeTab === 'chat' && renderChat()}
           {activeTab === 'academy' && renderAcademyRegs()}
+          {activeTab === 'reviews' && renderReviewsMgmt()}
         </div>
       </main>
 

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Project, ProjectProposal, PortfolioItem, AcademyRegistration } from './types';
+import { Project, ProjectProposal, PortfolioItem, AcademyRegistration, ClientReview } from './types';
 import { INITIAL_PROJECTS, IMAGES } from './constants';
 
 type UserRole = 'guest' | 'client' | 'admin';
@@ -20,6 +20,7 @@ interface StudioState {
   proposals: ProjectProposal[];
   portfolioItems: PortfolioItem[];
   academyRegistrations: AcademyRegistration[];
+  reviews: ClientReview[];
   login: (role: 'client' | 'admin', plan?: SubscriptionPlan, name?: string) => void;
   logout: () => void;
   setPlan: (plan: SubscriptionPlan) => void;
@@ -34,6 +35,8 @@ interface StudioState {
   addAcademyRegistration: (reg: AcademyRegistration) => void;
   updateAcademyRegistrationStatus: (id: string, status: AcademyRegistration['status']) => void;
   updateAcademyRegistrationNotes: (id: string, notes: string) => void;
+  addReview: (review: ClientReview) => void;
+  deleteReview: (id: string) => void;
 }
 
 export const useStudioStore = create<StudioState>()(persist((set) => ({
@@ -59,6 +62,38 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
     }
   ],
   portfolioItems: IMAGES.gallery,
+  reviews: [
+    {
+      id: 'REV-001',
+      name: 'Chukwuma Eze',
+      role: 'Principal Architect',
+      company: 'Eze & Associates, Lagos',
+      rating: 5,
+      comment: 'Figment Studio completely transformed how we present projects to investors. The renders look so real our clients often ask if they are photographs.',
+      date: '2026-05-14',
+      approved: true,
+    },
+    {
+      id: 'REV-002',
+      name: 'Ngozi Adeyemi',
+      role: 'Real Estate Developer',
+      company: 'Pinnacle Homes, Abuja',
+      rating: 5,
+      comment: 'The AI-guided scene planning tool saved us weeks of back-and-forth. The team understood our vision from the first brief.',
+      date: '2026-05-28',
+      approved: true,
+    },
+    {
+      id: 'REV-003',
+      name: 'Emeka Okonkwo',
+      role: 'Director of Projects',
+      company: 'Landmark Group, Victoria Island',
+      rating: 5,
+      comment: 'Working with Figment is the closest thing I have found to having a world-class visualization studio in-house — without the overhead.',
+      date: '2026-06-02',
+      approved: true,
+    },
+  ],
   academyRegistrations: [
     {
       id: 'REG-101',
@@ -188,12 +223,22 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
 
   updateAcademyRegistrationNotes: (id, notes) => set((state) => ({
     academyRegistrations: state.academyRegistrations.map(r => r.id === id ? { ...r, notes } : r)
-  }))
+  })),
+
+  addReview: (review) => set((state) => ({
+    reviews: [...state.reviews, review]
+  })),
+
+  deleteReview: (id) => set((state) => ({
+    reviews: state.reviews.filter(r => r.id !== id)
+  })),
 }), {
   name: 'figment-studio-store',
+  version: 2,
   partialize: (state) => ({
     auth: state.auth,
     arcvizTrialUsed: state.arcvizTrialUsed,
     academyRegistrations: state.academyRegistrations,
+    reviews: state.reviews,
   }),
 }));
