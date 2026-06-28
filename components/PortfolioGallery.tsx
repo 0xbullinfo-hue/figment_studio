@@ -57,6 +57,8 @@ const PortfolioGallery: React.FC = () => {
       'Lagos Penthouse Living': 'Exterior rendering of a multi story apartment, capturing warm textures and modern daylight refraction.',
       'Lagos Apartment Walkthrough': 'Immersive 3D architectural animation detailing luxurious apartment, natural daylighting choreography, and high-end materials.',
 
+      // Abuja Villa
+      'The Obsidian Retreat': 'Cinematic 3D animation outlining the design flow of a premium country home villa in Maitama, showcasing warm daylit facades, pool deck integration, and custom exterior landscaping.',
       // Edo state country home
       'Edo Country Manor': 'High-contrast facade render of a premium country villa, blending traditional architectural volumes with contemporary concrete details.',
       'Edo Country Manor - Side View': 'Angular perspective rendering showcasing country villa, blending traditional architectural volumes with contemporary concrete details.',
