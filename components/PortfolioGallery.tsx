@@ -70,7 +70,7 @@ const PortfolioGallery: React.FC = () => {
       'Abuja Modern Residence': 'High-end exterior visual capturing dramatic window reflections, sunset ambiance, and a clean minimalist fence layout.',
       'Abuja Luxury Villa Walkthrough': 'Cinematic exterior animation of a premium residential villa estate in Abuja, detailing cinematic shorts of the premium villa.',
       'Abuja B2B Corporate Tower': 'Commercial glass high-rise facade visual set in the Central Business District, rendered under diffuse afternoon daylight.',
-      'Abuja Nexus Hub Complex': 'Dynamic multi-use commercial center rendering detailing public plazas, double-glazing window facades, and landscape features.',
+      'Abuja Serviced Apartment': 'A high-end interior render of a serviced apartment suite in Wuse II, Abuja, detailing premium furnishings and ambient daylighting.',
       'Abuja B2B Residential Suite': 'High-end interior visualization of a residential B2B suite featuring custom meeting tables, soundproofing wood panels, and smart curtain glass partitions.',
       'Abuja B2B Residential Walkthrough': 'A cinematic walkthrough animation showcasing a premium residential B2B suite, executive office, and private lounge.',
       'Abuja Apartment': 'Luxury residential Apartment with ground floor parking.',

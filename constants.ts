@@ -38,8 +38,8 @@ export const IMAGES = {
     },
     { 
       id: 'P2', 
-      title: 'Nexus Hub District', 
-      category: 'Commercial', 
+      title: 'Abuja Serviced Apartment', 
+      category: 'Interior', 
       location: 'Wuse II', 
       url: '/figment_media/3D-Rendering-B2B-Abuja 2.png', 
       type: 'Still Image'
@@ -74,7 +74,7 @@ export const IMAGES = {
     { id: 9, type: 'Exterior', title: 'Abuja Contemporary Duplex', url: '/figment_media/3D-Duplex-Rendering-Abuja.png', class: 'aspect-[4/3]' },
     { id: 10, type: 'Exterior', title: 'Abuja Modern Residence', url: '/figment_media/3D-Rendering-Abuja.png', class: 'aspect-[3/2]' },
     { id: 11, type: 'Exterior', title: 'Abuja B2B Corporate Tower', url: '/figment_media/3D-Rendering-B2B-Abuja.png', class: 'aspect-[3/2]' },
-    { id: 12, type: 'Exterior', title: 'Abuja Nexus Hub Complex', url: '/figment_media/3D-Rendering-B2B-Abuja 2.png', class: 'aspect-[4/3]' },
+    { id: 12, type: 'Interior', title: 'Abuja Serviced Apartment', url: '/figment_media/3D-Rendering-B2B-Abuja 2.png', class: 'aspect-[4/3]' },
     { id: 13, type: 'Interior', title: 'Abuja B2B Residential Suite', url: '/figment_media/3D-Rendering-B2B-Abuja 3.png', class: 'aspect-[4/3]' },
     { id: 14, type: 'Exterior', title: 'Bus Transit Terminal', url: '/figment_media/Ai-Render-Bus-terminal.png', class: 'aspect-[3/2]' },
     { id: 15, type: 'Animation', title: 'Edo Suburban Estate Walkthrough', url: '/figment_media/animation-cover-press-play.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Villa-Animation-Edo-state.mp4' },
