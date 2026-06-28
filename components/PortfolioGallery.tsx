@@ -74,8 +74,7 @@ const PortfolioGallery: React.FC = () => {
       'Abuja Apartment': 'Luxury residential Apartment with ground floor parking.',
 
       // Ondo state items
-      'Ondo Corporate Plaza': 'Sleek exterior rendering featuring dynamic facade panels, dynamic glass glazing, and street-level pedestrian integration.',
-
+      'Ondo Modern Residence': 'A modern residential villa rendering in Ondo State, highlighting architectural geometry, integrated landscaping, and warm daylight refraction.',
       // Scale Models
       'Precision Maquette Printing': 'Physical maquette fabrication using high-precision additive manufacturing, showcasing architectural detailing directly in physical format.',
       'Residential Development Scale Model': 'Residential Development Scale Model.',

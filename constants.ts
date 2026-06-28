@@ -54,8 +54,8 @@ export const IMAGES = {
     },
     { 
       id: 'P4', 
-      title: 'Ondo Corporate Plaza', 
-      category: 'Commercial', 
+      title: 'Ondo Modern Residence', 
+      category: 'Residential', 
       location: 'Ondo State', 
       url: '/figment_media/3D-B2B-Rendering-Ondo-state.png', 
       type: 'Still Image'
@@ -77,7 +77,7 @@ export const IMAGES = {
     { id: 14, type: 'Exterior', title: 'Bus Transit Terminal', url: '/figment_media/Ai-Render-Bus-terminal.png', class: 'aspect-[3/2]' },
     { id: 15, type: 'Animation', title: 'Edo Suburban Estate Walkthrough', url: '/figment_media/3D-Country-home-Rendering-Edo-state 1.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Villa-Animation-Edo-state.mp4' },
     { id: 16, type: 'Animation', title: 'Abuja Luxury Villa Walkthrough', url: '/figment_media/3D-Rendering-Abuja.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Villa-Animation-Abuja.mp4' },
-    { id: 17, type: 'Exterior', title: 'Ondo Corporate Plaza', url: '/figment_media/3D-B2B-Rendering-Ondo-state.png', class: 'aspect-[3/2]' },
+    { id: 17, type: 'Exterior', title: 'Ondo Modern Residence', url: '/figment_media/3D-B2B-Rendering-Ondo-state.png', class: 'aspect-[3/2]' },
     { id: 18, type: 'Animation', title: 'Abuja Corporate Office Walkthrough', url: '/figment_media/3D-Rendering-B2B-Abuja 3.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Office-Interior -Animation-Abuja.mp4' },
     { id: 19, type: 'Exterior', title: 'Abuja Apartment', url: '/figment_media/3D-Rendering-Abuja 2.png', class: 'aspect-[4/3]' }
   ]
