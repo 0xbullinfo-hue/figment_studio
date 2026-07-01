@@ -6,7 +6,8 @@ import Footer from './components/Footer.tsx';
 import VisionAssistant from './components/VisionAssistant.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 import { useStudioStore } from './store.ts';
-import CustomCursor from './components/CustomCursor.tsx';
+import ProtectedRoute from './components/ProtectedRoute.tsx';
+import { meRequest } from './services/apiClient.ts';
 
 /**
  * Scrolls to the top of the page on every route change.
@@ -101,11 +102,45 @@ const AppRoutes = () => {
   const [isVisionAssistantOpen, setIsVisionAssistantOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { addProposal } = useStudioStore();
+  const { auth, addProposal, setAuthSession, logout } = useStudioStore();
 
   useEffect(() => {
     setIsVisionAssistantOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!auth.isAuthenticated || !auth.accessToken) {
+      return;
+    }
+
+    let cancelled = false;
+
+    meRequest(auth.accessToken)
+      .then((response) => {
+        if (cancelled) {
+          return;
+        }
+
+        setAuthSession({
+          id: response.user.id,
+          email: response.user.email,
+          name: response.user.name,
+          role: response.user.role,
+          plan: response.user.plan,
+          accessToken: auth.accessToken || '',
+          refreshToken: auth.refreshToken || '',
+        });
+      })
+      .catch(() => {
+        if (!cancelled) {
+          logout();
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [auth.accessToken]);
 
   const handleNewProjectSubmit = (data: { projectName: string; type: string; total: number; details: string }) => {
     const id = `FIG-${Math.floor(Math.random() * 10000) + 10000}`;
@@ -139,8 +174,8 @@ const AppRoutes = () => {
 
         <Route element={<DashboardLayout />}>
           <Route path="auth" element={<AuthPage onLogin={(role) => navigate(role === 'admin' ? '/admin' : '/dashboard')} onBack={() => navigate(-1)} />} />
-          <Route path="dashboard" element={<ClientDashboard onOpenVision={() => setIsVisionAssistantOpen(true)} />} />
-          <Route path="admin" element={<AdminDashboard />} />
+          <Route path="dashboard" element={<ProtectedRoute requiredRole="client"><ClientDashboard onOpenVision={() => setIsVisionAssistantOpen(true)} /></ProtectedRoute>} />
+          <Route path="admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
           <Route path="billing" element={<BillingManager onBack={() => navigate(-1)} onNavigate={(path, state) => navigate(path, state ? { state } : undefined)} />} />
           <Route path="payment" element={<PaymentPortal onBack={() => navigate(-1)} />} />
           <Route path="assets" element={<AssetManager onBack={() => navigate(-1)} onNavigate={(path) => navigate(path)} />} />
@@ -170,7 +205,6 @@ const App: React.FC = () => {
       <HelmetProvider>
         <BrowserRouter>
           <ScrollToTop />
-          <CustomCursor />
           <AppRoutes />
         </BrowserRouter>
       </HelmetProvider>

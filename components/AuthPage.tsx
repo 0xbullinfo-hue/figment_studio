@@ -1,9 +1,16 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
 import Logo from './Logo.tsx';
 import { useStudioStore } from '../store.ts';
+import { googleLoginRequest, loginRequest } from '../services/apiClient.ts';
+
+declare global {
+  interface Window {
+    google?: any;
+  }
+}
 
 interface AuthPageProps {
   onLogin: (role: 'client' | 'admin') => void;
@@ -14,20 +21,120 @@ const INPUT_CLASS = "w-full rounded-xl border border-border-ui bg-background px-
 
 const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
   const [searchParams] = useSearchParams();
-  const { login } = useStudioStore();
+  const { setAuthSession } = useStudioStore();
   const [isRegister, setIsRegister] = useState(false);
-  const [portalType, setPortalType] = useState<'client' | 'admin'>('client');
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const googleButtonRef = useRef<HTMLDivElement | null>(null);
+  const googleClientId = ((import.meta as any).env.VITE_GOOGLE_CLIENT_ID as string | undefined) || '';
+  const allowAdminPortal = import.meta.env.DEV;
   const upgradeIntent = searchParams.get('upgrade') === 'pro';
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (portalType === 'admin') {
-      login('admin', 'pro', 'Studio Admin');
-    } else {
-      login('client', upgradeIntent ? 'pro' : 'trial', 'Client User');
+  useEffect(() => {
+    if (!googleClientId || isRegister) {
+      return;
     }
-    onLogin(portalType);
+
+    const initGoogle = () => {
+      if (!window.google || !googleButtonRef.current) {
+        return;
+      }
+
+      googleButtonRef.current.innerHTML = '';
+
+      window.google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: async (response: { credential?: string }) => {
+          const credential = response?.credential;
+          if (!credential) {
+            setAuthError('Google did not return a credential token.');
+            return;
+          }
+
+          setAuthError(null);
+          setIsSubmitting(true);
+
+          try {
+            const session = await googleLoginRequest(credential);
+            setAuthSession({
+              id: session.user.id,
+              email: session.user.email,
+              name: session.user.name,
+              role: session.user.role,
+              plan: session.user.plan,
+              accessToken: session.accessToken,
+              refreshToken: session.refreshToken,
+            });
+            onLogin(session.user.role);
+          } catch (error) {
+            const message = error instanceof Error ? error.message : 'Google sign-in failed.';
+            setAuthError(message);
+          } finally {
+            setIsSubmitting(false);
+          }
+        },
+      });
+
+      window.google.accounts.id.renderButton(googleButtonRef.current, {
+        type: 'standard',
+        theme: 'filled_black',
+        text: 'continue_with',
+        shape: 'pill',
+        size: 'large',
+        width: 360,
+      });
+    };
+
+    const existingScript = document.getElementById('google-identity-script');
+    if (existingScript) {
+      initGoogle();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.id = 'google-identity-script';
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = initGoogle;
+    script.onerror = () => {
+      setAuthError('Unable to load Google sign-in. Please use email and password.');
+    };
+    document.head.appendChild(script);
+  }, [googleClientId, isRegister]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError(null);
+    setIsSubmitting(true);
+
+    try {
+      const response = await loginRequest(email, password);
+      setAuthSession({
+        id: response.user.id,
+        email: response.user.email,
+        name: response.user.name,
+        role: response.user.role,
+        plan: response.user.plan,
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      });
+      onLogin(response.user.role);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unable to authenticate right now.';
+      setAuthError(message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleRegisterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsRegister(false);
+    setAuthError('Registration flow will be enabled in the next phase. Please sign in with a provisioned account.');
   };
 
   if (isRegister) {
@@ -81,7 +188,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
           <div className="w-full max-w-xl card-base p-10 space-y-6">
             <h1 className="font-display font-light text-3xl text-text-main">Join the Studio</h1>
 
-            <form className="space-y-5" onSubmit={handleSubmit}>
+            <form className="space-y-5" onSubmit={handleRegisterSubmit}>
               {[
                 { label: 'Full Name', placeholder: 'Alexander Figment', type: 'text' },
                 { label: 'Company Name', placeholder: 'Architectural Collective Ltd.', type: 'text' },
@@ -176,31 +283,20 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
             boxShadow: '0 32px 64px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04)',
           }}
         >
-          {/* Toggle tab */}
-          <div className="flex p-1 rounded-xl mb-8" style={{ background: '#0A0805' }}>
-            {(['client', 'admin'] as const).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setPortalType(tab)}
-                className="flex-1 py-2.5 rounded-lg text-2xs font-bold uppercase tracking-widest transition-all duration-200"
-                style={{
-                  background: portalType === tab ? '#272018' : 'transparent',
-                  color: portalType === tab ? '#F2EDE6' : '#4E4540',
-                }}
-              >
-                {tab === 'client' ? 'Client' : 'Admin'}
-              </button>
-            ))}
-          </div>
+          {allowAdminPortal && (
+            <div className="rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 mb-8 text-xs text-text-secondary uppercase tracking-[0.18em]">
+              Development mode admin access remains available through /auth?portal=admin.
+            </div>
+          )}
 
           <div className="space-y-6">
             <div className="text-center space-y-1.5">
               <h1 className="font-display font-light text-3xl text-text-main">
-                {portalType === 'client' ? 'Client Portal' : 'Admin Control'}
+                Client Portal
               </h1>
               <p className="text-sm text-text-muted">Secure access to your architectural ecosystem</p>
-              {portalType === 'client' && upgradeIntent && (
-                <p className="label-xs text-primary" style={{ letterSpacing: '0.14em' }}>Pro upgrade flow active</p>
+              {upgradeIntent && (
+                <p className="label-xs text-primary" style={{ letterSpacing: '0.14em' }}>Upgrade request captured. Plan activation follows verified payment.</p>
               )}
             </div>
 
@@ -216,6 +312,8 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
                     required
                     type="email"
                     placeholder="name@company.com"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
                     className={`${INPUT_CLASS} pl-11`}
                   />
                 </div>
@@ -235,6 +333,8 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
                     required
                     type={showPassword ? 'text' : 'password'}
                     placeholder="••••••••"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                     className={`${INPUT_CLASS} pl-11 pr-11`}
                   />
                   <button
@@ -249,19 +349,34 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
                 </div>
               </div>
 
-              <button type="submit" className="btn-primary w-full justify-center py-3.5 mt-2">
-                Enter Portal
+              {authError && (
+                <p className="text-xs text-red-400 uppercase tracking-[0.12em]">{authError}</p>
+              )}
+
+              <button type="submit" disabled={isSubmitting} className="btn-primary w-full justify-center py-3.5 mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                {isSubmitting ? 'Authenticating...' : 'Enter Portal'}
               </button>
+
+              {googleClientId && (
+                <>
+                  <div className="flex items-center gap-3 py-1">
+                    <div className="h-px bg-border-ui flex-1" />
+                    <span className="text-[10px] uppercase tracking-[0.22em] text-text-faint">or</span>
+                    <div className="h-px bg-border-ui flex-1" />
+                  </div>
+                  <div className="flex justify-center">
+                    <div ref={googleButtonRef} />
+                  </div>
+                </>
+              )}
             </form>
 
-            {portalType === 'client' && (
-              <p className="text-center text-sm text-text-muted">
-                New client?{' '}
-                <button onClick={() => setIsRegister(true)} className="text-primary hover:text-primary-hover transition-colors font-semibold">
-                  Create an Account
-                </button>
-              </p>
-            )}
+            <p className="text-center text-sm text-text-muted">
+              New client?{' '}
+              <button onClick={() => setIsRegister(true)} className="text-primary hover:text-primary-hover transition-colors font-semibold">
+                Create an account
+              </button>
+            </p>
           </div>
         </div>
       </div>

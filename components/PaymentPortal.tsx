@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import Logo from './Logo.tsx';
+import { useStudioStore } from '../store.ts';
 
 type PaymentProvider = 'paystack' | 'flutterwave';
 type Currency = 'USD' | 'NGN';
@@ -22,6 +23,7 @@ const PROVIDER_LABELS: Record<PaymentProvider, string> = {
 
 const PaymentPortal: React.FC<PaymentPortalProps> = ({ onBack }) => {
   const location = useLocation();
+  const { auth } = useStudioStore();
   const {
     invoiceId = 'FIG-00000',
     amount = 3700,
@@ -98,10 +100,11 @@ const PaymentPortal: React.FC<PaymentPortalProps> = ({ onBack }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           provider,
-          amount: convertedAmount.toFixed(currency === 'NGN' ? 0 : 2),
+          amount: Number(convertedAmount.toFixed(currency === 'NGN' ? 0 : 2)),
           currency,
           reference: invoiceId,
           project,
+          email: auth.email,
         }),
       });
 

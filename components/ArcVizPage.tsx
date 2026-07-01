@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { VisionChat } from '../types.ts';
 import { streamArchitecturalAI } from '../services/geminiService.ts';
+import { authorizeArcvizRender, getArcvizQuota } from '../services/apiClient.ts';
 import { useStudioStore } from '../store.ts';
 import BeforeAfterSlider from './BeforeAfterSlider.tsx';
 import { runSimulatedRenderEngine } from '../services/renderEngine.ts';
@@ -95,11 +96,11 @@ const VIDEO_DURATIONS = ['8s', '10s', '15s', '20s', '30s'];
 const CONTEXT_STYLES = ['Minimal', 'Urban Premium', 'Tropical Landscape', 'Studio Background'];
 const WEATHER_STYLES = ['Keep Original', 'Clear', 'Overcast', 'After Rain', 'Harmattan Haze'];
 const ROOMS = ['Living Room', 'Bedroom', 'Kitchen', 'Office', 'Exterior Facade', 'Landscape'];
-const TRIAL_RENDER_LIMIT = 5;
+const TRIAL_RENDER_LIMIT = 4;
 
 const ArcVizPage: React.FC = () => {
   const navigate = useNavigate();
-  const { auth, arcvizTrialUsed, incrementArcvizTrial } = useStudioStore();
+  const { auth } = useStudioStore();
   const isProPlan = auth.isAuthenticated && auth.plan === 'pro';
   
   // Workspace Stepper & Navigation Tabs
@@ -148,13 +149,19 @@ const ArcVizPage: React.FC = () => {
   const [renderProgress, setRenderProgress] = useState(0);
   const [renderLogs, setRenderLogs] = useState<string[]>([]);
   const [generatedRender, setGeneratedRender] = useState<{ before: string; after: string } | null>(null);
+  const [trialStatus, setTrialStatus] = useState({
+    trialLimit: TRIAL_RENDER_LIMIT,
+    trialUsed: 0,
+    trialRemaining: TRIAL_RENDER_LIMIT,
+    allowed: true,
+  });
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const consoleScrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isTrialPlan = !isProPlan;
-  const trialRemaining = Math.max(0, TRIAL_RENDER_LIMIT - arcvizTrialUsed);
+  const trialRemaining = trialStatus.trialRemaining;
   const trialExceeded = isTrialPlan && trialRemaining <= 0;
 
   const isTabLockedForTrial = (tab: BuilderTab) => isTrialPlan && (tab === 'motion' || tab === 'context');
@@ -171,6 +178,39 @@ const ArcVizPage: React.FC = () => {
       consoleScrollRef.current.scrollTop = consoleScrollRef.current.scrollHeight;
     }
   }, [renderLogs, renderProgress]);
+
+  useEffect(() => {
+    const loadQuota = async () => {
+      if (!auth.accessToken) {
+        setTrialStatus({
+          trialLimit: TRIAL_RENDER_LIMIT,
+          trialUsed: 0,
+          trialRemaining: TRIAL_RENDER_LIMIT,
+          allowed: true,
+        });
+        return;
+      }
+
+      try {
+        const quota = await getArcvizQuota(auth.accessToken);
+        setTrialStatus({
+          trialLimit: quota.trialLimit,
+          trialUsed: quota.trialUsed,
+          trialRemaining: quota.trialRemaining,
+          allowed: quota.allowed,
+        });
+      } catch {
+        setTrialStatus({
+          trialLimit: TRIAL_RENDER_LIMIT,
+          trialUsed: 0,
+          trialRemaining: TRIAL_RENDER_LIMIT,
+          allowed: true,
+        });
+      }
+    };
+
+    loadQuota();
+  }, [auth.accessToken]);
 
   // Scroll window to top when step transitions (e.g. setup to workspace)
   useEffect(() => {
@@ -238,11 +278,44 @@ const ArcVizPage: React.FC = () => {
   const handleGenerateRender = async () => {
     if (isRendering || !selectedImage) return;
 
+    if (!auth.accessToken) {
+      setMessages((prev) => [...prev, {
+        role: 'assistant',
+        content: 'Please sign in to use ArcViz rendering.'
+      }]);
+      setActiveWorkspaceTab('chat');
+      return;
+    }
+
     if (trialExceeded) {
       setMessages((prev) => [...prev, {
         role: 'assistant',
         content: 'Trial limit reached. Upgrade to Studio Pro to continue generating renders and unlock advanced tools.'
       }]);
+      setActiveWorkspaceTab('chat');
+      return;
+    }
+
+    try {
+      const quota = await authorizeArcvizRender(auth.accessToken);
+      setTrialStatus({
+        trialLimit: quota.trialLimit,
+        trialUsed: quota.trialUsed,
+        trialRemaining: quota.trialRemaining,
+        allowed: quota.allowed,
+      });
+
+      if (!quota.allowed) {
+        setMessages((prev) => [...prev, {
+          role: 'assistant',
+          content: 'Trial limit reached. Upgrade to Studio Pro to continue generating renders and unlock advanced tools.'
+        }]);
+        setActiveWorkspaceTab('chat');
+        return;
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'ArcViz quota check failed.';
+      setMessages((prev) => [...prev, { role: 'assistant', content: message }]);
       setActiveWorkspaceTab('chat');
       return;
     }
@@ -303,10 +376,6 @@ const ArcVizPage: React.FC = () => {
     setInput('');
     setIsLoading(true);
     setStreamingContent('');
-
-    if (isTrialPlan && !isBackgroundQuery) {
-      incrementArcvizTrial();
-    }
 
     try {
       let fullResponse = '';

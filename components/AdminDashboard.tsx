@@ -523,7 +523,7 @@ const AdminDashboard: React.FC = () => {
                   {/* Middle Cover Letter message */}
                   <div className="space-y-2">
                     <p className="text-[9px] font-black uppercase text-zinc-500 tracking-widest font-sans">Candidate Cover Statement</p>
-                    <div className="bg-zinc-800/30 p-4 rounded-xl border border-zinc-800 text-zinc-450 font-sans text-xs leading-relaxed italic h-[110px] overflow-y-auto">
+                    <div className="bg-zinc-800/30 p-4 rounded-xl border border-zinc-800 text-zinc-500 font-sans text-xs leading-relaxed italic h-[110px] overflow-y-auto">
                       {reg.message ? `"${reg.message}"` : <span className="text-zinc-600 font-normal">No message provided.</span>}
                     </div>
                   </div>
@@ -584,7 +584,7 @@ const AdminDashboard: React.FC = () => {
                     <span className="text-[10px] text-zinc-500 font-bold uppercase">{rev.role} {rev.company ? `· ${rev.company}` : ''}</span>
                     <span className="text-primary font-bold text-xs">{'★'.repeat(rev.rating)}{'☆'.repeat(5 - rev.rating)}</span>
                   </div>
-                  <p className="text-zinc-405 text-sm leading-relaxed italic text-zinc-300">
+                  <p className="text-zinc-500 text-sm leading-relaxed italic text-zinc-300">
                     "{rev.comment}"
                   </p>
                   <p className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">
@@ -593,7 +593,7 @@ const AdminDashboard: React.FC = () => {
                 </div>
                 <button
                   onClick={() => deleteReview(rev.id)}
-                  className="px-5 py-3 border border-red-900/30 hover:border-red-600 bg-red-950/10 hover:bg-red-955/30 text-red-500 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all self-start md:self-auto flex items-center gap-2 cursor-pointer"
+                  className="px-5 py-3 border border-red-900/30 hover:border-red-700 bg-red-950/10 hover:bg-red-950/20 text-red-500 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all self-start md:self-auto flex items-center gap-2 cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-sm">delete</span>
                   Delete Comment

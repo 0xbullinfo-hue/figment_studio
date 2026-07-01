@@ -18,7 +18,8 @@ const PortfolioGallery: React.FC = () => {
 
   // Filter items based on selected category & search query
   const filteredItems = items.filter(item => {
-    const matchesCategory = activeFilter === 'All' || (activeFilter === 'Animation' ? !!item.hasPlay : item.type.toLowerCase() === activeFilter.toLowerCase());
+    const normalizedType = item.type.toLowerCase();
+    const matchesCategory = activeFilter === 'All' || normalizedType === activeFilter.toLowerCase();
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || item.type.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });

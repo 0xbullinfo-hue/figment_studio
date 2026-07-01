@@ -13,7 +13,10 @@ const SuccessInvoice: React.FC<SuccessInvoiceProps> = ({ onBack, onGoHome }) => 
   const [isUploading, setIsUploading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { invoiceId = '#FIG-2024-0892', amount = 3700, project = 'Project Estimate' } = location.state || {};
+  const searchParams = new URLSearchParams(location.search);
+  const paymentReference = searchParams.get('paymentReference');
+  const { invoiceId = paymentReference || '#FIG-2024-0892', amount = 3700, project = 'Project Estimate' } = location.state || {};
+  const isPaymentConfirmation = Boolean(paymentReference);
 
   const handleUploadPOP = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -38,7 +41,11 @@ const SuccessInvoice: React.FC<SuccessInvoiceProps> = ({ onBack, onGoHome }) => 
             <span className="material-symbols-outlined text-5xl">check_circle</span>
           </div>
           <h1 className="text-4xl font-black uppercase tracking-tighter text-primary">Quote Generated!</h1>
-          <p className="text-gray-500 text-lg max-w-lg mx-auto font-medium text-center">Your project estimate is ready. Please proceed with payment to initiate the studio production.</p>
+          <p className="text-gray-500 text-lg max-w-lg mx-auto font-medium text-center">
+            {isPaymentConfirmation
+              ? 'Payment confirmed. Your Pro entitlement is now active in this browser session.'
+              : 'Your project estimate is ready. Please proceed with payment to initiate the studio production.'}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

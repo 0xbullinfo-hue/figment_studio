@@ -322,7 +322,7 @@ const LandingPage: React.FC = () => {
 
             <div className="relative min-h-[260px] text-left">
               {reviews.length === 0 ? (
-                <p className="text-zinc-550 italic text-sm font-sans pt-12">No client reviews posted yet. Be the first to share your experience!</p>
+                <p className="text-zinc-600 italic text-sm font-sans pt-12">No client reviews posted yet. Be the first to share your experience!</p>
               ) : (
                 reviews.map((rev, i) => {
                   const isActive = i === (activeTestimonial % reviews.length);
@@ -360,7 +360,7 @@ const LandingPage: React.FC = () => {
                               deleteReview(rev.id);
                               setActiveTestimonial(0);
                             }}
-                            className="text-red-500 border border-red-950/20 hover:border-red-650 bg-red-950/10 hover:bg-red-950/20 px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded transition-all cursor-pointer flex items-center gap-1"
+                            className="text-red-500 border border-red-950/20 hover:border-red-700 bg-red-950/10 hover:bg-red-950/20 px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded transition-all cursor-pointer flex items-center gap-1"
                           >
                             <span className="material-symbols-outlined text-xs">delete</span>
                             Delete

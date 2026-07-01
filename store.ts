@@ -10,7 +10,11 @@ interface AuthSession {
   isAuthenticated: boolean;
   role: UserRole;
   plan: SubscriptionPlan;
+  id?: string;
+  email?: string;
   name: string;
+  accessToken?: string;
+  refreshToken?: string;
 }
 
 interface StudioState {
@@ -22,10 +26,18 @@ interface StudioState {
   academyRegistrations: AcademyRegistration[];
   reviews: ClientReview[];
   login: (role: 'client' | 'admin', plan?: SubscriptionPlan, name?: string) => void;
+  setAuthSession: (session: {
+    id: string;
+    email: string;
+    name: string;
+    role: 'client' | 'admin';
+    plan: SubscriptionPlan;
+    accessToken: string;
+    refreshToken: string;
+  }) => void;
   logout: () => void;
   setPlan: (plan: SubscriptionPlan) => void;
   incrementArcvizTrial: () => void;
-  resetArcvizTrial: () => void;
   addProject: (project: Project) => void;
   updateProject: (project: Project) => void;
   addProposal: (proposal: ProjectProposal) => void;
@@ -132,12 +144,29 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
     },
   })),
 
+  setAuthSession: (session) => set(() => ({
+    auth: {
+      isAuthenticated: true,
+      id: session.id,
+      email: session.email,
+      name: session.name,
+      role: session.role,
+      plan: session.plan,
+      accessToken: session.accessToken,
+      refreshToken: session.refreshToken,
+    },
+  })),
+
   logout: () => set(() => ({
     auth: {
       isAuthenticated: false,
       role: 'guest',
       plan: 'trial',
       name: 'Guest User',
+      id: undefined,
+      email: undefined,
+      accessToken: undefined,
+      refreshToken: undefined,
     },
   })),
 
@@ -150,10 +179,6 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
 
   incrementArcvizTrial: () => set((state) => ({
     arcvizTrialUsed: state.arcvizTrialUsed + 1,
-  })),
-
-  resetArcvizTrial: () => set(() => ({
-    arcvizTrialUsed: 0,
   })),
 
   addProject: (project) => set((state) => ({ 
@@ -238,6 +263,9 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
   partialize: (state) => ({
     auth: state.auth,
     arcvizTrialUsed: state.arcvizTrialUsed,
+    projects: state.projects,
+    proposals: state.proposals,
+    portfolioItems: state.portfolioItems,
     academyRegistrations: state.academyRegistrations,
     reviews: state.reviews,
   }),

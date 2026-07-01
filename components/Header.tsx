@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from './Logo.tsx';
 import { useStudioStore } from '../store.ts';
+import { logoutRequest } from '../services/apiClient.ts';
 
 interface HeaderProps {
   onOpenVision: () => void;
@@ -17,6 +18,12 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [aiDropdownOpen, setAiDropdownOpen] = useState(false);
   const aiDropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleSignOut = async () => {
+    await logoutRequest(auth.refreshToken, auth.accessToken);
+    logout();
+    navigate('/');
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -204,7 +211,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
                   Dashboard
                 </button>
                 <button
-                  onClick={() => { logout(); navigate('/'); }}
+                  onClick={handleSignOut}
                   className="text-[11px] tracking-[0.2em] uppercase border border-border-ui hover:border-primary/40 text-text-muted hover:text-primary transition-all px-4 py-2 font-medium"
                 >
                   Sign Out
@@ -298,9 +305,14 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
             </div>
             <div className="pt-4 mt-2 space-y-2.5">
               {auth.isAuthenticated ? (
-                <button onClick={() => navigate(auth.role === 'admin' ? '/admin' : '/dashboard')} className="w-full bg-primary text-white text-[11px] tracking-[0.2em] uppercase font-semibold py-3">
-                  Dashboard
-                </button>
+                <>
+                  <button onClick={() => navigate(auth.role === 'admin' ? '/admin' : '/dashboard')} className="w-full bg-primary text-white text-[11px] tracking-[0.2em] uppercase font-semibold py-3">
+                    Dashboard
+                  </button>
+                  <button onClick={handleSignOut} className="w-full border border-border-ui text-text-muted text-[11px] tracking-[0.2em] uppercase font-semibold py-3 hover:border-primary/40 hover:text-primary transition-colors">
+                    Sign Out
+                  </button>
+                </>
               ) : (
                 <>
                   <button disabled className="w-full border border-border-ui/50 text-text-faint text-[11px] tracking-[0.2em] uppercase font-semibold py-3 cursor-not-allowed">

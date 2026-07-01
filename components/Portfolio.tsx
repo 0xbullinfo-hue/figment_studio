@@ -1,32 +1,27 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IMAGES } from '../constants.ts';
+import { useStudioStore } from '../store.ts';
 
 interface PortfolioProps {
   onViewAll: () => void;
 }
 
-const signatureProjects = IMAGES.portfolio.map(p => ({
-  id: p.id,
-  title: p.title,
-  category: p.category,
-  location: p.location,
-  imageUrl: p.url,
-  type: (p as any).type || 'Static Render',
-  hasPlay: (p as any).hasPlay || false,
-  videoUrl: (p as any).videoUrl,
-}));
-
-// Expand with extra gallery images for a richer grid
-const GALLERY_EXTRAS: any[] = [];
-
-const ALL_PROJECTS = [...signatureProjects, ...GALLERY_EXTRAS];
-
 const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
   const navigate = useNavigate();
+  const { portfolioItems } = useStudioStore();
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
+  const featuredProjects = portfolioItems.slice(0, 4).map((item) => ({
+    id: item.id,
+    title: item.title,
+    category: item.type,
+    location: 'Featured Commission',
+    imageUrl: item.url,
+    type: item.type,
+    hasPlay: item.hasPlay || item.type.toLowerCase() === 'animation',
+    videoUrl: item.videoUrl,
+  }));
 
   return (
     <section className="bg-background border-t border-border-ui" id="portfolio">
@@ -52,7 +47,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
 
         {/* Masonry-style grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {ALL_PROJECTS.slice(0, 2).map((project, idx) => (
+          {featuredProjects.slice(0, 2).map((project, idx) => (
             <div
               key={project.id}
               onClick={() => setSelectedProject(project)}
@@ -104,7 +99,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
 
           {/* Right column: 2 stacked items */}
           <div className="flex flex-col gap-4">
-            {ALL_PROJECTS.slice(2, 4).map((project) => (
+            {featuredProjects.slice(2, 4).map((project) => (
               <div
                 key={project.id}
                 onClick={() => setSelectedProject(project)}
