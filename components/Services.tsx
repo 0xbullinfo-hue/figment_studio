@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getPublicStudioContent } from '../services/apiClient.ts';
 
 const SERVICES = [
   {
@@ -38,7 +39,30 @@ const SERVICES = [
 
 const Services: React.FC = () => {
   const [active, setActive] = useState(0);
-  const svc = SERVICES[active];
+  const [services, setServices] = useState(SERVICES);
+
+  useEffect(() => {
+    let cancelled = false;
+    getPublicStudioContent().then((content) => {
+      if (cancelled || !content.services?.length) {
+        return;
+      }
+      setServices(content.services.map((service, index) => ({
+        id: service.id || String(index + 1).padStart(2, '0'),
+        title: service.title,
+        short: service.short || service.title,
+        description: service.description,
+        image: service.image,
+        tags: Array.isArray(service.tags) ? service.tags : [],
+      })));
+    }).catch(() => undefined);
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const svc = services[active] || services[0];
 
   return (
     <section className="bg-[#0E0E0E]" id="services">
@@ -65,7 +89,7 @@ const Services: React.FC = () => {
 
           {/* Left: Tab list */}
           <div className="flex flex-col border-r border-border-ui">
-            {SERVICES.map((s, i) => {
+            {services.map((s, i) => {
               const isActive = i === active;
               return (
                 <button
@@ -133,7 +157,7 @@ const Services: React.FC = () => {
 
           {/* Right: Image panel */}
           <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden bg-surface min-h-[320px]">
-            {SERVICES.map((s, i) => (
+            {services.map((s, i) => (
               <img
                 key={s.id}
                 src={s.image}

@@ -12,14 +12,19 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
   const { portfolioItems } = useStudioStore();
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
-  const featuredProjects = portfolioItems.slice(0, 4).map((item) => ({
+  const renderOnlyItems = portfolioItems.filter((item) => {
+    const normalizedType = item.type.toLowerCase();
+    return normalizedType === 'exterior' || normalizedType === 'interior';
+  });
+
+  const featuredProjects = renderOnlyItems.slice(0, 4).map((item) => ({
     id: item.id,
     title: item.title,
     category: item.type,
     location: 'Featured Commission',
     imageUrl: item.url,
     type: item.type,
-    hasPlay: item.hasPlay || item.type.toLowerCase() === 'animation',
+    hasPlay: false,
     videoUrl: item.videoUrl,
   }));
 

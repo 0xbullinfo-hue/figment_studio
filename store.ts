@@ -40,15 +40,21 @@ interface StudioState {
   incrementArcvizTrial: () => void;
   addProject: (project: Project) => void;
   updateProject: (project: Project) => void;
+  deleteProject: (id: string) => void;
+  setProjects: (projects: Project[]) => void;
   addProposal: (proposal: ProjectProposal) => void;
   updateProposalStatus: (id: string, status: 'Approved' | 'Rejected') => void;
   addPortfolioItem: (item: PortfolioItem) => void;
+  updatePortfolioItem: (item: PortfolioItem) => void;
+  deletePortfolioItem: (id: number) => void;
+  setPortfolioItems: (items: PortfolioItem[]) => void;
   commitRevision: (projectId: string, comments: string) => void;
   addAcademyRegistration: (reg: AcademyRegistration) => void;
   updateAcademyRegistrationStatus: (id: string, status: AcademyRegistration['status']) => void;
   updateAcademyRegistrationNotes: (id: string, notes: string) => void;
   addReview: (review: ClientReview) => void;
   deleteReview: (id: string) => void;
+  setReviews: (reviews: ClientReview[]) => void;
 }
 
 export const useStudioStore = create<StudioState>()(persist((set) => ({
@@ -189,6 +195,14 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
     projects: state.projects.map(p => p.id === updatedProject.id ? { ...updatedProject } : p) 
   })),
 
+  deleteProject: (id) => set((state) => ({
+    projects: state.projects.filter(project => project.id !== id),
+  })),
+
+  setProjects: (projects) => set(() => ({
+    projects,
+  })),
+
   addProposal: (proposal) => set((state) => ({ 
     proposals: [proposal, ...state.proposals] 
   })),
@@ -224,6 +238,18 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
     portfolioItems: [item, ...state.portfolioItems] 
   })),
 
+  updatePortfolioItem: (updatedItem) => set((state) => ({
+    portfolioItems: state.portfolioItems.map(item => item.id === updatedItem.id ? { ...updatedItem } : item),
+  })),
+
+  deletePortfolioItem: (id) => set((state) => ({
+    portfolioItems: state.portfolioItems.filter(item => item.id !== id),
+  })),
+
+  setPortfolioItems: (portfolioItems) => set(() => ({
+    portfolioItems,
+  })),
+
   commitRevision: (projectId, comments) => set((state) => ({
     projects: state.projects.map(p => {
       if (p.id === projectId) {
@@ -256,6 +282,10 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
 
   deleteReview: (id) => set((state) => ({
     reviews: state.reviews.filter(r => r.id !== id)
+  })),
+
+  setReviews: (reviews) => set(() => ({
+    reviews,
   })),
 }), {
   name: 'figment-studio-store',

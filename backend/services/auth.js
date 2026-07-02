@@ -6,7 +6,26 @@ import { config } from '../config.js';
 import { resolveEffectivePlan } from './subscriptions.js';
 
 const refreshSessions = new Map();
+const refreshSessionSweepIntervalMs = 60 * 60 * 1000;
 const googleClient = new OAuth2Client();
+
+function cleanupExpiredRefreshSessions() {
+  const now = Date.now();
+
+  for (const [token, session] of refreshSessions.entries()) {
+    if (typeof session.expiresAt === 'number' && session.expiresAt <= now) {
+      refreshSessions.delete(token);
+    }
+  }
+}
+
+const refreshSessionSweeper = setInterval(() => {
+  cleanupExpiredRefreshSessions();
+}, refreshSessionSweepIntervalMs);
+
+if (typeof refreshSessionSweeper.unref === 'function') {
+  refreshSessionSweeper.unref();
+}
 
 const seededUsers = [
   {
@@ -63,10 +82,14 @@ function signRefreshToken(user) {
     { expiresIn: config.jwt.refreshExpiresIn }
   );
 
+  const decoded = jwt.decode(token);
+  const expiresAt = typeof decoded?.exp === 'number' ? decoded.exp * 1000 : Date.now();
+
   refreshSessions.set(token, {
     userId: user.id,
     user: { ...user },
     createdAt: Date.now(),
+    expiresAt,
   });
 
   return token;
@@ -137,6 +160,8 @@ export function verifyAccessToken(token) {
 }
 
 export function refreshAccessToken(refreshToken) {
+  cleanupExpiredRefreshSessions();
+
   const session = refreshSessions.get(refreshToken);
   if (!session) {
     return null;
@@ -149,8 +174,17 @@ export function refreshAccessToken(refreshToken) {
     return null;
   }
 
+  if (typeof session.expiresAt === 'number' && session.expiresAt <= Date.now()) {
+    refreshSessions.delete(refreshToken);
+    return null;
+  }
+
+  refreshSessions.delete(refreshToken);
+  const nextRefreshToken = signRefreshToken(user);
+
   return {
     accessToken: signAccessToken(user),
+    refreshToken: nextRefreshToken,
     user: toUserProfile(user),
   };
 }

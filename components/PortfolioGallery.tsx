@@ -109,6 +109,13 @@ const PortfolioGallery: React.FC = () => {
             Selected<br />
             <em className="font-light not-italic text-white/30">Works</em>
           </h1>
+          <button
+            onClick={() => navigate('/works/process')}
+            className="group flex items-center gap-2 text-[10px] tracking-[0.22em] uppercase text-primary font-semibold border-b border-primary/30 pb-1 hover:border-primary transition-colors"
+          >
+            View Work Process
+            <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </button>
         </div>
 
         {/* Minimalist Underlined Navigation Filters */}

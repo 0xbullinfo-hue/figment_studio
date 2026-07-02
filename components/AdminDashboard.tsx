@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import Logo from './Logo.tsx';
-import { Project, ProjectProposal, AcademyRegistration } from '../types.ts';
+import { Project, ProjectProposal, AcademyRegistration, PortfolioItem } from '../types.ts';
 import { useStudioStore } from '../store';
+import { deleteAdminResource, getAdminStudioContent, postAdminResource, putAdminResource } from '../services/apiClient.ts';
 
 interface ChatMessage {
   id: string;
@@ -21,33 +22,111 @@ const AdminDashboard: React.FC = () => {
     portfolioItems,
     academyRegistrations,
     reviews,
+    auth,
     updateProject,
     updateProposalStatus,
-    addPortfolioItem,
     updateAcademyRegistrationStatus,
     updateAcademyRegistrationNotes,
-    deleteReview
+    setProjects,
+    setPortfolioItems,
+    setReviews,
   } = useStudioStore();
-  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'proposals' | 'chat' | 'portfolio' | 'payments' | 'academy' | 'reviews'>('overview');
-  
-  // Academy registration filters & note state
+
+  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'proposals' | 'chat' | 'portfolio' | 'payments' | 'academy' | 'reviews' | 'content'>('overview');
   const [academyStatusFilter, setAcademyStatusFilter] = useState<'All' | 'Pending' | 'Contacted' | 'Enrolled'>('All');
   const [academyLevelFilter, setAcademyLevelFilter] = useState<'All' | 'Beginner' | 'Intermediate' | 'Advanced'>('All');
   const [tempNotes, setTempNotes] = useState<Record<string, string>>({});
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedPortfolioItem, setSelectedPortfolioItem] = useState<PortfolioItem | null>(null);
+  const [selectedService, setSelectedService] = useState<any | null>(null);
   const [viewingProposal, setViewingProposal] = useState<ProjectProposal | null>(null);
   const [activeChatId, setActiveChatId] = useState<string | null>(projects[0]?.id || null);
+  const [services, setServices] = useState<any[]>([]);
+  const [aboutDraft, setAboutDraft] = useState({ badge: '', headline: '', lead: '', story1: '', story2: '' });
+  const [undoEntry, setUndoEntry] = useState<{ type: 'project' | 'portfolio' | 'review' | 'service'; payload: any } | null>(null);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
-    { id: '1', projectId: 'FS-082', sender: 'client', content: "Hi, can we see the dusk lighting renders today?", timestamp: "10:30 AM" },
-    { id: '2', projectId: 'FS-082', sender: 'admin', content: "Finalizing the export now, Julian.", timestamp: "10:35 AM" }
+    { id: '1', projectId: 'FS-082', sender: 'client', content: 'Hi, can we see the dusk lighting renders today?', timestamp: '10:30 AM' },
+    { id: '2', projectId: 'FS-082', sender: 'admin', content: 'Finalizing the export now, Julian.', timestamp: '10:35 AM' },
   ]);
   const [newMsg, setNewMsg] = useState('');
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // ── Scroll chat to bottom ────────────────────────────────────────────────
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages, activeChatId]);
 
+  // ── Hydrate from backend on mount ────────────────────────────────────────
+  useEffect(() => {
+    if (!auth.accessToken || auth.role !== 'admin') {
+      return;
+    }
+    let cancelled = false;
+    getAdminStudioContent(auth.accessToken)
+      .then((snapshot) => {
+        if (cancelled) return;
+        if (snapshot.projects?.length) setProjects(snapshot.projects);
+        if (snapshot.portfolioItems?.length) setPortfolioItems(snapshot.portfolioItems);
+        if (snapshot.reviews?.length) setReviews(snapshot.reviews);
+        if (snapshot.services?.length) setServices(snapshot.services);
+        if (snapshot.about) {
+          setAboutDraft({
+            badge: snapshot.about.badge || '',
+            headline: snapshot.about.headline || '',
+            lead: snapshot.about.lead || '',
+            story1: Array.isArray(snapshot.about.story) ? snapshot.about.story[0] || '' : '',
+            story2: Array.isArray(snapshot.about.story) ? snapshot.about.story[1] || '' : '',
+          });
+        }
+      })
+      .catch(() => undefined);
+    return () => { cancelled = true; };
+  }, [auth.accessToken, auth.role, setPortfolioItems, setProjects, setReviews]);
+
+  // ── Optimistic delete with undo ──────────────────────────────────────────
+  const confirmAndDelete = async (
+    type: 'project' | 'portfolio' | 'review' | 'service',
+    payload: any
+  ) => {
+    if (!auth.accessToken || auth.role !== 'admin') return;
+    if (!window.confirm(`Delete this ${type}? This can be restored immediately after.`)) return;
+
+    const endpoint =
+      type === 'project'   ? `/api/content/admin/projects/${payload.id}`
+      : type === 'portfolio' ? `/api/content/admin/portfolio/${payload.id}`
+      : type === 'service'   ? `/api/content/admin/services/${payload.id}`
+      : `/api/content/admin/reviews/${payload.id}`;
+
+    if (type === 'project')   setProjects(projects.filter((p) => p.id !== payload.id));
+    if (type === 'portfolio') setPortfolioItems(portfolioItems.filter((item) => item.id !== payload.id));
+    if (type === 'review')    setReviews(reviews.filter((r) => r.id !== payload.id));
+    if (type === 'service')   setServices((prev) => prev.filter((s) => s.id !== payload.id));
+
+    await deleteAdminResource(endpoint, auth.accessToken).catch(() => undefined);
+    setUndoEntry({ type, payload });
+  };
+
+  // ── Undo last delete ─────────────────────────────────────────────────────
+  const undoDelete = async () => {
+    if (!auth.accessToken || !undoEntry) return;
+
+    const endpoint =
+      undoEntry.type === 'project'   ? '/api/content/admin/projects'
+      : undoEntry.type === 'portfolio' ? '/api/content/admin/portfolio'
+      : undoEntry.type === 'service'   ? '/api/content/admin/services'
+      : '/api/content/admin/reviews';
+
+    const response = await postAdminResource(endpoint, auth.accessToken, undoEntry.payload).catch(() => null);
+    if (!response) return;
+
+    if (undoEntry.type === 'project'   && response.projects)       setProjects(response.projects as Project[]);
+    if (undoEntry.type === 'portfolio' && response.portfolioItems) setPortfolioItems(response.portfolioItems as PortfolioItem[]);
+    if (undoEntry.type === 'review'    && response.reviews)        setReviews(response.reviews as any[]);
+    if (undoEntry.type === 'service'   && response.services)       setServices(response.services as any[]);
+    setUndoEntry(null);
+  };
+
+  // ── Chat ─────────────────────────────────────────────────────────────────
   const handleSendMessage = () => {
     if (!newMsg.trim() || !activeChatId) return;
     const msg: ChatMessage = {
@@ -55,20 +134,21 @@ const AdminDashboard: React.FC = () => {
       projectId: activeChatId,
       sender: 'admin',
       content: newMsg,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
     setChatMessages([...chatMessages, msg]);
     setNewMsg('');
   };
 
+  // ── renderOverview ───────────────────────────────────────────────────────
   const renderOverview = () => (
     <div className="space-y-12">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: 'Active Projects', value: projects.filter(p => p.status !== 'Completed').length, icon: 'architecture', color: 'text-blue-500' },
+          { label: 'Active Projects',   value: projects.filter(p => p.status !== 'Completed').length, icon: 'architecture',   color: 'text-blue-500' },
           { label: 'Pending Proposals', value: proposals.filter(p => p.status === 'Received').length, icon: 'mark_as_unread', color: 'text-orange-500' },
-          { label: 'Academy Leads', value: academyRegistrations.length, icon: 'school', color: 'text-amber-500' },
-          { label: 'Studio Revenue', value: `$${projects.reduce((acc, p) => acc + (p.status === 'Completed' ? 5000 : 0), 0) + 124000}`, icon: 'trending_up', color: 'text-emerald-500' },
+          { label: 'Academy Leads',     value: academyRegistrations.length,                            icon: 'school',         color: 'text-amber-500' },
+          { label: 'Studio Revenue',    value: `$${projects.reduce((acc, p) => acc + (p.status === 'Completed' ? 5000 : 0), 0) + 124000}`, icon: 'trending_up', color: 'text-emerald-500' },
         ].map((stat, i) => (
           <div key={i} className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl shadow-xl space-y-4">
             <div className="flex justify-between items-start">
@@ -129,6 +209,7 @@ const AdminDashboard: React.FC = () => {
     </div>
   );
 
+  // ── renderProjects ───────────────────────────────────────────────────────
   const renderProjects = () => (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
@@ -166,12 +247,19 @@ const AdminDashboard: React.FC = () => {
               <button onClick={() => setSelectedProject(p)} className="flex-1 py-3 bg-zinc-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-zinc-700">Edit Project</button>
               <button onClick={() => { setActiveChatId(p.id); setActiveTab('chat'); }} className="flex-1 py-3 border border-zinc-800 text-zinc-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:text-white">Chat Client</button>
             </div>
+            <button
+              onClick={() => confirmAndDelete('project', p)}
+              className="w-full py-3 border border-red-900/30 text-red-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-950/20 hover:text-white transition-all"
+            >
+              Delete Project
+            </button>
           </div>
         ))}
       </div>
     </div>
   );
 
+  // ── renderProposals ──────────────────────────────────────────────────────
   const renderProposals = () => (
     <div className="space-y-8">
       <h2 className="text-3xl font-black uppercase text-white">Client Inquiries</h2>
@@ -213,6 +301,7 @@ const AdminDashboard: React.FC = () => {
     </div>
   );
 
+  // ── renderChat ───────────────────────────────────────────────────────────
   const renderChat = () => {
     const activeProject = projects.find(p => p.id === activeChatId) || projects[0];
     const filteredMsgs = chatMessages.filter(m => m.projectId === activeChatId);
@@ -229,13 +318,14 @@ const AdminDashboard: React.FC = () => {
                 className={`w-full p-4 rounded-2xl text-left transition-all border ${activeChatId === p.id ? 'bg-primary/10 border-primary/40' : 'hover:bg-zinc-800 border-transparent'}`}
               >
                 <p className={`font-bold text-sm uppercase truncate ${activeChatId === p.id ? 'text-primary' : 'text-white'}`}>{p.title}</p>
-                <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">Active Thread • {p.status}</p>
+                <p className="text-[9px] text-zinc-500 font-bold uppercase mt-0.5">{p.id}</p>
               </button>
             ))}
           </div>
         </aside>
-        <section className="flex-1 flex flex-col p-8 bg-black/20">
-          <div className="pb-6 border-b border-zinc-800 mb-6 flex justify-between items-center">
+
+        <section className="flex-1 flex flex-col">
+          <div className="pb-6 border-b border-zinc-800 mb-6 flex justify-between items-center px-8 pt-8">
             <div className="text-left">
               <h3 className="text-xl font-black text-white uppercase">{activeProject?.title}</h3>
               <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest">Client Portal Chat</p>
@@ -256,7 +346,7 @@ const AdminDashboard: React.FC = () => {
             )}
             <div ref={chatEndRef} />
           </div>
-          <div className="mt-8 flex gap-4">
+          <div className="mt-8 flex gap-4 px-8 pb-8">
             <input
               className="flex-1 bg-zinc-800 border-zinc-700 border rounded-2xl px-6 text-sm font-bold text-white focus:ring-2 focus:ring-primary outline-none transition-all"
               placeholder="Studio response..."
@@ -273,22 +363,29 @@ const AdminDashboard: React.FC = () => {
     );
   };
 
+  // ── renderPortfolioMgmt ──────────────────────────────────────────────────
   const renderPortfolioMgmt = () => (
     <div className="space-y-12">
       <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl">
         <h3 className="text-xl font-black uppercase text-white mb-8">Push to Public Gallery</h3>
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={(e) => {
-          e.preventDefault();
-          const formData = new FormData(e.currentTarget);
-          addPortfolioItem({
-            id: Date.now(),
-            type: formData.get('type') as string,
-            title: formData.get('title') as string,
-            url: formData.get('url') as string,
-            class: 'aspect-video'
-          });
-          (e.target as HTMLFormElement).reset();
-        }}>
+        <form
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!auth.accessToken) return;
+            const formData = new FormData(e.currentTarget);
+            postAdminResource('/api/content/admin/portfolio', auth.accessToken, {
+              id: Date.now(),
+              type: formData.get('type') as string,
+              title: formData.get('title') as string,
+              url: formData.get('url') as string,
+              class: 'aspect-video',
+            })
+              .then((r) => { if (r.portfolioItems) setPortfolioItems(r.portfolioItems as PortfolioItem[]); })
+              .catch(() => undefined);
+            (e.target as HTMLFormElement).reset();
+          }}
+        >
           <div className="space-y-2 text-left">
             <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Project Title</label>
             <input name="title" required className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white focus:ring-primary outline-none" placeholder="The Emerald Heights" />
@@ -316,8 +413,22 @@ const AdminDashboard: React.FC = () => {
           <div key={item.id} className="group relative aspect-square rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800">
             <img src={item.url} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt={item.title} />
             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition-opacity">
-              <button className="p-2 bg-red-500 text-white rounded-lg hover:scale-110"><span className="material-symbols-outlined text-sm">delete</span></button>
-              <button className="p-2 bg-white text-black rounded-lg hover:scale-110"><span className="material-symbols-outlined text-sm">edit</span></button>
+              <button
+                type="button"
+                onClick={() => confirmAndDelete('portfolio', item)}
+                className="p-2 bg-red-500 text-white rounded-lg hover:scale-110"
+                aria-label={`Delete ${item.title}`}
+              >
+                <span className="material-symbols-outlined text-sm">delete</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedPortfolioItem(item)}
+                className="p-2 bg-white text-black rounded-lg hover:scale-110"
+                aria-label={`Edit ${item.title}`}
+              >
+                <span className="material-symbols-outlined text-sm">edit</span>
+              </button>
             </div>
             <div className="absolute bottom-4 left-4 text-left">
               <p className="text-[8px] font-black text-primary uppercase tracking-widest">{item.type}</p>
@@ -329,6 +440,7 @@ const AdminDashboard: React.FC = () => {
     </div>
   );
 
+  // ── renderPayments ───────────────────────────────────────────────────────
   const renderPayments = () => {
     const pending = proposals.filter(p => p.status === 'Received');
     const approved = proposals.filter(p => p.status === 'Approved');
@@ -380,6 +492,7 @@ const AdminDashboard: React.FC = () => {
     );
   };
 
+  // ── renderAcademyRegs ────────────────────────────────────────────────────
   const filteredAcademyRegs = academyRegistrations.filter(reg => {
     const matchesStatus = academyStatusFilter === 'All' || reg.status === academyStatusFilter;
     const matchesLevel = academyLevelFilter === 'All' || reg.experienceLevel === academyLevelFilter;
@@ -387,20 +500,19 @@ const AdminDashboard: React.FC = () => {
   });
 
   const renderAcademyRegs = () => {
-    const totalLeads = academyRegistrations.length;
-    const onsiteLeads = academyRegistrations.filter(r => r.preferredFormat === 'Onsite Abuja Studio').length;
-    const onlineLeads = academyRegistrations.filter(r => r.preferredFormat === 'Live Online Interactive').length;
+    const totalLeads    = academyRegistrations.length;
+    const onsiteLeads   = academyRegistrations.filter(r => r.preferredFormat === 'Onsite Abuja Studio').length;
+    const onlineLeads   = academyRegistrations.filter(r => r.preferredFormat === 'Live Online Interactive').length;
     const enrolledLeads = academyRegistrations.filter(r => r.status === 'Enrolled').length;
 
     return (
       <div className="space-y-12">
-        {/* Academy Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { label: 'Academy Leads', value: totalLeads, icon: 'school', color: 'text-orange-500' },
-            { label: 'Abuja Onsite Leads', value: onsiteLeads, icon: 'location_on', color: 'text-blue-500' },
-            { label: 'Live Online Leads', value: onlineLeads, icon: 'computer', color: 'text-purple-500' },
-            { label: 'Enrolled Cohort', value: enrolledLeads, icon: 'task_alt', color: 'text-emerald-500' },
+            { label: 'Academy Leads',      value: totalLeads,    icon: 'school',      color: 'text-orange-500' },
+            { label: 'Abuja Onsite Leads', value: onsiteLeads,   icon: 'location_on', color: 'text-blue-500' },
+            { label: 'Live Online Leads',  value: onlineLeads,   icon: 'computer',    color: 'text-purple-500' },
+            { label: 'Enrolled Cohort',    value: enrolledLeads, icon: 'task_alt',    color: 'text-emerald-500' },
           ].map((stat, i) => (
             <div key={i} className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl shadow-xl space-y-4">
               <div className="flex justify-between items-start">
@@ -415,14 +527,12 @@ const AdminDashboard: React.FC = () => {
           ))}
         </div>
 
-        {/* Filters */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-zinc-900 border border-zinc-800 p-6 rounded-3xl">
           <div className="text-left">
             <h3 className="text-xl font-black uppercase text-white leading-none">Subscribers Queue</h3>
             <p className="text-xs text-zinc-500 mt-2 font-bold uppercase tracking-widest font-sans">Onboarding interest declarations</p>
           </div>
           <div className="flex flex-wrap gap-3 font-sans">
-            {/* Status Filters */}
             <div className="flex gap-1.5 bg-zinc-950 p-1 rounded-xl border border-zinc-800">
               {(['All', 'Pending', 'Contacted', 'Enrolled'] as const).map(f => (
                 <button
@@ -434,8 +544,6 @@ const AdminDashboard: React.FC = () => {
                 </button>
               ))}
             </div>
-            
-            {/* Level Filters */}
             <div className="flex gap-1.5 bg-zinc-950 p-1 rounded-xl border border-zinc-800">
               {(['All', 'Beginner', 'Intermediate', 'Advanced'] as const).map(l => (
                 <button
@@ -450,7 +558,6 @@ const AdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Leads List */}
         <div className="space-y-6">
           {filteredAcademyRegs.length === 0 ? (
             <div className="p-20 text-center text-zinc-600 bg-zinc-900 rounded-3xl border border-dashed border-zinc-800 italic text-sm">
@@ -458,8 +565,8 @@ const AdminDashboard: React.FC = () => {
             </div>
           ) : (
             filteredAcademyRegs.map(reg => (
-              <div 
-                key={reg.id} 
+              <div
+                key={reg.id}
                 className={`bg-zinc-900 border border-zinc-800 p-8 rounded-3xl flex flex-col gap-6 text-left transition-all ${reg.status === 'Pending' ? 'ring-1 ring-primary/20' : 'opacity-85'}`}
               >
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-zinc-800/60 pb-6">
@@ -468,8 +575,8 @@ const AdminDashboard: React.FC = () => {
                       <h4 className="text-2xl font-black text-white uppercase leading-none">{reg.name}</h4>
                       <span className="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-[8px] font-black uppercase rounded tracking-widest">{reg.id}</span>
                       <span className={`px-2.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
-                        reg.status === 'Enrolled' ? 'bg-emerald-600 text-white' : 
-                        reg.status === 'Contacted' ? 'bg-blue-600 text-white' : 
+                        reg.status === 'Enrolled'  ? 'bg-emerald-600 text-white' :
+                        reg.status === 'Contacted' ? 'bg-blue-600 text-white' :
                         'bg-primary text-white'
                       }`}>
                         {reg.status}
@@ -479,8 +586,6 @@ const AdminDashboard: React.FC = () => {
                       Email: <span className="text-white">{reg.email}</span> • Phone: <span className="text-white">{reg.phone}</span>
                     </p>
                   </div>
-                  
-                  {/* Status update actions */}
                   <div className="flex items-center gap-2 font-sans">
                     <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mr-2">Update Stage:</span>
                     {(['Pending', 'Contacted', 'Enrolled'] as const).map(st => (
@@ -488,8 +593,8 @@ const AdminDashboard: React.FC = () => {
                         key={st}
                         onClick={() => updateAcademyRegistrationStatus(reg.id, st)}
                         className={`px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-widest border transition-all ${
-                          reg.status === st 
-                            ? 'bg-primary/10 border-primary text-primary' 
+                          reg.status === st
+                            ? 'bg-primary/10 border-primary text-primary'
                             : 'border-zinc-800 text-zinc-500 hover:border-zinc-700 hover:text-white'
                         }`}
                       >
@@ -500,7 +605,6 @@ const AdminDashboard: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                  {/* Left Specs */}
                   <div className="space-y-4 font-sans text-xs">
                     <div className="flex justify-between py-1 border-b border-zinc-800/40">
                       <span className="text-zinc-500 uppercase font-semibold text-[10px] tracking-wider">Registration Date</span>
@@ -520,7 +624,6 @@ const AdminDashboard: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Middle Cover Letter message */}
                   <div className="space-y-2">
                     <p className="text-[9px] font-black uppercase text-zinc-500 tracking-widest font-sans">Candidate Cover Statement</p>
                     <div className="bg-zinc-800/30 p-4 rounded-xl border border-zinc-800 text-zinc-500 font-sans text-xs leading-relaxed italic h-[110px] overflow-y-auto">
@@ -528,7 +631,6 @@ const AdminDashboard: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Right Follow-up Notes */}
                   <div className="space-y-2 flex flex-col justify-between">
                     <div className="space-y-2 text-left">
                       <p className="text-[9px] font-black uppercase text-zinc-500 tracking-widest font-sans">Follow-up Notes (Internal)</p>
@@ -540,9 +642,7 @@ const AdminDashboard: React.FC = () => {
                       />
                     </div>
                     <button
-                      onClick={() => {
-                        updateAcademyRegistrationNotes(reg.id, tempNotes[reg.id] || '');
-                      }}
+                      onClick={() => updateAcademyRegistrationNotes(reg.id, tempNotes[reg.id] || '')}
                       className="w-full py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all font-sans"
                     >
                       Save Notes
@@ -557,72 +657,271 @@ const AdminDashboard: React.FC = () => {
     );
   };
 
-  const renderReviewsMgmt = () => {
-    return (
-      <div className="space-y-8 text-left">
-        <div>
-          <h2 className="text-3xl font-black text-white uppercase tracking-tight">Client Reviews</h2>
-          <p className="text-zinc-500 font-bold uppercase text-xs tracking-widest mt-1">
-            Moderate guest comments and inappropriate feedback submissions.
-          </p>
-        </div>
-
-        <div className="space-y-6">
-          {reviews.length === 0 ? (
-            <div className="p-20 text-center text-zinc-600 bg-zinc-900 rounded-3xl border border-dashed border-zinc-800 italic text-sm font-sans">
-              No client reviews posted yet.
-            </div>
-          ) : (
-            reviews.map(rev => (
-              <div 
-                key={rev.id} 
-                className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-zinc-700 transition-all font-sans"
-              >
-                <div className="space-y-3 max-w-3xl">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <h4 className="text-lg font-bold text-white uppercase tracking-wide font-display">{rev.name}</h4>
-                    <span className="text-[10px] text-zinc-500 font-bold uppercase">{rev.role} {rev.company ? `· ${rev.company}` : ''}</span>
-                    <span className="text-primary font-bold text-xs">{'★'.repeat(rev.rating)}{'☆'.repeat(5 - rev.rating)}</span>
-                  </div>
-                  <p className="text-zinc-500 text-sm leading-relaxed italic text-zinc-300">
-                    "{rev.comment}"
-                  </p>
-                  <p className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">
-                    Posted on {rev.date}
-                  </p>
-                </div>
-                <button
-                  onClick={() => deleteReview(rev.id)}
-                  className="px-5 py-3 border border-red-900/30 hover:border-red-700 bg-red-950/10 hover:bg-red-950/20 text-red-500 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all self-start md:self-auto flex items-center gap-2 cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-sm">delete</span>
-                  Delete Comment
-                </button>
-              </div>
-            ))
-          )}
-        </div>
+  // ── renderReviewsMgmt ────────────────────────────────────────────────────
+  const renderReviewsMgmt = () => (
+    <div className="space-y-8 text-left">
+      <div>
+        <h2 className="text-3xl font-black text-white uppercase tracking-tight">Client Reviews</h2>
+        <p className="text-zinc-500 font-bold uppercase text-xs tracking-widest mt-1">
+          Moderate guest comments and inappropriate feedback submissions.
+        </p>
       </div>
-    );
-  };
+      <div className="space-y-6">
+        {reviews.length === 0 ? (
+          <div className="p-20 text-center text-zinc-600 bg-zinc-900 rounded-3xl border border-dashed border-zinc-800 italic text-sm font-sans">
+            No client reviews posted yet.
+          </div>
+        ) : (
+          reviews.map(rev => (
+            <div
+              key={rev.id}
+              className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-zinc-700 transition-all font-sans"
+            >
+              <div className="space-y-3 max-w-3xl">
+                <div className="flex flex-wrap items-center gap-3">
+                  <h4 className="text-lg font-bold text-white uppercase tracking-wide font-display">{rev.name}</h4>
+                  <span className="text-[10px] text-zinc-500 font-bold uppercase">{rev.role} {rev.company ? `· ${rev.company}` : ''}</span>
+                  <span className="text-primary font-bold text-xs">{'★'.repeat(rev.rating)}{'☆'.repeat(5 - rev.rating)}</span>
+                </div>
+                <p className="text-zinc-300 text-sm leading-relaxed italic">"{rev.comment}"</p>
+                <p className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">Posted on {rev.date}</p>
+              </div>
+              <button
+                onClick={() => confirmAndDelete('review', rev)}
+                className="px-5 py-3 border border-red-900/30 hover:border-red-700 bg-red-950/10 hover:bg-red-950/20 text-red-500 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all self-start md:self-auto flex items-center gap-2 cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-sm">delete</span>
+                Delete Comment
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
 
+  // ── renderContentTab ─────────────────────────────────────────────────────
+  const renderContentTab = () => (
+    <div className="space-y-12 text-left">
+      <div>
+        <h2 className="text-3xl font-black text-white uppercase tracking-tight">Content Management</h2>
+        <p className="text-zinc-500 font-bold uppercase text-xs tracking-widest mt-1">Manage website content, services, and testimonials.</p>
+      </div>
+
+      {/* Undo Last Delete */}
+      {undoEntry !== null && (
+        <div className="flex items-center gap-4 bg-amber-950/30 border border-amber-800/40 rounded-2xl p-6">
+          <span className="material-symbols-outlined text-amber-400">undo</span>
+          <p className="text-amber-300 font-bold text-sm flex-1">Last deleted: <span className="uppercase">{undoEntry.type}</span></p>
+          <button
+            onClick={undoDelete}
+            className="px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+          >
+            Undo Last Delete
+          </button>
+        </div>
+      )}
+
+      {/* About Content */}
+      <section className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 space-y-8">
+        <h3 className="text-xl font-black uppercase text-white">About Content</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Badge</label>
+            <input
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white outline-none focus:ring-1 focus:ring-primary"
+              value={aboutDraft.badge}
+              onChange={(e) => setAboutDraft({ ...aboutDraft, badge: e.target.value })}
+              placeholder="Our Story"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Headline</label>
+            <input
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white outline-none focus:ring-1 focus:ring-primary"
+              value={aboutDraft.headline}
+              onChange={(e) => setAboutDraft({ ...aboutDraft, headline: e.target.value })}
+              placeholder="We Craft Architectural Realities"
+            />
+          </div>
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Lead</label>
+            <textarea
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white outline-none focus:ring-1 focus:ring-primary resize-none h-20"
+              value={aboutDraft.lead}
+              onChange={(e) => setAboutDraft({ ...aboutDraft, lead: e.target.value })}
+              placeholder="Lead paragraph..."
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Story Paragraph 1</label>
+            <textarea
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white outline-none focus:ring-1 focus:ring-primary resize-none h-28"
+              value={aboutDraft.story1}
+              onChange={(e) => setAboutDraft({ ...aboutDraft, story1: e.target.value })}
+              placeholder="First story paragraph..."
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Story Paragraph 2</label>
+            <textarea
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white outline-none focus:ring-1 focus:ring-primary resize-none h-28"
+              value={aboutDraft.story2}
+              onChange={(e) => setAboutDraft({ ...aboutDraft, story2: e.target.value })}
+              placeholder="Second story paragraph..."
+            />
+          </div>
+        </div>
+        <button
+          onClick={() => {
+            if (!auth.accessToken) return;
+            putAdminResource('/api/content/admin/about', auth.accessToken, {
+              badge: aboutDraft.badge,
+              headline: aboutDraft.headline,
+              lead: aboutDraft.lead,
+              story: [aboutDraft.story1, aboutDraft.story2],
+              storyImages: [],
+            }).catch(() => undefined);
+          }}
+          className="py-4 px-8 bg-primary text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.01] active:scale-95 transition-all"
+        >
+          Save About Content
+        </button>
+      </section>
+
+      {/* Services */}
+      <section className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 space-y-8">
+        <h3 className="text-xl font-black uppercase text-white">Services</h3>
+        <form
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!auth.accessToken) return;
+            const fd = new FormData(e.currentTarget);
+            const servicePayload = {
+              id: selectedService?.id || Date.now(),
+              title: fd.get('svcTitle') as string,
+              description: fd.get('svcDesc') as string,
+            };
+            const req = selectedService
+              ? putAdminResource(`/api/content/admin/services/${selectedService.id}`, auth.accessToken, servicePayload)
+              : postAdminResource('/api/content/admin/services', auth.accessToken, servicePayload);
+            req
+              .then((r) => { if (r.services) setServices(r.services as any[]); setSelectedService(null); })
+              .catch(() => undefined);
+            (e.target as HTMLFormElement).reset();
+          }}
+        >
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Service Title</label>
+            <input
+              name="svcTitle"
+              required
+              key={selectedService?.id ?? 'new-svc-title'}
+              defaultValue={selectedService?.title || ''}
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white outline-none focus:ring-1 focus:ring-primary"
+              placeholder="3D Architectural Visualization"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Description</label>
+            <input
+              name="svcDesc"
+              required
+              key={selectedService?.id ?? 'new-svc-desc'}
+              defaultValue={selectedService?.description || ''}
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white outline-none focus:ring-1 focus:ring-primary"
+              placeholder="Brief service description"
+            />
+          </div>
+          <div className="md:col-span-2 flex gap-4">
+            <button type="submit" className="py-4 px-8 bg-primary text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.01] active:scale-95 transition-all">
+              {selectedService ? 'Update Service' : 'Add Service'}
+            </button>
+            {selectedService && (
+              <button type="button" onClick={() => setSelectedService(null)} className="py-4 px-8 bg-zinc-800 text-zinc-400 rounded-2xl font-black uppercase tracking-widest hover:text-white transition-all">
+                Cancel
+              </button>
+            )}
+          </div>
+        </form>
+
+        {services.length > 0 && (
+          <div className="space-y-4">
+            {services.map((svc: any) => (
+              <div key={svc.id} className="flex items-center justify-between bg-zinc-800/50 border border-zinc-800 rounded-2xl p-5">
+                <div>
+                  <p className="text-white font-bold text-sm uppercase">{svc.title}</p>
+                  <p className="text-zinc-500 text-xs mt-1">{svc.description}</p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setSelectedService(svc)}
+                    className="p-2.5 bg-zinc-700 hover:bg-zinc-600 text-white rounded-xl transition-all"
+                  >
+                    <span className="material-symbols-outlined text-sm">edit</span>
+                  </button>
+                  <button
+                    onClick={() => confirmAndDelete('service', svc)}
+                    className="p-2.5 bg-red-950/30 hover:bg-red-900/40 text-red-400 rounded-xl transition-all"
+                  >
+                    <span className="material-symbols-outlined text-sm">delete</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Testimonials */}
+      <section className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 space-y-6">
+        <h3 className="text-xl font-black uppercase text-white">Testimonials</h3>
+        {reviews.length === 0 ? (
+          <p className="text-zinc-500 text-sm italic">No testimonials to display.</p>
+        ) : (
+          reviews.map(rev => (
+            <div key={rev.id} className="flex items-start justify-between gap-6 bg-zinc-800/30 border border-zinc-800 rounded-2xl p-6">
+              <div className="space-y-1 flex-1">
+                <p className="text-white font-bold text-sm uppercase">{rev.name}</p>
+                <p className="text-zinc-500 text-xs">{rev.role}{rev.company ? ` · ${rev.company}` : ''}</p>
+                <p className="text-zinc-400 text-xs italic mt-2">"{rev.comment}"</p>
+              </div>
+              <button
+                onClick={() => confirmAndDelete('review', rev)}
+                className="px-4 py-2.5 border border-red-900/30 hover:border-red-700 bg-red-950/10 hover:bg-red-950/20 text-red-500 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all flex items-center gap-2"
+              >
+                <span className="material-symbols-outlined text-sm">delete</span>
+                Delete
+              </button>
+            </div>
+          ))
+        )}
+      </section>
+    </div>
+  );
+
+  // ── Menu items ────────────────────────────────────────────────────────────
   const menuItems = [
-    { id: 'overview', label: 'Overview', icon: 'dashboard' },
-    { id: 'projects', label: 'Projects', icon: 'architecture' },
+    { id: 'overview',  label: 'Overview',  icon: 'dashboard' },
+    { id: 'projects',  label: 'Projects',  icon: 'architecture' },
     { id: 'proposals', label: 'Inquiries', icon: 'mark_as_unread' },
-    { id: 'academy', label: 'Academy', icon: 'school' },
-    { id: 'reviews', label: 'Reviews', icon: 'rate_review' },
-    { id: 'chat', label: 'Chat', icon: 'forum' },
+    { id: 'academy',   label: 'Academy',   icon: 'school' },
+    { id: 'reviews',   label: 'Reviews',   icon: 'rate_review' },
+    { id: 'chat',      label: 'Chat',      icon: 'forum' },
     { id: 'portfolio', label: 'Portfolio', icon: 'gallery_thumbnail' },
-    { id: 'payments', label: 'Payments', icon: 'payments' },
+    { id: 'payments',  label: 'Payments',  icon: 'payments' },
+    { id: 'content',   label: 'Content',   icon: 'article' },
   ];
 
+  // ── Main render ───────────────────────────────────────────────────────────
   return (
     <div className="flex h-screen bg-[#0c0c0c] font-display text-left overflow-hidden">
       <Helmet>
         <title>Studio Control | Figment Studio</title>
         <meta name="description" content="Figment Studio internal administration and client pipeline controller." />
       </Helmet>
+
       <aside className="w-80 bg-zinc-950 border-r border-zinc-900 p-10 flex flex-col justify-between shrink-0">
         <div className="space-y-16">
           <Logo size={36} showWordmark showTagline />
@@ -660,18 +959,19 @@ const AdminDashboard: React.FC = () => {
             </div>
           </header>
 
-          {activeTab === 'overview' && renderOverview()}
-          {activeTab === 'projects' && renderProjects()}
+          {activeTab === 'overview'  && renderOverview()}
+          {activeTab === 'projects'  && renderProjects()}
           {activeTab === 'portfolio' && renderPortfolioMgmt()}
-          {activeTab === 'payments' && renderPayments()}
+          {activeTab === 'payments'  && renderPayments()}
           {activeTab === 'proposals' && renderProposals()}
-          {activeTab === 'chat' && renderChat()}
-          {activeTab === 'academy' && renderAcademyRegs()}
-          {activeTab === 'reviews' && renderReviewsMgmt()}
+          {activeTab === 'chat'      && renderChat()}
+          {activeTab === 'academy'   && renderAcademyRegs()}
+          {activeTab === 'reviews'   && renderReviewsMgmt()}
+          {activeTab === 'content'   && renderContentTab()}
         </div>
       </main>
 
-      {/* Proposal Detail Modal */}
+      {/* ── Proposal Detail Modal ─────────────────────────────────────────── */}
       {viewingProposal && (
         <div className="fixed inset-0 z-[110] bg-black/95 backdrop-blur-xl flex items-center justify-center p-6">
           <div className="bg-zinc-900 border border-zinc-800 w-full max-w-3xl rounded-[3rem] p-12 space-y-10 relative shadow-2xl animate-in zoom-in-95 duration-300 overflow-y-auto max-h-[90vh] custom-scrollbar">
@@ -681,7 +981,7 @@ const AdminDashboard: React.FC = () => {
             <div className="space-y-4 text-left">
               <div className="flex items-center gap-4">
                 <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Inquiry ID: {viewingProposal.id}</span>
-                <span className={`px-3 py-1 bg-primary/10 text-primary text-[8px] font-black uppercase tracking-widest rounded-full`}>{viewingProposal.status}</span>
+                <span className="px-3 py-1 bg-primary/10 text-primary text-[8px] font-black uppercase tracking-widest rounded-full">{viewingProposal.status}</span>
               </div>
               <h3 className="text-4xl font-black text-white uppercase tracking-tighter leading-[0.9]">{viewingProposal.projectName}</h3>
               <p className="text-zinc-500 font-bold uppercase tracking-widest">Submitted by {viewingProposal.clientName} on {viewingProposal.date}</p>
@@ -753,7 +1053,7 @@ const AdminDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Project Status & Details Edit Modal */}
+      {/* ── Project Edit Modal ────────────────────────────────────────────── */}
       {selectedProject && (
         <div className="fixed inset-0 z-[110] bg-black/95 backdrop-blur-xl flex items-center justify-center p-6">
           <div className="bg-zinc-900 border border-zinc-800 w-full max-w-2xl rounded-[3rem] p-12 space-y-10 relative animate-in zoom-in-95 duration-300 shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar">
@@ -764,8 +1064,8 @@ const AdminDashboard: React.FC = () => {
               <h3 className="text-3xl font-black text-white uppercase tracking-tight">Post-Launch Management</h3>
               <p className="text-zinc-500 font-bold uppercase text-xs tracking-widest">ID: {selectedProject.id} • Real-time Sync Active</p>
             </div>
+
             <div className="space-y-6">
-              {/* Project Metadata Edits */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-3 text-left">
                   <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Project Title</label>
@@ -822,19 +1122,112 @@ const AdminDashboard: React.FC = () => {
               <div className="space-y-3 text-left">
                 <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Studio Notes (Internal)</label>
                 <textarea
-                  className="w-full bg-zinc-800 border-zinc-700 rounded-xl p-4 text-white font-medium min-h-[100px] outline-none focus:ring-1 focus:ring-primary"
+                  className="w-full bg-zinc-800 border-zinc-700 rounded-xl p-4 text-white font-bold outline-none focus:ring-1 focus:ring-primary resize-none h-28"
                   value={selectedProject.notes || ''}
-                  placeholder="Add studio internal notes..."
                   onChange={(e) => setSelectedProject({ ...selectedProject, notes: e.target.value })}
+                  placeholder="Internal project notes..."
                 />
               </div>
             </div>
-            <button
-              onClick={() => { updateProject(selectedProject); setSelectedProject(null); }}
-              className="w-full py-5 bg-primary text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
-            >
-              Save & Synchronize
+
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={() => {
+                  if (!auth.accessToken) return;
+                  putAdminResource(`/api/content/admin/projects/${selectedProject.id}`, auth.accessToken, selectedProject)
+                    .then((r) => { if (r.projects) setProjects(r.projects as Project[]); setSelectedProject(null); })
+                    .catch(() => undefined);
+                }}
+                className="w-full py-5 bg-primary text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+              >
+                Save & Synchronize
+              </button>
+              <button
+                onClick={() => confirmAndDelete('project', selectedProject)}
+                className="w-full py-5 border border-red-900/40 text-red-400 rounded-2xl font-black uppercase tracking-widest hover:bg-red-950/20 hover:text-white transition-all"
+              >
+                Delete Project
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Portfolio Item Edit Modal ─────────────────────────────────────── */}
+      {selectedPortfolioItem && (
+        <div className="fixed inset-0 z-[110] bg-black/95 backdrop-blur-xl flex items-center justify-center p-6">
+          <div className="bg-zinc-900 border border-zinc-800 w-full max-w-2xl rounded-[3rem] p-12 space-y-10 relative animate-in zoom-in-95 duration-300 shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar">
+            <button onClick={() => setSelectedPortfolioItem(null)} className="absolute top-8 right-8 text-zinc-600 hover:text-white transition-colors">
+              <span className="material-symbols-outlined text-4xl">close</span>
             </button>
+            <div className="space-y-4 text-left">
+              <h3 className="text-3xl font-black text-white uppercase tracking-tight">Portfolio Item Editor</h3>
+              <p className="text-zinc-500 font-bold uppercase text-xs tracking-widest">ID: {selectedPortfolioItem.id} • Gallery Sync Active</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3 text-left">
+                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Project Title</label>
+                <input
+                  type="text"
+                  className="w-full bg-zinc-800 border-zinc-700 rounded-xl p-4 text-white font-bold outline-none focus:ring-1 focus:ring-primary"
+                  value={selectedPortfolioItem.title}
+                  onChange={(e) => setSelectedPortfolioItem({ ...selectedPortfolioItem, title: e.target.value })}
+                />
+              </div>
+              <div className="space-y-3 text-left">
+                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Media Type</label>
+                <select
+                  className="w-full bg-zinc-800 border-zinc-700 rounded-xl p-4 text-white font-bold outline-none focus:ring-1 focus:ring-primary"
+                  value={selectedPortfolioItem.type}
+                  onChange={(e) => setSelectedPortfolioItem({ ...selectedPortfolioItem, type: e.target.value })}
+                >
+                  <option>Exterior</option>
+                  <option>Interior</option>
+                  <option>Animation</option>
+                  <option>Still Image</option>
+                  <option>Scale Models</option>
+                </select>
+              </div>
+              <div className="md:col-span-2 space-y-3 text-left">
+                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Image URL</label>
+                <input
+                  type="text"
+                  className="w-full bg-zinc-800 border-zinc-700 rounded-xl p-4 text-white font-bold outline-none focus:ring-1 focus:ring-primary"
+                  value={selectedPortfolioItem.url}
+                  onChange={(e) => setSelectedPortfolioItem({ ...selectedPortfolioItem, url: e.target.value })}
+                />
+              </div>
+              <div className="md:col-span-2 space-y-3 text-left">
+                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Layout Class</label>
+                <input
+                  type="text"
+                  className="w-full bg-zinc-800 border-zinc-700 rounded-xl p-4 text-white font-bold outline-none focus:ring-1 focus:ring-primary"
+                  value={selectedPortfolioItem.class}
+                  onChange={(e) => setSelectedPortfolioItem({ ...selectedPortfolioItem, class: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <button
+                onClick={() => {
+                  if (!auth.accessToken) return;
+                  putAdminResource(`/api/content/admin/portfolio/${selectedPortfolioItem.id}`, auth.accessToken, selectedPortfolioItem)
+                    .then((r) => { if (r.portfolioItems) setPortfolioItems(r.portfolioItems as PortfolioItem[]); setSelectedPortfolioItem(null); })
+                    .catch(() => undefined);
+                }}
+                className="flex-1 py-5 bg-primary text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+              >
+                Save Changes
+              </button>
+              <button
+                onClick={() => confirmAndDelete('portfolio', selectedPortfolioItem)}
+                className="flex-1 py-5 border border-red-900/40 text-red-400 rounded-2xl font-black uppercase tracking-widest hover:bg-red-950/20 hover:text-white transition-all"
+              >
+                Delete Item
+              </button>
+            </div>
           </div>
         </div>
       )}

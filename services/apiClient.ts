@@ -27,6 +27,15 @@ export interface ArcVizQuotaResponse {
   allowed: boolean;
 }
 
+export interface StudioContentResponse {
+  ok: boolean;
+  services?: Array<any>;
+  about?: Record<string, any>;
+  reviews?: Array<any>;
+  portfolioItems?: Array<any>;
+  projects?: Array<any>;
+}
+
 const backendBaseUrl = ((import.meta as any).env.VITE_BACKEND_URL as string | undefined) || 'http://localhost:8787';
 
 async function parseJsonResponse<T>(response: Response): Promise<T> {
@@ -102,4 +111,60 @@ export async function getArcvizQuota(accessToken: string): Promise<ArcVizQuotaRe
   });
 
   return parseJsonResponse<ArcVizQuotaResponse>(response);
+}
+
+export async function getPublicStudioContent(): Promise<StudioContentResponse> {
+  const response = await fetch(`${backendBaseUrl}/api/content/public`, {
+    method: 'GET',
+  });
+
+  return parseJsonResponse<StudioContentResponse>(response);
+}
+
+export async function getAdminStudioContent(accessToken: string): Promise<StudioContentResponse> {
+  const response = await fetch(`${backendBaseUrl}/api/content/admin`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  return parseJsonResponse<StudioContentResponse>(response);
+}
+
+export async function deleteAdminResource(path: string, accessToken: string): Promise<StudioContentResponse> {
+  const response = await fetch(`${backendBaseUrl}${path}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  return parseJsonResponse<StudioContentResponse>(response);
+}
+
+export async function putAdminResource(path: string, accessToken: string, body: unknown): Promise<StudioContentResponse> {
+  const response = await fetch(`${backendBaseUrl}${path}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(body),
+  });
+
+  return parseJsonResponse<StudioContentResponse>(response);
+}
+
+export async function postAdminResource(path: string, accessToken: string, body: unknown): Promise<StudioContentResponse> {
+  const response = await fetch(`${backendBaseUrl}${path}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(body),
+  });
+
+  return parseJsonResponse<StudioContentResponse>(response);
 }

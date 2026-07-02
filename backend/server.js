@@ -21,6 +21,7 @@ import { validate } from './middleware/validate.js';
 import { setupErrorHandler, AppError, ValidationError } from './middleware/errorHandler.js';
 import { createAuthRouter } from './routes/auth.js';
 import { createArcvizRouter } from './routes/arcviz.js';
+import { createContentRouter } from './routes/content.js';
 import { createPaymentIntent, getPaymentIntent, markPaymentCompleted } from './services/subscriptions.js';
 import {
   getWebhookEventId,
@@ -323,6 +324,7 @@ app.post('/api/payments/webhook/:provider', paymentLimiter, (req, res, next) => 
 
 app.use('/api/auth', createAuthRouter({ authLimiter, validate }));
 app.use('/api/arcviz', createArcvizRouter());
+app.use('/api/content', createContentRouter());
 
 // ============================================================================
 // ERROR HANDLING (Must be last)

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 interface HeroProps {
   onStartProject: () => void;
   onOpenArcViz: () => void;
+  onOpenWorkProcess: () => void;
 }
 
 const SLIDES = [
@@ -36,7 +37,7 @@ const SLIDES = [
   },
 ];
 
-const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenArcViz }) => {
+const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenArcViz, onOpenWorkProcess }) => {
   const [current, setCurrent] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -191,7 +192,7 @@ const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenArcViz }) => {
             </div>
             <div className="space-y-1.5 flex items-center">
               <button
-                onClick={onOpenArcViz}
+                onClick={onOpenWorkProcess}
                 className="flex items-center gap-4 group focus:outline-none"
               >
                 <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white bg-black/40 group-hover:border-primary group-hover:bg-primary/20 transition-all duration-300">

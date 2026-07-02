@@ -1,9 +1,41 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { IMAGES } from '../constants.ts';
+import { getPublicStudioContent } from '../services/apiClient.ts';
 
 const AboutPage: React.FC = () => {
+  const [aboutContent, setAboutContent] = useState({
+    badge: 'Est. 2015 — Abuja, Nigeria',
+    headline: 'Visualizing the Future of African Design.',
+    lead: 'Abuja\'s premier architectural visualization firm, where precision meets artistry in every pixel.',
+    story: [
+      'Founded in the heart of Abuja, Figment Studio began with a single vision: to redefine how architecture is experienced before it\'s even built.',
+      'What started as a small team of passionate designers has grown into Abuja\'s leading studio for high-stakes visual communication.',
+    ],
+    storyImages: ['/figment_media/3D-Rendering-B2B-Abuja 2.png', '/figment_media/3D-Rendering-B2B-Abuja 3.png'],
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+    getPublicStudioContent().then((content) => {
+      if (cancelled || !content.about) {
+        return;
+      }
+      setAboutContent({
+        badge: content.about.badge || aboutContent.badge,
+        headline: content.about.headline || aboutContent.headline,
+        lead: content.about.lead || aboutContent.lead,
+        story: Array.isArray(content.about.story) ? content.about.story : aboutContent.story,
+        storyImages: Array.isArray(content.about.storyImages) ? content.about.storyImages : aboutContent.storyImages,
+      });
+    }).catch(() => undefined);
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="bg-white">
       <Helmet>
@@ -13,12 +45,16 @@ const AboutPage: React.FC = () => {
       <section className="px-6 lg:px-20 py-20 bg-gray-50 overflow-hidden relative">
         <div className="absolute inset-0 abuja-map-overlay opacity-[0.03]"></div>
         <div className="max-w-[1200px] mx-auto relative z-10">
-          <span className="text-primary font-bold tracking-[0.3em] text-xs uppercase mb-6 block border-l-2 border-primary pl-4">Est. 2015 — Abuja, Nigeria</span>
+          <span className="text-primary font-bold tracking-[0.3em] text-xs uppercase mb-6 block border-l-2 border-primary pl-4">{aboutContent.badge}</span>
           <h1 className="text-5xl md:text-8xl font-black leading-[1] tracking-tighter mb-8 uppercase">
-            Visualizing the <br /><span className="text-primary italic font-light">Future</span> of African Design.
+            {aboutContent.headline.split('Future').length > 1 ? (
+              <>Visualizing the <br /><span className="text-primary italic font-light">Future</span> of African Design.</>
+            ) : (
+              aboutContent.headline
+            )}
           </h1>
           <p className="text-gray-600 text-lg md:text-xl font-medium leading-relaxed max-w-lg">
-            Abuja's premier architectural visualization firm, where precision meets artistry in every pixel.
+            {aboutContent.lead}
           </p>
         </div>
       </section>
@@ -31,13 +67,14 @@ const AboutPage: React.FC = () => {
           </div>
           <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-10 uppercase">Our Story</h2>
           <div className="space-y-8 text-lg font-light leading-relaxed">
-            <p>Founded in the heart of Abuja, <span className="font-bold">Figment Studio</span> began with a single vision: to redefine how architecture is experienced before it's even built.</p>
-            <p>What started as a small team of passionate designers has grown into Abuja's leading studio for high-stakes visual communication.</p>
+            {aboutContent.story.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
           </div>
         </div>
         <div className="grid grid-cols-2 gap-6">
-          <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-lg bg-cover bg-center" style={{ backgroundImage: `url("${IMAGES.about.story1}")` }}></div>
-          <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-lg mt-12 bg-cover bg-center" style={{ backgroundImage: `url("${IMAGES.about.story2}")` }}></div>
+          <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-lg bg-cover bg-center" style={{ backgroundImage: `url("${aboutContent.storyImages[0] || IMAGES.about.story1}")` }}></div>
+          <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-lg mt-12 bg-cover bg-center" style={{ backgroundImage: `url("${aboutContent.storyImages[1] || IMAGES.about.story2}")` }}></div>
         </div>
       </section>
 
