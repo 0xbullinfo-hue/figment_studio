@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet-async';
 const PROCESS_GALLERY = [
   {
     id: 'modelling-01',
-    step: '01',
     phase: '3D Modeling',
     title: 'Revit Base Model Setup',
     description:
@@ -15,7 +14,6 @@ const PROCESS_GALLERY = [
   },
   {
     id: 'modelling-02',
-    step: '02',
     phase: '3D Modeling',
     title: 'Facade Detailing and Material Mapping',
     description:
@@ -26,7 +24,6 @@ const PROCESS_GALLERY = [
   },
   {
     id: 'printing-01',
-    step: '03',
     phase: '3D Printing',
     title: 'Scale Model Preparation',
     description:
@@ -37,8 +34,7 @@ const PROCESS_GALLERY = [
   },
   {
     id: 'painting-01',
-    step: '04',
-    phase: 'Painting',
+    phase: 'Texturing',
     title: 'Hand Finishing and Weathering',
     description:
       'Printed elements are hand-finished with controlled paint layers to communicate tone, depth, and spatial hierarchy during investor presentations.',
@@ -48,7 +44,6 @@ const PROCESS_GALLERY = [
   },
   {
     id: 'animation-01',
-    step: '05',
     phase: 'Animation',
     title: 'Camera Blocking and Storyboard',
     description:
@@ -59,7 +54,6 @@ const PROCESS_GALLERY = [
   },
   {
     id: 'animation-02',
-    step: '06',
     phase: 'Animation',
     title: 'Final Grade and Delivery',
     description:
@@ -74,27 +68,27 @@ const WorkProcessPage: React.FC = () => {
   return (
     <section className="bg-background text-white min-h-screen border-t border-border-ui">
       <Helmet>
-        <title>Work Process | Figment Studio</title>
+        <title>The Process | Figment Studio</title>
         <meta
           name="description"
-          content="A behind-the-scenes look at Figment Studio's workflow from Revit modeling to 3D printing, painting, and cinematic animation delivery."
+          content="A behind-the-scenes look at Figment Studio's workflow from Revit modeling to 3D printing, texturing, and cinematic animation delivery."
         />
       </Helmet>
 
       <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto">
         <div className="max-w-4xl space-y-6 mb-14">
-          <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold font-sans">Works / Process</p>
+          <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold font-sans">Works / The Process</p>
           <h1
             className="font-display font-light text-white leading-tight"
             style={{ fontSize: 'clamp(2.4rem, 5vw, 4.8rem)', lineHeight: 1.02 }}
           >
-            How We Build Every
+            The Process Behind Every
             <br />
             <em className="font-light not-italic text-white/35">Visualization Story</em>
           </h1>
           <p className="text-white/55 text-base md:text-lg leading-relaxed font-sans max-w-3xl">
-            This is a private look into our internal production workflow, from BIM-accurate Revit modeling through printing,
-            painting, and final animation output for client presentations.
+            A look into our internal production workflow, from BIM-accurate Revit modeling through printing,
+            texturing, and final animation output for client presentations.
           </p>
         </div>
 
@@ -114,9 +108,6 @@ const WorkProcessPage: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                 <span className="absolute top-4 left-4 text-[9px] tracking-[0.2em] uppercase bg-black/55 border border-white/15 px-2.5 py-1 text-primary font-bold font-sans">
                   {item.phase}
-                </span>
-                <span className="absolute top-4 right-4 text-[10px] tracking-[0.22em] uppercase bg-black/55 border border-white/15 px-2.5 py-1 text-white/80 font-bold font-sans">
-                  Step {item.step}
                 </span>
               </div>
 

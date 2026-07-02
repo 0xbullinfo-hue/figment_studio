@@ -128,12 +128,27 @@ const LandingPage: React.FC = () => {
   useEffect(() => {
     const scrollTarget = searchParams.get('scroll');
     if (scrollTarget) {
-      const el = document.getElementById(scrollTarget);
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 150);
+      const scrollToTarget = () => {
+        const el = document.getElementById(scrollTarget);
+        if (!el) return false;
+
+        const headerOffset = 96;
+        const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
+        window.scrollTo({ top, behavior: 'smooth' });
+        return true;
+      };
+
+      if (scrollToTarget()) {
+        return;
       }
+
+      const timeouts = [120, 260, 420, 650].map((delay) =>
+        setTimeout(() => {
+          scrollToTarget();
+        }, delay)
+      );
+
+      return () => timeouts.forEach(clearTimeout);
     }
   }, [searchParams]);
 

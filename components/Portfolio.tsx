@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStudioStore } from '../store.ts';
+import { getPublicStudioContent } from '../services/apiClient.ts';
 
 interface PortfolioProps {
   onViewAll: () => void;
@@ -9,9 +10,25 @@ interface PortfolioProps {
 
 const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
   const navigate = useNavigate();
-  const { portfolioItems } = useStudioStore();
+  const { portfolioItems, setPortfolioItems } = useStudioStore();
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    getPublicStudioContent()
+      .then((content) => {
+        if (cancelled || !content.portfolioItems?.length) {
+          return;
+        }
+        setPortfolioItems(content.portfolioItems);
+      })
+      .catch(() => undefined);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [setPortfolioItems]);
   const renderOnlyItems = portfolioItems.filter((item) => {
     const normalizedType = item.type.toLowerCase();
     return normalizedType === 'exterior' || normalizedType === 'interior';

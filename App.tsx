@@ -165,6 +165,7 @@ const AppRoutes = () => {
           <Route index element={<LandingPage />} />
           <Route path="estimator" element={<Estimator onBack={() => navigate(-1)} onFinish={(data) => navigate('/success', { state: { invoiceId: data.id, amount: data.total, project: data.projectName } })} />} />
           <Route path="portfolio" element={<PortfolioGallery />} />
+          <Route path="works" element={<PortfolioGallery />} />
           <Route path="works/process" element={<WorkProcessPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="contact" element={<ContactPage />} />

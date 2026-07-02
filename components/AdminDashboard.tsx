@@ -65,10 +65,10 @@ const AdminDashboard: React.FC = () => {
     getAdminStudioContent(auth.accessToken)
       .then((snapshot) => {
         if (cancelled) return;
-        if (snapshot.projects?.length) setProjects(snapshot.projects);
-        if (snapshot.portfolioItems?.length) setPortfolioItems(snapshot.portfolioItems);
-        if (snapshot.reviews?.length) setReviews(snapshot.reviews);
-        if (snapshot.services?.length) setServices(snapshot.services);
+        if (Array.isArray(snapshot.projects)) setProjects(snapshot.projects);
+        if (Array.isArray(snapshot.portfolioItems)) setPortfolioItems(snapshot.portfolioItems);
+        if (Array.isArray(snapshot.reviews)) setReviews(snapshot.reviews);
+        if (Array.isArray(snapshot.services)) setServices(snapshot.services);
         if (snapshot.about) {
           setAboutDraft({
             badge: snapshot.about.badge || '',

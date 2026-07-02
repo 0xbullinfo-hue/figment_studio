@@ -1,17 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PortfolioItem } from '../types.ts';
 import { useStudioStore } from '../store';
+import { getPublicStudioContent } from '../services/apiClient.ts';
 
 const PortfolioGallery: React.FC = () => {
   const navigate = useNavigate();
-  const { portfolioItems: items } = useStudioStore();
+  const { portfolioItems: items, setPortfolioItems } = useStudioStore();
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
   const [activeFilter, setActiveFilter] = useState('All');
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    let cancelled = false;
+    getPublicStudioContent()
+      .then((content) => {
+        if (cancelled || !content.portfolioItems?.length) {
+          return;
+        }
+        setPortfolioItems(content.portfolioItems);
+      })
+      .catch(() => undefined);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [setPortfolioItems]);
 
   // Dynamic filter categories based on actual items present
   const filterCategories = ['All', 'Exterior', 'Interior', 'Animation', 'Scale Models'];
@@ -106,14 +123,14 @@ const PortfolioGallery: React.FC = () => {
         <div className="space-y-4 max-w-xl text-left">
           <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold font-sans">WORKS GALLERY</p>
           <h1 className="font-display font-light text-white uppercase tracking-tight leading-[0.9] text-5xl lg:text-7xl">
-            Selected<br />
+            Our<br />
             <em className="font-light not-italic text-white/30">Works</em>
           </h1>
           <button
             onClick={() => navigate('/works/process')}
             className="group flex items-center gap-2 text-[10px] tracking-[0.22em] uppercase text-primary font-semibold border-b border-primary/30 pb-1 hover:border-primary transition-colors"
           >
-            View Work Process
+            View The Process
             <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
           </button>
         </div>
