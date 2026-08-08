@@ -24,6 +24,9 @@ jobs:
       - name: Build Project
         run: npm run build
 
+      - name: Verify SEO Guardrails
+        run: npm run check:seo
+
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:

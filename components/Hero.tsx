@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState, useEffect, useCallback } from 'react';
 
 interface HeroProps {
@@ -33,7 +33,7 @@ const SLIDES = [
     location: 'Edo State',
     headline: ['Space', 'Becomes', 'Story.'],
     accent: 2,
-    sub: 'Premium country home villa — client-chosen textures and landscaped pool decks.',
+    sub: 'Premium country home villa  -  client-chosen textures and landscaped pool decks.',
   },
 ];
 
@@ -110,7 +110,7 @@ const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenArcViz, onOpenWorkPro
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
             <span className="text-[10px] tracking-[0.28em] uppercase text-white/60 font-medium">
-              {slide.category} · {slide.location}
+              {slide.category}  -  {slide.location}
             </span>
           </div>
           <div className="hidden md:flex items-center gap-3 text-[10px] tracking-[0.22em] uppercase text-primary/80 font-medium">
@@ -218,3 +218,5 @@ const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenArcViz, onOpenWorkPro
 };
 
 export default Hero;
+
+

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
@@ -39,3 +39,5 @@ const NotFound: React.FC = () => {
 };
 
 export default NotFound;
+
+

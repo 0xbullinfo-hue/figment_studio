@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStudioStore } from '../store.ts';
@@ -172,21 +172,21 @@ const AcademyPage: React.FC = () => {
 
 I want to declare my interest to subscribe for the architectural visualization sessions. Here are my registration details:
 
-• Name: ${formData.name}
-• Email: ${formData.email}
-• WhatsApp Number: ${formData.phone}
-• Experience Level: ${formData.experienceLevel}
-• Mentorship Mode: ${formData.preferredFormat}
-• Course Selection: ${formData.courseInterest}`;
+ -  Name: ${formData.name}
+ -  Email: ${formData.email}
+ -  WhatsApp Number: ${formData.phone}
+ -  Experience Level: ${formData.experienceLevel}
+ -  Mentorship Mode: ${formData.preferredFormat}
+ -  Course Selection: ${formData.courseInterest}`;
 
       if (formData.referralSource) {
-        waText += `\n• Referral Source: ${formData.referralSource}`;
+        waText += `\n -  Referral Source: ${formData.referralSource}`;
       }
       if (formData.referrerName) {
-        waText += `\n• Referrer Details: ${formData.referrerName}`;
+        waText += `\n -  Referrer Details: ${formData.referrerName}`;
       }
       if (formData.message.trim()) {
-        waText += `\n• Cover Statement: "${formData.message.trim()}"`;
+        waText += `\n -  Cover Statement: "${formData.message.trim()}"`;
       }
 
       waText += `\n\nPlease let me know the next steps for cohort onboarding.`;
@@ -362,7 +362,7 @@ I want to declare my interest to subscribe for the architectural visualization s
             {instructorWorks.map((work, idx) => (
               <div 
                 key={idx} 
-                onClick={() => setActiveLightboxImg({ url: work.url, title: work.title, subtitle: `${work.category} • ${work.software}` })}
+                onClick={() => setActiveLightboxImg({ url: work.url, title: work.title, subtitle: `${work.category}  -  ${work.software}` })}
                 className="group relative border border-border-ui/30 bg-surface p-4 rounded-3xl overflow-hidden text-left transition-all hover:border-primary/30 hover:shadow-2xl cursor-pointer"
               >
                 <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-zinc-950">
@@ -728,3 +728,5 @@ I want to declare my interest to subscribe for the architectural visualization s
 };
 
 export default AcademyPage;
+
+

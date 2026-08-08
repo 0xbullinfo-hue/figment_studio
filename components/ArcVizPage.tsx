@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { VisionChat } from '../types.ts';
-import { streamArchitecturalAI } from '../services/geminiService.ts';
-import { authorizeArcvizRender, getArcvizQuota } from '../services/apiClient.ts';
+import { arcvizArchitecturalChatRequest, authorizeArcvizRender, getArcvizQuota } from '../services/apiClient.ts';
 import { useStudioStore } from '../store.ts';
 import BeforeAfterSlider from './BeforeAfterSlider.tsx';
 import { runSimulatedRenderEngine } from '../services/renderEngine.ts';
@@ -364,6 +363,14 @@ const ArcVizPage: React.FC = () => {
     const outboundPrompt = messageText ?? input;
     if (!outboundPrompt.trim() && !selectedImage) return;
 
+    if (!auth.accessToken) {
+      setMessages((prev) => [...prev, {
+        role: 'assistant',
+        content: 'Please sign in to continue using ArcViz chat.'
+      }]);
+      return;
+    }
+
     const userMessage: VisionChat = {
       role: 'user',
       content: outboundPrompt.trim() ? outboundPrompt : '[Image analysis request]'
@@ -378,17 +385,14 @@ const ArcVizPage: React.FC = () => {
     setStreamingContent('');
 
     try {
-      let fullResponse = '';
-      const stream = streamArchitecturalAI(
-        outboundPrompt.trim() ? outboundPrompt : 'Analyze this architectural reference and generate production-ready visualization guidance.',
-        currentHistory,
-        imageToSend
-      );
+      const response = await arcvizArchitecturalChatRequest(auth.accessToken, {
+        message: outboundPrompt.trim() ? outboundPrompt : 'Analyze this architectural reference and generate production-ready visualization guidance.',
+        history: currentHistory,
+        image: imageToSend,
+      });
 
-      for await (const chunk of stream) {
-        fullResponse += chunk;
-        setStreamingContent(fullResponse);
-      }
+      const fullResponse = response.reply || '';
+      setStreamingContent(fullResponse);
 
       setMessages((prev) => [...prev, { role: 'assistant', content: fullResponse }]);
       setStreamingContent('');
@@ -962,3 +966,5 @@ const ArcVizPage: React.FC = () => {
 };
 
 export default ArcVizPage;
+
+

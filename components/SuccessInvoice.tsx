@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -147,3 +147,5 @@ const SuccessInvoice: React.FC<SuccessInvoiceProps> = ({ onBack, onGoHome }) => 
 };
 
 export default SuccessInvoice;
+
+

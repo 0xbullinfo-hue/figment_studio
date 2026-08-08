@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 const CustomCursor: React.FC = () => {
@@ -76,4 +76,6 @@ const CustomCursor: React.FC = () => {
 };
 
 export default CustomCursor;
+
+
 

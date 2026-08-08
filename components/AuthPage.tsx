@@ -1,4 +1,4 @@
-
+﻿
 import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
@@ -214,7 +214,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
                   <input
                     required
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="••••••••"
+                    placeholder="********"
                     className={`${INPUT_CLASS} pr-12`}
                   />
                   <button
@@ -332,7 +332,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
                   <input
                     required
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="••••••••"
+                    placeholder="********"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     className={`${INPUT_CLASS} pl-11 pr-11`}
@@ -385,3 +385,5 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, onBack }) => {
 };
 
 export default AuthPage;
+
+

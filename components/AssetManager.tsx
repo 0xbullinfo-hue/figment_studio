@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AppView } from '../types';
@@ -169,7 +169,7 @@ const AssetManager: React.FC<AssetManagerProps> = ({ onBack, onNavigate }) => {
                     </div>
                     <div>
                       <h3 className="font-bold text-lg mb-1">{folder.name}</h3>
-                      <p className="text-sm text-gray-500">{folder.assets} assets • {folder.updated}</p>
+                      <p className="text-sm text-gray-500">{folder.assets} assets  -  {folder.updated}</p>
                     </div>
                   </div>
                 ))}
@@ -205,7 +205,7 @@ const AssetManager: React.FC<AssetManagerProps> = ({ onBack, onNavigate }) => {
                     </div>
                     <div className="p-3">
                       <p className="font-bold text-xs truncate">{asset.name}</p>
-                      <p className="text-[9px] text-gray-400 mt-1 uppercase font-black">{asset.size} • {asset.project}</p>
+                      <p className="text-[9px] text-gray-400 mt-1 uppercase font-black">{asset.size}  -  {asset.project}</p>
                     </div>
                   </div>
                 ))}
@@ -219,3 +219,5 @@ const AssetManager: React.FC<AssetManagerProps> = ({ onBack, onNavigate }) => {
 };
 
 export default AssetManager;
+
+

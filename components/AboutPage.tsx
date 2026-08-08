@@ -1,4 +1,4 @@
-
+﻿
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { IMAGES } from '../constants.ts';
@@ -6,7 +6,7 @@ import { getPublicStudioContent } from '../services/apiClient.ts';
 
 const AboutPage: React.FC = () => {
   const [aboutContent, setAboutContent] = useState({
-    badge: 'Est. 2015 — Abuja, Nigeria',
+    badge: 'Est. 2015  -  Abuja, Nigeria',
     headline: 'Visualizing the Future of African Design.',
     lead: 'Abuja\'s premier architectural visualization firm, where precision meets artistry in every pixel.',
     story: [
@@ -102,3 +102,5 @@ const AboutPage: React.FC = () => {
 };
 
 export default AboutPage;
+
+

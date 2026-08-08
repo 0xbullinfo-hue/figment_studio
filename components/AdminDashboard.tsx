@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import Logo from './Logo.tsx';
@@ -49,14 +49,21 @@ const AdminDashboard: React.FC = () => {
     { id: '2', projectId: 'FS-082', sender: 'admin', content: 'Finalizing the export now, Julian.', timestamp: '10:35 AM' },
   ]);
   const [newMsg, setNewMsg] = useState('');
+  const [operationNotice, setOperationNotice] = useState<{ type: 'error' | 'success'; text: string } | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // ── Scroll chat to bottom ────────────────────────────────────────────────
+  //  Scroll chat to bottom 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages, activeChatId]);
 
-  // ── Hydrate from backend on mount ────────────────────────────────────────
+  useEffect(() => {
+    if (!operationNotice) return;
+    const timer = setTimeout(() => setOperationNotice(null), 4500);
+    return () => clearTimeout(timer);
+  }, [operationNotice]);
+
+  //  Hydrate from backend on mount 
   useEffect(() => {
     if (!auth.accessToken || auth.role !== 'admin') {
       return;
@@ -83,7 +90,7 @@ const AdminDashboard: React.FC = () => {
     return () => { cancelled = true; };
   }, [auth.accessToken, auth.role, setPortfolioItems, setProjects, setReviews]);
 
-  // ── Optimistic delete with undo ──────────────────────────────────────────
+  //  Optimistic delete with undo 
   const confirmAndDelete = async (
     type: 'project' | 'portfolio' | 'review' | 'service',
     payload: any
@@ -97,16 +104,33 @@ const AdminDashboard: React.FC = () => {
       : type === 'service'   ? `/api/content/admin/services/${payload.id}`
       : `/api/content/admin/reviews/${payload.id}`;
 
+    const prevProjects = projects;
+    const prevPortfolioItems = portfolioItems;
+    const prevReviews = reviews;
+    const prevServices = services;
+
     if (type === 'project')   setProjects(projects.filter((p) => p.id !== payload.id));
     if (type === 'portfolio') setPortfolioItems(portfolioItems.filter((item) => item.id !== payload.id));
     if (type === 'review')    setReviews(reviews.filter((r) => r.id !== payload.id));
     if (type === 'service')   setServices((prev) => prev.filter((s) => s.id !== payload.id));
 
-    await deleteAdminResource(endpoint, auth.accessToken).catch(() => undefined);
-    setUndoEntry({ type, payload });
+    try {
+      await deleteAdminResource(endpoint, auth.accessToken);
+      setUndoEntry({ type, payload });
+      setOperationNotice({ type: 'success', text: `${type} deleted successfully. You can undo this action.` });
+    } catch (error) {
+      if (type === 'project') setProjects(prevProjects);
+      if (type === 'portfolio') setPortfolioItems(prevPortfolioItems);
+      if (type === 'review') setReviews(prevReviews);
+      if (type === 'service') setServices(prevServices);
+      setOperationNotice({
+        type: 'error',
+        text: error instanceof Error ? error.message : `Failed to delete ${type}. Changes were rolled back.`,
+      });
+    }
   };
 
-  // ── Undo last delete ─────────────────────────────────────────────────────
+  //  Undo last delete 
   const undoDelete = async () => {
     if (!auth.accessToken || !undoEntry) return;
 
@@ -126,7 +150,7 @@ const AdminDashboard: React.FC = () => {
     setUndoEntry(null);
   };
 
-  // ── Chat ─────────────────────────────────────────────────────────────────
+  //  Chat 
   const handleSendMessage = () => {
     if (!newMsg.trim() || !activeChatId) return;
     const msg: ChatMessage = {
@@ -140,7 +164,23 @@ const AdminDashboard: React.FC = () => {
     setNewMsg('');
   };
 
-  // ── renderOverview ───────────────────────────────────────────────────────
+  const persistProjectProgress = async (project: Project) => {
+    if (!auth.accessToken) return;
+
+    try {
+      const response = await putAdminResource(`/api/content/admin/projects/${project.id}`, auth.accessToken, project);
+      if (response.projects) {
+        setProjects(response.projects as Project[]);
+      }
+    } catch (error) {
+      setOperationNotice({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to persist project progress.',
+      });
+    }
+  };
+
+  //  renderOverview 
   const renderOverview = () => (
     <div className="space-y-12">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -177,7 +217,7 @@ const AdminDashboard: React.FC = () => {
                 <div key={prop.id} onClick={() => { setViewingProposal(prop); setActiveTab('proposals'); }} className="p-4 bg-zinc-800/50 border border-zinc-800 rounded-2xl flex justify-between items-center cursor-pointer hover:bg-zinc-800 transition-colors">
                   <div>
                     <p className="text-white font-bold">{prop.projectName}</p>
-                    <p className="text-[10px] text-zinc-400 font-bold uppercase">{prop.clientName} • ${prop.total.toLocaleString()}</p>
+                    <p className="text-[10px] text-zinc-400 font-bold uppercase">{prop.clientName}  -  ${prop.total.toLocaleString()}</p>
                   </div>
                   <span className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full ${prop.status === 'Received' ? 'bg-primary/10 text-primary' : 'bg-zinc-700 text-zinc-400'}`}>{prop.status}</span>
                 </div>
@@ -209,7 +249,7 @@ const AdminDashboard: React.FC = () => {
     </div>
   );
 
-  // ── renderProjects ───────────────────────────────────────────────────────
+  //  renderProjects 
   const renderProjects = () => (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
@@ -226,7 +266,7 @@ const AdminDashboard: React.FC = () => {
             <div className="flex justify-between items-start">
               <div className="text-left">
                 <h4 className="text-2xl font-black text-white uppercase leading-none">{p.title}</h4>
-                <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest mt-2">{p.id} • {p.location}</p>
+                <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest mt-2">{p.id}  -  {p.location}</p>
               </div>
               <div className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase ${p.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/10' : 'bg-primary/10 text-primary border border-primary/10'}`}>
                 {p.status}
@@ -239,7 +279,18 @@ const AdminDashboard: React.FC = () => {
               </div>
               <input
                 type="range" min="0" max="100" value={p.progress}
-                onChange={(e) => updateProject({ ...p, progress: parseInt(e.target.value) })}
+                onChange={(e) => {
+                  const nextProject = { ...p, progress: parseInt(e.target.value) };
+                  updateProject(nextProject);
+                }}
+                onMouseUp={() => {
+                  const currentProject = projects.find((item) => item.id === p.id) || p;
+                  void persistProjectProgress(currentProject);
+                }}
+                onTouchEnd={() => {
+                  const currentProject = projects.find((item) => item.id === p.id) || p;
+                  void persistProjectProgress(currentProject);
+                }}
                 className="w-full h-1 bg-zinc-800 rounded-full accent-primary appearance-none cursor-pointer"
               />
             </div>
@@ -259,7 +310,7 @@ const AdminDashboard: React.FC = () => {
     </div>
   );
 
-  // ── renderProposals ──────────────────────────────────────────────────────
+  //  renderProposals 
   const renderProposals = () => (
     <div className="space-y-8">
       <h2 className="text-3xl font-black uppercase text-white">Client Inquiries</h2>
@@ -276,7 +327,7 @@ const AdminDashboard: React.FC = () => {
                   <h4 className="text-2xl font-black text-white uppercase leading-none">{prop.projectName}</h4>
                   <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase ${prop.status === 'Approved' ? 'bg-emerald-500 text-white' : prop.status === 'Rejected' ? 'bg-red-500 text-white' : 'bg-primary text-white'}`}>{prop.status}</span>
                 </div>
-                <p className="text-zinc-400 font-bold">{prop.clientName} • <span className="text-primary">${prop.total.toLocaleString()}</span> • Received: {prop.date}</p>
+                <p className="text-zinc-400 font-bold">{prop.clientName}  -  <span className="text-primary">${prop.total.toLocaleString()}</span>  -  Received: {prop.date}</p>
                 <p className="text-sm text-zinc-500 italic max-w-xl line-clamp-1">"{prop.details}"</p>
                 {prop.attachments && prop.attachments.length > 0 && (
                   <div className="flex items-center gap-2 mt-2">
@@ -301,7 +352,7 @@ const AdminDashboard: React.FC = () => {
     </div>
   );
 
-  // ── renderChat ───────────────────────────────────────────────────────────
+  //  renderChat 
   const renderChat = () => {
     const activeProject = projects.find(p => p.id === activeChatId) || projects[0];
     const filteredMsgs = chatMessages.filter(m => m.projectId === activeChatId);
@@ -363,7 +414,7 @@ const AdminDashboard: React.FC = () => {
     );
   };
 
-  // ── renderPortfolioMgmt ──────────────────────────────────────────────────
+  //  renderPortfolioMgmt 
   const renderPortfolioMgmt = () => (
     <div className="space-y-12">
       <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl">
@@ -440,7 +491,7 @@ const AdminDashboard: React.FC = () => {
     </div>
   );
 
-  // ── renderPayments ───────────────────────────────────────────────────────
+  //  renderPayments 
   const renderPayments = () => {
     const pending = proposals.filter(p => p.status === 'Received');
     const approved = proposals.filter(p => p.status === 'Approved');
@@ -477,7 +528,7 @@ const AdminDashboard: React.FC = () => {
                 <div key={p.id} className="rounded-2xl border border-zinc-800 bg-black/20 p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                   <div>
                     <p className="text-white font-bold uppercase text-sm">{p.projectName}</p>
-                    <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">{p.id} • {p.clientName}</p>
+                    <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">{p.id}  -  {p.clientName}</p>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-primary font-black">${p.total.toLocaleString()}</span>
@@ -492,7 +543,7 @@ const AdminDashboard: React.FC = () => {
     );
   };
 
-  // ── renderAcademyRegs ────────────────────────────────────────────────────
+  //  renderAcademyRegs 
   const filteredAcademyRegs = academyRegistrations.filter(reg => {
     const matchesStatus = academyStatusFilter === 'All' || reg.status === academyStatusFilter;
     const matchesLevel = academyLevelFilter === 'All' || reg.experienceLevel === academyLevelFilter;
@@ -583,7 +634,7 @@ const AdminDashboard: React.FC = () => {
                       </span>
                     </div>
                     <p className="text-xs text-zinc-400 mt-2 font-medium font-sans">
-                      Email: <span className="text-white">{reg.email}</span> • Phone: <span className="text-white">{reg.phone}</span>
+                      Email: <span className="text-white">{reg.email}</span>  -  Phone: <span className="text-white">{reg.phone}</span>
                     </p>
                   </div>
                   <div className="flex items-center gap-2 font-sans">
@@ -657,7 +708,7 @@ const AdminDashboard: React.FC = () => {
     );
   };
 
-  // ── renderReviewsMgmt ────────────────────────────────────────────────────
+  //  renderReviewsMgmt 
   const renderReviewsMgmt = () => (
     <div className="space-y-8 text-left">
       <div>
@@ -680,8 +731,8 @@ const AdminDashboard: React.FC = () => {
               <div className="space-y-3 max-w-3xl">
                 <div className="flex flex-wrap items-center gap-3">
                   <h4 className="text-lg font-bold text-white uppercase tracking-wide font-display">{rev.name}</h4>
-                  <span className="text-[10px] text-zinc-500 font-bold uppercase">{rev.role} {rev.company ? `· ${rev.company}` : ''}</span>
-                  <span className="text-primary font-bold text-xs">{'★'.repeat(rev.rating)}{'☆'.repeat(5 - rev.rating)}</span>
+                  <span className="text-[10px] text-zinc-500 font-bold uppercase">{rev.role} {rev.company ? ` -  ${rev.company}` : ''}</span>
+                  <span className="text-primary font-bold text-xs">{'*'.repeat(rev.rating)}{'-'.repeat(5 - rev.rating)}</span>
                 </div>
                 <p className="text-zinc-300 text-sm leading-relaxed italic">"{rev.comment}"</p>
                 <p className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">Posted on {rev.date}</p>
@@ -700,7 +751,7 @@ const AdminDashboard: React.FC = () => {
     </div>
   );
 
-  // ── renderContentTab ─────────────────────────────────────────────────────
+  //  renderContentTab 
   const renderContentTab = () => (
     <div className="space-y-12 text-left">
       <div>
@@ -884,7 +935,7 @@ const AdminDashboard: React.FC = () => {
             <div key={rev.id} className="flex items-start justify-between gap-6 bg-zinc-800/30 border border-zinc-800 rounded-2xl p-6">
               <div className="space-y-1 flex-1">
                 <p className="text-white font-bold text-sm uppercase">{rev.name}</p>
-                <p className="text-zinc-500 text-xs">{rev.role}{rev.company ? ` · ${rev.company}` : ''}</p>
+                <p className="text-zinc-500 text-xs">{rev.role}{rev.company ? `  -  ${rev.company}` : ''}</p>
                 <p className="text-zinc-400 text-xs italic mt-2">"{rev.comment}"</p>
               </div>
               <button
@@ -901,7 +952,7 @@ const AdminDashboard: React.FC = () => {
     </div>
   );
 
-  // ── Menu items ────────────────────────────────────────────────────────────
+  //  Menu items 
   const menuItems = [
     { id: 'overview',  label: 'Overview',  icon: 'dashboard' },
     { id: 'projects',  label: 'Projects',  icon: 'architecture' },
@@ -914,7 +965,7 @@ const AdminDashboard: React.FC = () => {
     { id: 'content',   label: 'Content',   icon: 'article' },
   ];
 
-  // ── Main render ───────────────────────────────────────────────────────────
+  //  Main render 
   return (
     <div className="flex h-screen bg-[#0c0c0c] font-display text-left overflow-hidden">
       <Helmet>
@@ -959,6 +1010,12 @@ const AdminDashboard: React.FC = () => {
             </div>
           </header>
 
+          {operationNotice && (
+            <div className={`rounded-2xl border px-6 py-4 ${operationNotice.type === 'error' ? 'border-red-800/40 bg-red-950/20 text-red-300' : 'border-emerald-800/40 bg-emerald-950/20 text-emerald-300'}`}>
+              <p className="text-xs font-bold uppercase tracking-widest">{operationNotice.text}</p>
+            </div>
+          )}
+
           {activeTab === 'overview'  && renderOverview()}
           {activeTab === 'projects'  && renderProjects()}
           {activeTab === 'portfolio' && renderPortfolioMgmt()}
@@ -971,7 +1028,7 @@ const AdminDashboard: React.FC = () => {
         </div>
       </main>
 
-      {/* ── Proposal Detail Modal ─────────────────────────────────────────── */}
+      {/*  Proposal Detail Modal  */}
       {viewingProposal && (
         <div className="fixed inset-0 z-[110] bg-black/95 backdrop-blur-xl flex items-center justify-center p-6">
           <div className="bg-zinc-900 border border-zinc-800 w-full max-w-3xl rounded-[3rem] p-12 space-y-10 relative shadow-2xl animate-in zoom-in-95 duration-300 overflow-y-auto max-h-[90vh] custom-scrollbar">
@@ -1045,7 +1102,7 @@ const AdminDashboard: React.FC = () => {
                 </>
               ) : (
                 <button className="w-full py-5 border border-zinc-800 text-zinc-600 rounded-2xl font-black uppercase tracking-widest cursor-default">
-                  {viewingProposal.status} • Record Active
+                  {viewingProposal.status}  -  Record Active
                 </button>
               )}
             </div>
@@ -1053,7 +1110,7 @@ const AdminDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* ── Project Edit Modal ────────────────────────────────────────────── */}
+      {/*  Project Edit Modal  */}
       {selectedProject && (
         <div className="fixed inset-0 z-[110] bg-black/95 backdrop-blur-xl flex items-center justify-center p-6">
           <div className="bg-zinc-900 border border-zinc-800 w-full max-w-2xl rounded-[3rem] p-12 space-y-10 relative animate-in zoom-in-95 duration-300 shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar">
@@ -1062,7 +1119,7 @@ const AdminDashboard: React.FC = () => {
             </button>
             <div className="space-y-4 text-left">
               <h3 className="text-3xl font-black text-white uppercase tracking-tight">Post-Launch Management</h3>
-              <p className="text-zinc-500 font-bold uppercase text-xs tracking-widest">ID: {selectedProject.id} • Real-time Sync Active</p>
+              <p className="text-zinc-500 font-bold uppercase text-xs tracking-widest">ID: {selectedProject.id}  -  Real-time Sync Active</p>
             </div>
 
             <div className="space-y-6">
@@ -1153,7 +1210,7 @@ const AdminDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* ── Portfolio Item Edit Modal ─────────────────────────────────────── */}
+      {/*  Portfolio Item Edit Modal  */}
       {selectedPortfolioItem && (
         <div className="fixed inset-0 z-[110] bg-black/95 backdrop-blur-xl flex items-center justify-center p-6">
           <div className="bg-zinc-900 border border-zinc-800 w-full max-w-2xl rounded-[3rem] p-12 space-y-10 relative animate-in zoom-in-95 duration-300 shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar">
@@ -1162,7 +1219,7 @@ const AdminDashboard: React.FC = () => {
             </button>
             <div className="space-y-4 text-left">
               <h3 className="text-3xl font-black text-white uppercase tracking-tight">Portfolio Item Editor</h3>
-              <p className="text-zinc-500 font-bold uppercase text-xs tracking-widest">ID: {selectedPortfolioItem.id} • Gallery Sync Active</p>
+              <p className="text-zinc-500 font-bold uppercase text-xs tracking-widest">ID: {selectedPortfolioItem.id}  -  Gallery Sync Active</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1236,3 +1293,5 @@ const AdminDashboard: React.FC = () => {
 };
 
 export default AdminDashboard;
+
+

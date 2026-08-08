@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from './Logo.tsx';
@@ -151,7 +151,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
       >
         <div className="flex items-center justify-between h-[72px] px-6 md:px-10 lg:px-16 max-w-[1600px] mx-auto">
 
-          {/* Logo — show wordmark + tagline consistently across all pages */}
+          {/* Logo  -  show wordmark + tagline consistently across all pages */}
           <button
             onClick={() => navigate('/')}
             className="flex-shrink-0 group focus:outline-none"
@@ -164,7 +164,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
             />
           </button>
 
-          {/* Center Nav – desktop */}
+          {/* Center Nav - desktop */}
           <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
             {navItems.map((item) => {
               if (item.label === 'Works') {
@@ -249,7 +249,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
               );
             })}
             
-            {/* AI Tools Dropdown Menu — with delayed close */}
+            {/* AI Tools Dropdown Menu  -  with delayed close */}
             <div
               className="relative"
               onMouseEnter={handleAiDropdownEnter}
@@ -290,7 +290,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
             </div>
           </nav>
 
-          {/* Right CTA – desktop */}
+          {/* Right CTA - desktop */}
           <div className="hidden lg:flex items-center gap-3">
             {auth.isAuthenticated ? (
               <>
@@ -459,3 +459,5 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
 };
 
 export default Header;
+
+

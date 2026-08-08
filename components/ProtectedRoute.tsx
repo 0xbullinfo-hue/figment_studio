@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ProtectedRoute Component
  * Guards admin routes - requires authentication and admin role
  * Frontend authorization gate (server-side enforcement in Phase 1)
@@ -41,3 +41,5 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 };
 
 export default ProtectedRoute;
+
+

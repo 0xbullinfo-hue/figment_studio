@@ -1,4 +1,4 @@
-
+﻿
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
@@ -89,7 +89,7 @@ const SupportCenter: React.FC<SupportCenterProps> = ({ onBack }) => {
                         <span className="text-xs font-black tracking-wider text-[#9e7047] uppercase">#FIG-4822</span>
                         <h5 className="font-bold">Revision on Terrace Render</h5>
                       </div>
-                      <p className="text-sm text-[#9e7047]">Awaiting studio review • Oct 24</p>
+                      <p className="text-sm text-[#9e7047]">Awaiting studio review  -  Oct 24</p>
                     </div>
                     <span className="px-3 py-1 bg-primary text-white text-[10px] font-black uppercase rounded-full">In Progress</span>
                   </div>
@@ -124,3 +124,5 @@ const SupportCenter: React.FC<SupportCenterProps> = ({ onBack }) => {
 };
 
 export default SupportCenter;
+
+

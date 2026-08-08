@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { useStudioStore } from '../store';
@@ -34,7 +34,15 @@ const getStatusIcon = (status: string) => {
 
 const ClientDashboard: React.FC<DashboardProps> = ({ onOpenVision }) => {
   const navigate = useNavigate();
-  const { projects } = useStudioStore();
+  const { projects, auth } = useStudioStore();
+  const clientName = auth.name || 'Client';
+  const clientFirstName = clientName.split(' ')[0] || 'Client';
+  const clientInitials = clientName
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() || '')
+    .join('') || 'CU';
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-display text-left relative">
@@ -72,9 +80,9 @@ const ClientDashboard: React.FC<DashboardProps> = ({ onOpenVision }) => {
           </nav>
         </div>
         <button onClick={() => navigate('/profile')} className="pt-8 border-t border-gray-100 flex items-center gap-3 group text-left">
-          <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black border border-primary/20 group-hover:bg-primary group-hover:text-white transition-colors">JT</div>
+          <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black border border-primary/20 group-hover:bg-primary group-hover:text-white transition-colors">{clientInitials}</div>
           <div className="truncate">
-            <p className="text-xs font-bold uppercase truncate text-slate-900">Julian Thorne</p>
+            <p className="text-xs font-bold uppercase truncate text-slate-900">{clientName}</p>
             <p className="text-[10px] text-gray-400 uppercase font-black">Edit Profile</p>
           </div>
         </button>
@@ -105,7 +113,7 @@ const ClientDashboard: React.FC<DashboardProps> = ({ onOpenVision }) => {
           <div className="max-w-6xl mx-auto space-y-12">
             <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-[#f4ede7] pb-8 gap-6">
               <div className="text-left">
-                <h1 className="text-4xl font-light tracking-tighter text-slate-900">Hello, <span className="font-bold text-primary">Julian.</span></h1>
+                <h1 className="text-4xl font-light tracking-tighter text-slate-900">Hello, <span className="font-bold text-primary">{clientFirstName}.</span></h1>
                 <p className="text-slate-500 mt-2">Your architectural visions are currently taking shape in the studio.</p>
               </div>
               <button className="flex items-center gap-3 bg-white border border-[#e8dbce] px-6 py-3 rounded-2xl shadow-sm hover:shadow-md transition-all text-left">
@@ -136,7 +144,7 @@ const ClientDashboard: React.FC<DashboardProps> = ({ onOpenVision }) => {
                       <div className="flex justify-between items-start">
                         <div className="space-y-1">
                           <h4 className="text-2xl font-black tracking-tight text-slate-900 uppercase">{project.title}</h4>
-                          <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest">{project.id} • {project.location}</p>
+                          <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest">{project.id}  -  {project.location}</p>
                         </div>
                         <div className="text-right">
                           <span className="text-primary font-black text-xl">{project.progress}%</span>
@@ -180,3 +188,5 @@ const ClientDashboard: React.FC<DashboardProps> = ({ onOpenVision }) => {
 };
 
 export default ClientDashboard;
+
+

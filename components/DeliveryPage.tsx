@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStudioStore } from '../store';
@@ -93,8 +93,8 @@ const DeliveryPage: React.FC = () => {
             />
             <div className="absolute bottom-10 left-10 right-10 flex items-center justify-between p-8 bg-white/90 backdrop-blur-xl border border-white rounded-3xl opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 shadow-2xl pointer-events-none">
               <div>
-                <h4 className="font-black text-xl text-slate-900 uppercase tracking-tight">Main Interior — Evening Composition</h4>
-                <p className="text-sm text-slate-500 font-medium mt-1">Resolution: 7680 x 4320 • Format: Lossless PNG (48.5MB)</p>
+                <h4 className="font-black text-xl text-slate-900 uppercase tracking-tight">Main Interior - Evening Composition</h4>
+                <p className="text-sm text-slate-500 font-medium mt-1">Resolution: 7680 x 4320 - Format: Lossless PNG (48.5MB)</p>
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-[10px] font-black uppercase text-gray-300 tracking-widest">Verified Final</span>
@@ -146,7 +146,7 @@ const DeliveryPage: React.FC = () => {
             <button onClick={() => navigate('/dashboard')} className="bg-transparent border border-white/20 text-white px-12 py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-white/5 transition-all">Return to Projects</button>
           </div>
           <div className="mt-24 text-[10px] font-black uppercase text-gray-600 tracking-[0.3em]">
-            © 2024 Figment Studio Nigeria • Production Rights Released
+            © 2024 Figment Studio Nigeria - Production Rights Released
           </div>
         </footer>
       </main>
@@ -155,3 +155,5 @@ const DeliveryPage: React.FC = () => {
 };
 
 export default DeliveryPage;
+
+

@@ -95,14 +95,14 @@ const INITIAL_SERVICES = [
     id: '04',
     title: '3D Scale Models & Printing',
     short: 'Scale Models',
-    description: 'Physical scale models with micro-detail precision — ideal for urban master-planning, property launch events, and client showrooms.',
+    description: 'Physical scale models with micro-detail precision ΓÇö ideal for urban master-planning, property launch events, and client showrooms.',
     image: '/figment_media/3D-Printing.png',
     tags: ['Physical', 'Master-Planning', 'Events'],
   },
 ];
 
 const INITIAL_ABOUT = {
-  badge: 'Est. 2015 — Abuja, Nigeria',
+  badge: 'Est. 2015 ΓÇö Abuja, Nigeria',
   headline: 'Visualizing the Future of African Design.',
   lead: 'Abuja\'s premier architectural visualization firm, where precision meets artistry in every pixel.',
   story: [
@@ -139,7 +139,7 @@ const INITIAL_REVIEWS = [
     role: 'Director of Projects',
     company: 'Landmark Group, Victoria Island',
     rating: 5,
-    comment: 'Working with Figment is the closest thing I have found to having a world-class visualization studio in-house — without the overhead.',
+    comment: 'Working with Figment is the closest thing I have found to having a world-class visualization studio in-house ΓÇö without the overhead.',
     date: '2026-06-02',
     approved: true,
   },

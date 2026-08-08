@@ -36,6 +36,17 @@ export interface StudioContentResponse {
   projects?: Array<any>;
 }
 
+export interface ArcVizChatPayload {
+  message: string;
+  history: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
+  image?: { data: string; mimeType: string };
+}
+
+export interface ArcVizChatResponse {
+  ok: boolean;
+  reply: string;
+}
+
 const backendBaseUrl = ((import.meta as any).env.VITE_BACKEND_URL as string | undefined) || 'http://localhost:8787';
 
 async function parseJsonResponse<T>(response: Response): Promise<T> {
@@ -111,6 +122,32 @@ export async function getArcvizQuota(accessToken: string): Promise<ArcVizQuotaRe
   });
 
   return parseJsonResponse<ArcVizQuotaResponse>(response);
+}
+
+export async function arcvizVisionChatRequest(accessToken: string, payload: ArcVizChatPayload): Promise<ArcVizChatResponse> {
+  const response = await fetch(`${backendBaseUrl}/api/arcviz/chat/vision`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  return parseJsonResponse<ArcVizChatResponse>(response);
+}
+
+export async function arcvizArchitecturalChatRequest(accessToken: string, payload: ArcVizChatPayload): Promise<ArcVizChatResponse> {
+  const response = await fetch(`${backendBaseUrl}/api/arcviz/chat/architectural`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  return parseJsonResponse<ArcVizChatResponse>(response);
 }
 
 export async function getPublicStudioContent(): Promise<StudioContentResponse> {

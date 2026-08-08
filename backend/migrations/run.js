@@ -20,16 +20,16 @@ async function runMigrations() {
   const dbUrl = process.env.DATABASE_URL;
   
   if (!dbUrl) {
-    console.error('❌ DATABASE_URL not set in environment');
+    console.error('Γ¥î DATABASE_URL not set in environment');
     process.exit(1);
   }
 
   const client = new Client({ connectionString: dbUrl });
 
   try {
-    console.log('📦 Connecting to database...');
+    console.log('≡ƒôª Connecting to database...');
     await client.connect();
-    console.log('✅ Connected');
+    console.log('Γ£à Connected');
 
     // Read schema.sql
     const schemaPath = path.join(process.cwd(), 'schema.sql');
@@ -40,9 +40,9 @@ async function runMigrations() {
     const schema = fs.readFileSync(schemaPath, 'utf-8');
 
     // Execute schema
-    console.log('🔧 Running migrations...');
+    console.log('≡ƒöº Running migrations...');
     await client.query(schema);
-    console.log('✅ Migrations completed');
+    console.log('Γ£à Migrations completed');
 
     // Verify tables
     const result = await client.query(`
@@ -52,13 +52,13 @@ async function runMigrations() {
       ORDER BY table_name
     `);
 
-    console.log('\n📊 Created tables:');
+    console.log('\n≡ƒôè Created tables:');
     result.rows.forEach(row => {
       console.log(`   - ${row.table_name}`);
     });
 
   } catch (error) {
-    console.error('❌ Migration failed:', error.message);
+    console.error('Γ¥î Migration failed:', error.message);
     if (error.detail) {
       console.error('   Detail:', error.detail);
     }

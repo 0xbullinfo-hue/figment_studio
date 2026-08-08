@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+﻿import React, { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import Logo from './Logo.tsx';
@@ -191,7 +191,7 @@ const PaymentPortal: React.FC<PaymentPortalProps> = ({ onBack }) => {
               </button>
             </div>
             <p className="text-xs text-slate-500">
-              Rate preview: {formatMoney(amount, 'USD')} ≈ {formatMoney(amount * fxRate, 'NGN')} · 1 USD = {fxRate.toLocaleString()} NGN
+              Rate preview: {formatMoney(amount, 'USD')} = {formatMoney(amount * fxRate, 'NGN')} - 1 USD = {fxRate.toLocaleString()} NGN
             </p>
           </div>
 
@@ -245,3 +245,5 @@ const PaymentPortal: React.FC<PaymentPortalProps> = ({ onBack }) => {
 };
 
 export default PaymentPortal;
+
+

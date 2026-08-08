@@ -1,4 +1,4 @@
-
+﻿
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from './Logo.tsx';
@@ -178,3 +178,5 @@ const Footer: React.FC = () => {
 };
 
 export default Footer;
+
+

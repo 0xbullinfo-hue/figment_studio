@@ -66,19 +66,19 @@ export function validateConfig() {
 
   // Print results
   if (errors.length > 0) {
-    console.error('\n❌ CONFIG VALIDATION FAILED:');
+    console.error('\nΓ¥î CONFIG VALIDATION FAILED:');
     errors.forEach(e => console.error(`   - ${e}`));
     console.error('\n');
     process.exit(1);
   }
 
   if (warnings.length > 0) {
-    console.warn('\n⚠️  CONFIG WARNINGS:');
+    console.warn('\nΓÜá∩╕Å  CONFIG WARNINGS:');
     warnings.forEach(w => console.warn(`   - ${w}`));
     console.warn('\n');
   }
 
-  console.log('✅ Configuration validated');
+  console.log('Γ£à Configuration validated');
 }
 
 export const config = {

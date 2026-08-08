@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from './Logo.tsx';
 import { useStudioStore } from '../store.ts';
@@ -144,3 +144,5 @@ const Sidebar: React.FC<SidebarProps> = ({ onOpenVision }) => {
 };
 
 export default Sidebar;
+
+

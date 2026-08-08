@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStudioStore } from '../store';
@@ -82,7 +82,7 @@ const ProjectDetails: React.FC = () => {
         <header className="h-20 border-b border-gray-100 flex items-center justify-between px-10 shrink-0 bg-white/80 backdrop-blur-md sticky top-0 z-10">
           <div>
             <h1 className="text-2xl font-black tracking-tight text-slate-900 uppercase">{project.title}</h1>
-            <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest mt-0.5">{project.id} • {project.location}</p>
+            <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest mt-0.5">{project.id}  -  {project.location}</p>
           </div>
           <div className="flex gap-4">
             <button onClick={() => navigate(`/project/${project.id}/markup`)} className="px-6 py-2.5 bg-primary text-white rounded-lg font-bold text-[10px] uppercase tracking-widest shadow-lg shadow-primary/20 active:scale-95">Request Revision</button>
@@ -207,3 +207,5 @@ const ProjectDetails: React.FC = () => {
 };
 
 export default ProjectDetails;
+
+

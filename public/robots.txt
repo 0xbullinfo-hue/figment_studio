@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Private application areas
+Disallow: /auth
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /billing
+Disallow: /payment
+Disallow: /assets
+Disallow: /support
+Disallow: /profile
+Disallow: /new-project
+Disallow: /project
+Disallow: /success
+
+Sitemap: https://figmentstudio.ng/sitemap.xml

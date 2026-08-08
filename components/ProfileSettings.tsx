@@ -1,4 +1,4 @@
-
+﻿
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AppView } from '../types.ts';
@@ -88,3 +88,5 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ onBack, onNavigate })
 };
 
 export default ProfileSettings;
+
+

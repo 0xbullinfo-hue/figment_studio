@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Logo from './Logo.tsx';
@@ -150,3 +150,5 @@ const BillingManager: React.FC<BillingManagerProps> = ({ onBack, onNavigate }) =
 };
 
 export default BillingManager;
+
+

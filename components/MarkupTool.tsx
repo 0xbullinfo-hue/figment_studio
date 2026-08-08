@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Marker } from '../types';
@@ -162,3 +162,5 @@ const MarkupTool: React.FC = () => {
 };
 
 export default MarkupTool;
+
+

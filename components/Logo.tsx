@@ -1,4 +1,4 @@
-
+﻿
 import React from 'react';
 
 interface LogoProps {
@@ -16,7 +16,7 @@ interface LogoProps {
    */
   showTagline?: boolean;
   /**
-   * Render the mark only — no text regardless of other props.
+   * Render the mark only  -  no text regardless of other props.
    */
   iconOnly?: boolean;
   className?: string;
@@ -28,15 +28,15 @@ interface LogoProps {
 }
 
 /**
- * Figment Creative Studio — official brand logo component.
+ * Figment Creative Studio  -  official brand logo component.
  *
  * Uses the real /logo.png asset (RGBA transparent background),
  * so the orange flame mark renders cleanly on any background color.
  *
  * Three visual variants:
- *  iconOnly                        → flame mark only (compact nav/favicon contexts)
- *  showWordmark                    → flame mark + "figment" (main header)
- *  showWordmark + showTagline      → flame mark + "figment" + "creative studio" (footer, hero)
+ *  iconOnly                        -> flame mark only (compact nav/favicon contexts)
+ *  showWordmark                    -> flame mark + "figment" (main header)
+ *  showWordmark + showTagline      -> flame mark + "figment" + "creative studio" (footer, hero)
  */
 const Logo: React.FC<LogoProps> = ({
   size = 36,
@@ -57,7 +57,7 @@ const Logo: React.FC<LogoProps> = ({
       }}
       aria-label="figment creative studio logo"
     >
-      {/* ── Transparent logo text image ── */}
+      {/* Transparent logo text image */}
       <img
         src="/logo-text.png"
         alt="" // decorative since wrapper has aria-label
@@ -77,3 +77,5 @@ const Logo: React.FC<LogoProps> = ({
 };
 
 export default Logo;
+
+

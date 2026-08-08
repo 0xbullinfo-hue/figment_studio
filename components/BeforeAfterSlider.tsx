@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 
 interface BeforeAfterSliderProps {
     beforeImage: string;
@@ -52,3 +52,5 @@ const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ beforeImage, afte
 };
 
 export default BeforeAfterSlider;
+
+

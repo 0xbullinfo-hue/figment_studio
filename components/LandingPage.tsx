@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState, useEffect } from 'react';
 import Hero from './Hero';
 import Services from './Services';
@@ -167,7 +167,7 @@ const LandingPage: React.FC = () => {
       <Services />
       <Portfolio onViewAll={() => navigate('/portfolio')} />
 
-      {/* ── WHO WE ARE ── */}
+      {/*  WHO WE ARE  */}
       <section className="bg-background" id="about-intro">
         <div className="px-8 md:px-14 lg:px-20 py-28 max-w-[1600px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -218,7 +218,7 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── PROCESS ACCORDION ── */}
+      {/*  PROCESS ACCORDION  */}
       <section className="bg-[#0E0E0E] border-t border-border-ui" id="process">
         <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
@@ -228,7 +228,7 @@ const LandingPage: React.FC = () => {
                 Built For<br />Professional
               </SectionHeading>
               <p className="text-white/45 text-sm leading-relaxed max-w-md font-sans">
-                Every premium project moves through a secure, auditable flow designed for serious developers and architects — from intake to final asset handoff.
+                Every premium project moves through a secure, auditable flow designed for serious developers and architects  -  from intake to final asset handoff.
               </p>
               <button onClick={() => navigate('/estimator')} className="flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase bg-primary hover:bg-primary-hover text-white px-7 py-3.5 font-semibold transition-all duration-300 hover:shadow-[0_4px_14px_rgba(240,122,58,0.3)] mt-2">
                 <span className="material-symbols-outlined text-base">calculate</span>
@@ -262,7 +262,7 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── TEAM ── */}
+      {/*  TEAM  */}
       <section className="bg-background border-t border-border-ui" id="team">
         <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
@@ -302,7 +302,7 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── CLIENT STORIES / REVIEWS ── */}
+      {/*  CLIENT STORIES / REVIEWS  */}
       <section className="bg-[#0E0E0E] border-t border-border-ui" id="testimonials">
         <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto space-y-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
@@ -352,7 +352,7 @@ const LandingPage: React.FC = () => {
                         <div className="flex justify-between items-center">
                           <span className="font-display text-6xl text-primary/20 leading-none select-none">"</span>
                           <span className="text-primary font-bold text-xs tracking-wider">
-                            {'★'.repeat(rev.rating)}{'☆'.repeat(5 - rev.rating)}
+                            {'*'.repeat(rev.rating)}{'-'.repeat(5 - rev.rating)}
                           </span>
                         </div>
                         <p className="text-white/70 text-lg font-light leading-relaxed font-sans italic">
@@ -366,7 +366,7 @@ const LandingPage: React.FC = () => {
                           </div>
                           <div>
                             <p className="text-sm font-semibold text-white font-sans">{rev.name}</p>
-                            <p className="text-[11px] text-white/35 font-sans">{rev.role} {rev.company ? `· ${rev.company}` : ''}</p>
+                            <p className="text-[11px] text-white/35 font-sans">{rev.role} {rev.company ? ` -  ${rev.company}` : ''}</p>
                           </div>
                         </div>
 
@@ -481,7 +481,7 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── PRICING ── */}
+      {/*  PRICING  */}
       <section className="bg-background border-t border-border-ui" id="pricing">
         <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
@@ -556,7 +556,7 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── JOURNAL / INSIGHTS ── */}
+      {/*  JOURNAL / INSIGHTS  */}
       <section className="bg-[#0E0E0E] border-t border-border-ui" id="journal">
         <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
@@ -612,7 +612,7 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── CTA ── */}
+      {/*  CTA  */}
       <section className="relative overflow-hidden" id="cta">
         <div
           className="relative px-8 md:px-14 lg:px-20 py-36"
@@ -660,3 +660,5 @@ const LandingPage: React.FC = () => {
 };
 
 export default LandingPage;
+
+

@@ -1,4 +1,4 @@
-
+﻿
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStudioStore } from '../store.ts';
@@ -102,7 +102,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
 
               <div className="absolute bottom-0 left-0 p-8">
                 <p className="text-primary text-[10px] tracking-[0.25em] uppercase font-bold mb-2 font-sans">
-                  {project.category} · {project.location}
+                  {project.category}  -  {project.location}
                 </p>
                 <h3 className="font-display font-light text-white text-2xl md:text-3xl leading-tight tracking-tight">
                   {project.title}
@@ -147,7 +147,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-500" />
                 <div className="absolute bottom-0 left-0 p-6">
                   <p className="text-primary text-[9px] tracking-[0.22em] uppercase font-bold mb-1.5 font-sans">
-                    {project.category} · {project.location}
+                    {project.category}  -  {project.location}
                   </p>
                   <h3 className="font-display font-light text-white text-xl leading-tight tracking-tight">
                     {project.title}
@@ -196,7 +196,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
 
           <div className="mt-10 text-center text-white space-y-4 max-w-2xl">
             <p className="text-primary font-bold uppercase tracking-[0.3em] text-[10px] font-sans">
-              {selectedProject.category} · {selectedProject.location} · {selectedProject.type}
+              {selectedProject.category}  -  {selectedProject.location}  -  {selectedProject.type}
             </p>
             <h3 className="font-display font-light text-3xl md:text-5xl leading-tight tracking-tight">
               {selectedProject.title}
@@ -217,3 +217,5 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
 };
 
 export default Portfolio;
+
+

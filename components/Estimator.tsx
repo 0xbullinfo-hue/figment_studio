@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { IMAGES } from '../constants.ts';
@@ -242,7 +242,7 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
           <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
           
           <div className="flex flex-col gap-1 w-full md:w-auto text-left relative z-10">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Selected Package • {pricing.timeline}</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Selected Package  -  {pricing.timeline}</span>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl md:text-4xl font-black text-primary">${pricing.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
               <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">Excl. Taxes</span>
@@ -385,3 +385,5 @@ TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
 };
 
 export default Estimator;
+
+

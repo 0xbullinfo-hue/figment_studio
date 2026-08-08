@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -272,7 +272,7 @@ const PortfolioGallery: React.FC = () => {
             {/* Left Pane: Cinematic Visual Focus Frame */}
             <div className="w-full lg:w-[65%] h-[45vh] lg:h-full relative flex items-center justify-center bg-black/20 p-8 lg:p-16 border-b border-border-ui lg:border-none">
               <span className="absolute top-6 left-8 text-[9px] tracking-[0.3em] font-sans text-primary font-bold uppercase hidden md:block">
-                Figment Studio • Master Series Visual
+                Figment Studio  -  Master Series Visual
               </span>
 
               {/* Render Image or Animated Loop */}
@@ -424,3 +424,5 @@ const PortfolioGallery: React.FC = () => {
 };
 
 export default PortfolioGallery;
+
+

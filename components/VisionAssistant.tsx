@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import { VisionChat } from '../types.ts';
-import { streamVisionAI } from '../services/geminiService.ts';
+import { arcvizVisionChatRequest } from '../services/apiClient.ts';
+import { useStudioStore } from '../store.ts';
 import Logo from './Logo.tsx';
 
 interface VisionAssistantProps {
@@ -8,6 +9,7 @@ interface VisionAssistantProps {
 }
 
 const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
+  const { auth } = useStudioStore();
   const [messages, setMessages] = useState<VisionChat[]>([
     { role: 'assistant', content: 'Hi, I am Vision AI. Share your idea and I can help with mood, style, and simple design direction. For advanced architecture controls, open ArcViz.' }
   ]);
@@ -47,6 +49,11 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
     const finalInput = text || input;
     if ((!finalInput.trim() && !selectedImage) || isLoading) return;
 
+    if (!auth.accessToken) {
+      setMessages((prev) => [...prev, { role: 'assistant', content: 'Please sign in to use Vision AI securely.' }]);
+      return;
+    }
+
     const userMessage: VisionChat = { role: 'user', content: finalInput || '[Image analysis request]' };
     const currentHistory = [...messages];
     const imageToSend = selectedImage ? { data: selectedImage.data, mimeType: selectedImage.mimeType } : undefined;
@@ -58,13 +65,14 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
     setStreamingContent('');
 
     try {
-      let fullResponse = '';
-      const stream = streamVisionAI(finalInput || 'Analyze this design image in simple terms.', currentHistory, imageToSend);
+      const response = await arcvizVisionChatRequest(auth.accessToken, {
+        message: finalInput.trim() ? finalInput : 'Analyze this design image in simple terms.',
+        history: currentHistory,
+        image: imageToSend,
+      });
 
-      for await (const chunk of stream) {
-        fullResponse += chunk;
-        setStreamingContent(fullResponse);
-      }
+      const fullResponse = response.reply || '';
+      setStreamingContent(fullResponse);
 
       setMessages((prev) => [...prev, { role: 'assistant', content: fullResponse }]);
       setStreamingContent('');
@@ -130,13 +138,6 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
         </div>
 
         <div className="p-6 bg-white border-t border-gray-100 relative">
-          {/* Coming Soon Overlay */}
-          <div className="absolute inset-0 bg-white/80 backdrop-blur-[1px] flex items-center justify-center z-10">
-            <div className="bg-[#1A1A1A] text-white px-5 py-2.5 rounded-full flex items-center gap-2 shadow-lg border border-white/5">
-              <span className="material-symbols-outlined text-[14px] text-primary">auto_awesome</span>
-              <span className="text-[10px] tracking-[0.2em] uppercase font-bold">Coming Soon</span>
-            </div>
-          </div>
           {selectedImage && (
             <div className="mb-4 flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-primary/20">
               <div className="size-12 rounded-lg overflow-hidden">
@@ -188,3 +189,5 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
 };
 
 export default VisionAssistant;
+
+

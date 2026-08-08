@@ -1,4 +1,4 @@
-
+﻿
 import React, { useEffect, useState } from 'react';
 import { getPublicStudioContent } from '../services/apiClient.ts';
 
@@ -31,7 +31,7 @@ const SERVICES = [
     id: '04',
     title: '3D Scale Models & Printing',
     short: 'Scale Models',
-    description: 'Physical scale models with micro-detail precision — ideal for urban master-planning, property launch events, and client showrooms.',
+    description: 'Physical scale models with micro-detail precision  -  ideal for urban master-planning, property launch events, and client showrooms.',
     image: '/figment_media/3D-Printing.png',
     tags: ['Physical', 'Master-Planning', 'Events'],
   },
@@ -67,7 +67,7 @@ const Services: React.FC = () => {
   return (
     <section className="bg-[#0E0E0E]" id="services">
 
-      {/* ── Section Header ── */}
+      {/*  Section Header  */}
       <div className="px-8 md:px-14 lg:px-20 pt-24 pb-16 max-w-[1600px] mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="space-y-4">
@@ -83,7 +83,7 @@ const Services: React.FC = () => {
         </div>
       </div>
 
-      {/* ── Interactive Service Viewer ── */}
+      {/*  Interactive Service Viewer  */}
       <div className="px-8 md:px-14 lg:px-20 pb-24 max-w-[1600px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-border-ui overflow-hidden">
 
@@ -177,7 +177,7 @@ const Services: React.FC = () => {
         </div>
       </div>
 
-      {/* ── Stats bar ── */}
+      {/*  Stats bar  */}
       <div className="border-t border-border-ui">
         <div className="px-8 md:px-14 lg:px-20 py-12 max-w-[1600px] mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -202,3 +202,5 @@ const Services: React.FC = () => {
 };
 
 export default Services;
+
+
