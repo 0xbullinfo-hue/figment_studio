@@ -5,14 +5,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Figment Studio | Premium Architectural Visualization</title>
-  <meta name="description" content="Figment Studio — Nigeria's leading architectural visualization house. Cinematic 3D rendering, AI-guided design, and private delivery for world-class projects." />
+  <meta name="description" content="Figment Studio ΓÇö Nigeria's leading architectural visualization house. Cinematic 3D rendering, AI-guided design, and private delivery for world-class projects." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://figmentstudio.ng/" />
 
   <!-- Open Graph / Facebook Meta Tags -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://figmentstudio.ng" />
   <meta property="og:site_name" content="Figment Studio" />
   <meta property="og:title" content="Figment Studio | Premium Architectural Visualization" />
-  <meta property="og:description" content="Figment Studio — Nigeria's leading architectural visualization house. Cinematic 3D rendering, AI-guided design, and private delivery for world-class projects." />
+  <meta property="og:description" content="Figment Studio ΓÇö Nigeria's leading architectural visualization house. Cinematic 3D rendering, AI-guided design, and private delivery for world-class projects." />
   <meta property="og:image" content="https://figmentstudio.ng/og-image.png" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1024" />
@@ -21,8 +23,30 @@
   <!-- Twitter Meta Tags -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Figment Studio | Premium Architectural Visualization" />
-  <meta name="twitter:description" content="Figment Studio — Nigeria's leading architectural visualization house. Cinematic 3D rendering, AI-guided design, and private delivery for world-class projects." />
+  <meta name="twitter:description" content="Figment Studio ΓÇö Nigeria's leading architectural visualization house. Cinematic 3D rendering, AI-guided design, and private delivery for world-class projects." />
   <meta name="twitter:image" content="https://figmentstudio.ng/og-image.png" />
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["Organization", "LocalBusiness"],
+      "name": "Figment Studio",
+      "url": "https://figmentstudio.ng",
+      "image": "https://figmentstudio.ng/og-image.png",
+      "description": "Premium architectural visualization studio in Abuja, Nigeria.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Abuja",
+        "addressRegion": "FCT",
+        "addressCountry": "NG"
+      },
+      "areaServed": [
+        { "@type": "Country", "name": "Nigeria" },
+        { "@type": "Place", "name": "Global" }
+      ],
+      "email": "hello@figmentstudio7@gmail.com"
+    }
+  </script>
 
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
@@ -38,29 +62,29 @@
       theme: {
         extend: {
           colors: {
-            /* ── Core Dark Grey Palette (Old system mapping) ── */
+            /* ΓöÇΓöÇ Core Dark Grey Palette (Old system mapping) ΓöÇΓöÇ */
             "bg":          "#121212",   /* page background */
             "bg-2":        "#181818",   /* section alternating */
             "bg-3":        "#1E1E1E",   /* elevated cards */
             "bg-4":        "#262626",   /* highest card */
             "sidebar":     "#0E0E0E",   /* sidebar panel */
 
-            /* ── Text (Old) ── */
+            /* ΓöÇΓöÇ Text (Old) ΓöÇΓöÇ */
             "t-1":  "#FFFFFF",          /* headings */
             "t-2":  "#BDBDBD",          /* body */
             "t-3":  "#737373",          /* muted / labels */
             "t-4":  "#3D3D3D",          /* faintest */
 
-            /* ── Brand (Old) ── */
+            /* ΓöÇΓöÇ Brand (Old) ΓöÇΓöÇ */
             "accent":       "#F07A3A",  /* primary orange */
             "accent-dim":   "rgba(240,122,58,0.15)",
             "accent-border":"rgba(240,122,58,0.25)",
 
-            /* ── Borders (Old) ── */
+            /* ΓöÇΓöÇ Borders (Old) ΓöÇΓöÇ */
             "b-1":  "rgba(255,255,255,0.08)",  /* default border */
             "b-2":  "rgba(255,255,255,0.14)",  /* stronger */
 
-            /* ── Unified Layout Variables ── */
+            /* ΓöÇΓöÇ Unified Layout Variables ΓöÇΓöÇ */
             "background":      "#121212",
             "background-alt":  "#181818",
             "surface":         "#1E1E1E",
@@ -113,7 +137,7 @@
     }
 
     @layer utilities {
-      /* ── Typography ── */
+      /* ΓöÇΓöÇ Typography ΓöÇΓöÇ */
       .h-display {
         font-family: 'Tenor Sans', sans-serif;
         font-weight: 300;
@@ -139,7 +163,7 @@
       .body-sm { @apply text-text-secondary text-sm leading-relaxed; font-family: 'Outfit', sans-serif; }
       .body-xs { @apply text-text-muted text-xs leading-relaxed; font-family: 'Outfit', sans-serif; }
 
-      /* ── Buttons ── */
+      /* ΓöÇΓöÇ Buttons ΓöÇΓöÇ */
       .btn-fill {
         display: inline-flex;
         align-items: center;
@@ -191,7 +215,7 @@
       }
       .btn-text:hover { gap: 0.75rem; color: #F07A3A; }
 
-      /* ── Section spacing ── */
+      /* ΓöÇΓöÇ Section spacing ΓöÇΓöÇ */
       .sec       { padding: 7rem 5rem; }
       .sec-sm    { padding: 5rem 5rem; }
       @media(max-width:1024px) { .sec { padding: 5rem 2.5rem; } .sec-sm { padding: 4rem 2.5rem; } }
@@ -201,7 +225,7 @@
       .wrap-lg { max-width: 1100px; margin: 0 auto; }
       .wrap-md { max-width: 820px; margin: 0 auto; }
 
-      /* ── Cards ── */
+      /* ΓöÇΓöÇ Cards ΓöÇΓöÇ */
       .card {
         background: #1E1E1E;
         border: 1px solid rgba(255,255,255,0.06);
@@ -209,10 +233,10 @@
       }
       .card:hover { border-color: rgba(240,122,58,0.2); transform: translateY(-3px); }
 
-      /* ── Divider ── */
+      /* ΓöÇΓöÇ Divider ΓöÇΓöÇ */
       .divider { border-top: 1px solid rgba(255,255,255,0.07); }
 
-      /* ── Accent line ── */
+      /* ΓöÇΓöÇ Accent line ΓöÇΓöÇ */
       .accent-line {
         display: inline-block;
         width: 2rem;
@@ -222,7 +246,7 @@
         margin-right: 0.75rem;
       }
 
-      /* ── Number counter (stats) ── */
+      /* ΓöÇΓöÇ Number counter (stats) ΓöÇΓöÇ */
       .stat-num {
         font-family: 'Tenor Sans', sans-serif;
         font-weight: 300;
@@ -231,7 +255,7 @@
         line-height: 1;
       }
 
-      /* ── Portfolio item ── */
+      /* ΓöÇΓöÇ Portfolio item ΓöÇΓöÇ */
       .port-item { position: relative; overflow: hidden; }
       .port-item img { transition: transform 0.6s ease; }
       .port-item:hover img { transform: scale(1.06); }
@@ -242,21 +266,21 @@
       }
       .port-item:hover .port-overlay { opacity: 1; }
 
-      /* ── Process accordion ── */
+      /* ΓöÇΓöÇ Process accordion ΓöÇΓöÇ */
       .process-item {
         border-top: 1px solid rgba(255,255,255,0.07);
         transition: background 0.25s ease;
       }
       .process-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.07); }
 
-      /* ── Material icons ── */
+      /* ΓöÇΓöÇ Material icons ΓöÇΓöÇ */
       .material-symbols-outlined {
         font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
         vertical-align: middle;
         line-height: 1;
       }
 
-      /* ── Input dark ── */
+      /* ΓöÇΓöÇ Input dark ΓöÇΓöÇ */
       .inp {
         width: 100%;
         background: transparent;
@@ -272,19 +296,19 @@
       .inp::placeholder { color: #4A4A4A; }
       .inp:focus { border-bottom-color: #F07A3A; }
 
-      /* ── Service image hover ── */
+      /* ΓöÇΓöÇ Service image hover ΓöÇΓöÇ */
       .svc-img { overflow: hidden; }
       .svc-img img { transition: transform 0.5s ease; }
       .svc-img:hover img { transform: scale(1.05); }
 
-      /* ── Scroll indicator ── */
+      /* ΓöÇΓöÇ Scroll indicator ΓöÇΓöÇ */
       @keyframes bounce-y {
         0%, 100% { transform: translateY(0); }
         50%       { transform: translateY(6px); }
       }
       .scroll-bounce { animation: bounce-y 2s ease-in-out infinite; }
 
-      /* ── Fade in up animation ── */
+      /* ΓöÇΓöÇ Fade in up animation ΓöÇΓöÇ */
       @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(24px); }
         to   { opacity: 1; transform: translateY(0); }
@@ -293,17 +317,17 @@
       .anim-in-2 { animation: fadeInUp 0.7s 0.15s ease both; }
       .anim-in-3 { animation: fadeInUp 0.7s 0.3s ease both; }
 
-      /* ── Fade in down animation (dropdown) ── */
+      /* ΓöÇΓöÇ Fade in down animation (dropdown) ΓöÇΓöÇ */
       @keyframes fadeInDown {
         from { opacity: 0; transform: translateY(-8px); }
         to   { opacity: 1; transform: translateY(0); }
       }
 
-      /* ── Status pills ── */
+      /* ΓöÇΓöÇ Status pills ΓöÇΓöÇ */
       .pill-prog { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
       .pill-done { background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
       .pill-pend { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
-      /* ── Missing Layout Helper Styles ── */
+      /* ΓöÇΓöÇ Missing Layout Helper Styles ΓöÇΓöÇ */
       .badge-primary {
         display: inline-flex;
         align-items: center;
@@ -362,7 +386,7 @@
         box-shadow: 0 12px 30px rgba(0,0,0,0.5) !important;
       }
 
-      /* ── Global Dark Mode Compatibility Overrides for Hardcoded Light Styles ── */
+      /* ΓöÇΓöÇ Global Dark Mode Compatibility Overrides for Hardcoded Light Styles ΓöÇΓöÇ */
       .bg-white { background-color: #121212 !important; }
       .bg-gray-50 { background-color: #0E0E0E !important; }
       .bg-slate-50 { background-color: #0E0E0E !important; }
@@ -387,7 +411,7 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45) !important;
       }
 
-      /* ── Legacy utility aliases (used by inner pages) ── */
+      /* ΓöÇΓöÇ Legacy utility aliases (used by inner pages) ΓöÇΓöÇ */
       .hover-underline {
         position: relative;
       }
@@ -408,7 +432,7 @@
       /* Blank override so Studio doesn't error */
       .abuja-map-overlay { display: none; }
 
-      /* ── Buttons (inner pages / Estimator / Contact) ── */
+      /* ΓöÇΓöÇ Buttons (inner pages / Estimator / Contact) ΓöÇΓöÇ */
       .btn-primary {
         display: inline-flex;
         align-items: center;
@@ -465,7 +489,7 @@
       }
       .btn-ghost:hover { color: rgba(255,255,255,0.9); }
 
-      /* ── Layout aliases (Estimator, About, Contact pages) ── */
+      /* ΓöÇΓöÇ Layout aliases (Estimator, About, Contact pages) ΓöÇΓöÇ */
       .content-max  { max-width: 1600px; margin: 0 auto; }
       .content-lg   { max-width: 1200px; margin: 0 auto; }
       .content-md   { max-width: 860px;  margin: 0 auto; }
@@ -474,7 +498,7 @@
       @media(max-width:1024px) { .section-pad { padding: 5rem 2.5rem; } .section-pad-sm { padding: 3.5rem 2.5rem; } }
       @media(max-width:640px)  { .section-pad { padding: 4rem 1.5rem; } .section-pad-sm { padding: 3rem 1.5rem; } }
 
-      /* ── Label helpers ── */
+      /* ΓöÇΓöÇ Label helpers ΓöÇΓöÇ */
       .label-sm {
         font-family: 'Outfit', sans-serif;
         font-size: 0.65rem;
@@ -500,7 +524,7 @@
       .font-body { font-family: 'Outfit', sans-serif; }
       .text-2xs { font-size: 0.6rem; }
       
-      /* ── Dot Grid Background ── */
+      /* ΓöÇΓöÇ Dot Grid Background ΓöÇΓöÇ */
       .dot-grid {
         background-image: 
           radial-gradient(circle, rgba(240,122,58,0.3) 1px, transparent 1px);

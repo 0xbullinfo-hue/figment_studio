@@ -107,7 +107,7 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
       role: 'Director of Projects',
       company: 'Landmark Group, Victoria Island',
       rating: 5,
-      comment: 'Working with Figment is the closest thing I have found to having a world-class visualization studio in-house — without the overhead.',
+      comment: 'Working with Figment is the closest thing I have found to having a world-class visualization studio in-house ΓÇö without the overhead.',
       date: '2026-06-02',
       approved: true,
     },

@@ -3,6 +3,122 @@
   publish = "dist"
 
 [[redirects]]
-  from = "/*"
+  from = "/"
   to = "/index.html"
   status = 200
+
+[[redirects]]
+  from = "/about"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/contact"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/works"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/works/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/portfolio"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/insights"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/insights/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/academy"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/arcviz"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/estimator"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/feedback"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/auth"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/dashboard"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/billing"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/payment"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/assets"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/support"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/profile"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/new-project"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/project/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/success"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+  force = true

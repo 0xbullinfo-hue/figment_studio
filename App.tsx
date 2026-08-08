@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header.tsx';
 import Footer from './components/Footer.tsx';
 import VisionAssistant from './components/VisionAssistant.tsx';
@@ -37,6 +37,38 @@ const ScrollToTop: React.FC = () => {
     return () => timeouts.forEach(clearTimeout);
   }, [pathname]);
   return null;
+};
+
+const APP_CANONICAL_ORIGIN = ((import.meta as any).env.VITE_SITE_URL as string | undefined) || 'https://figmentstudio.ng';
+
+const RouteSeo: React.FC = () => {
+  const location = useLocation();
+  const pathname = location.pathname;
+  const canonical = `${APP_CANONICAL_ORIGIN.replace(/\/$/, '')}${pathname === '/' ? '' : pathname}`;
+
+  const privateRoutePrefixes = [
+    '/auth',
+    '/dashboard',
+    '/admin',
+    '/billing',
+    '/payment',
+    '/assets',
+    '/support',
+    '/profile',
+    '/new-project',
+    '/project/',
+    '/success',
+  ];
+
+  const isPrivateRoute = privateRoutePrefixes.some((prefix) => pathname === prefix || pathname.startsWith(prefix));
+  const robots = isPrivateRoute ? 'noindex, nofollow' : 'index, follow';
+
+  return (
+    <Helmet>
+      <link rel="canonical" href={canonical} />
+      <meta name="robots" content={robots} />
+    </Helmet>
+  );
 };
 
 // Lazy loaded components
@@ -171,6 +203,7 @@ const AppRoutes = () => {
           <Route path="contact" element={<ContactPage />} />
           <Route path="arcviz" element={<ArcVizPage />} />
           <Route path="insights" element={<InsightsPage />} />
+          <Route path="insights/:slug" element={<InsightsPage />} />
           <Route path="feedback" element={<FeedbackForm onFinish={() => navigate(-1)} />} />
           <Route path="academy" element={<AcademyPage />} />
         </Route>
@@ -207,6 +240,7 @@ const App: React.FC = () => {
     <ErrorBoundary>
       <HelmetProvider>
         <BrowserRouter>
+          <RouteSeo />
           <ScrollToTop />
           <AppRoutes />
         </BrowserRouter>
