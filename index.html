@@ -5,7 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Figment Studio | Premium Architectural Visualization</title>
-  <meta name="description" content="Figment Studio ΓÇö Nigeria's leading architectural visualization house. Cinematic 3D rendering, AI-guided design, and private delivery for world-class projects." />
+  <meta name="description" content="Figment Studio is a premium architectural visualization studio in Abuja, Nigeria delivering cinematic 3D rendering, animation, and private project delivery for developers and architects." />
+  <meta name="keywords" content="Figment Studio, architectural visualization Nigeria, 3D rendering Abuja, architectural animation Lagos, archviz studio, real estate visualization" />
+  <meta name="author" content="Figment Studio" />
+  <meta name="theme-color" content="#121212" />
+  <meta name="format-detection" content="telephone=no" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://figmentstudio.ng/" />
 
@@ -13,8 +17,9 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://figmentstudio.ng" />
   <meta property="og:site_name" content="Figment Studio" />
+  <meta property="og:locale" content="en_NG" />
   <meta property="og:title" content="Figment Studio | Premium Architectural Visualization" />
-  <meta property="og:description" content="Figment Studio ΓÇö Nigeria's leading architectural visualization house. Cinematic 3D rendering, AI-guided design, and private delivery for world-class projects." />
+  <meta property="og:description" content="Figment Studio is a premium architectural visualization studio in Abuja, Nigeria delivering cinematic 3D rendering, animation, and private project delivery for developers and architects." />
   <meta property="og:image" content="https://figmentstudio.ng/og-image.png" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1024" />
@@ -23,28 +28,66 @@
   <!-- Twitter Meta Tags -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Figment Studio | Premium Architectural Visualization" />
-  <meta name="twitter:description" content="Figment Studio ΓÇö Nigeria's leading architectural visualization house. Cinematic 3D rendering, AI-guided design, and private delivery for world-class projects." />
+  <meta name="twitter:description" content="Figment Studio is a premium architectural visualization studio in Abuja, Nigeria delivering cinematic 3D rendering, animation, and private project delivery for developers and architects." />
   <meta name="twitter:image" content="https://figmentstudio.ng/og-image.png" />
+  <meta name="twitter:site" content="@figment_cs" />
 
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": ["Organization", "LocalBusiness"],
-      "name": "Figment Studio",
-      "url": "https://figmentstudio.ng",
-      "image": "https://figmentstudio.ng/og-image.png",
-      "description": "Premium architectural visualization studio in Abuja, Nigeria.",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Abuja",
-        "addressRegion": "FCT",
-        "addressCountry": "NG"
-      },
-      "areaServed": [
-        { "@type": "Country", "name": "Nigeria" },
-        { "@type": "Place", "name": "Global" }
-      ],
-      "email": "hello@figmentstudio7@gmail.com"
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://figmentstudio.ng/#organization",
+          "name": "Figment Studio",
+          "url": "https://figmentstudio.ng",
+          "logo": "https://figmentstudio.ng/logo.png",
+          "image": "https://figmentstudio.ng/og-image.png",
+          "description": "Premium architectural visualization studio in Abuja, Nigeria.",
+          "email": "hello@figmentstudio7@gmail.com",
+          "sameAs": [
+            "https://www.instagram.com/figment_cs",
+            "https://www.facebook.com/figmentCstudio",
+            "https://x.com/figment_cs",
+            "https://www.tiktok.com/@figment_cs"
+          ],
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Abuja",
+            "addressRegion": "FCT",
+            "addressCountry": "NG"
+          },
+          "areaServed": [
+            { "@type": "Country", "name": "Nigeria" },
+            { "@type": "Place", "name": "Global" }
+          ]
+        },
+        {
+          "@type": "ProfessionalService",
+          "@id": "https://figmentstudio.ng/#service",
+          "name": "Figment Studio Architectural Visualization",
+          "url": "https://figmentstudio.ng",
+          "serviceType": [
+            "Architectural Rendering",
+            "Cinematic 3D Walkthrough Animation",
+            "Interior and Exterior Visualization",
+            "Design Communication Support"
+          ],
+          "provider": { "@id": "https://figmentstudio.ng/#organization" },
+          "areaServed": [
+            { "@type": "Country", "name": "Nigeria" },
+            { "@type": "Place", "name": "Global" }
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://figmentstudio.ng/#website",
+          "url": "https://figmentstudio.ng/",
+          "name": "Figment Studio",
+          "publisher": { "@id": "https://figmentstudio.ng/#organization" },
+          "inLanguage": "en-NG"
+        }
+      ]
     }
   </script>
 

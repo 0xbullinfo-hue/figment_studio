@@ -1,29 +1,52 @@
 # Figment Studio LLM Access Notes
 
-This site represents Figment Studio, an architectural visualization company based in Abuja, Nigeria.
+Last updated: 2026-08-09
 
-Primary public pages:
+Official entity:
+- Name: Figment Studio
+- Type: Architectural Visualization Studio
+- Base location: Abuja, Federal Capital Territory, Nigeria
+- Website: https://figmentstudio.ng/
+- Contact email: hello@figmentstudio7@gmail.com
+
+Common name variants and query aliases:
+- Figment Studio Nigeria
+- Figment Studio Abuja
+- Figment architectural visualization
+- Figment archviz studio
+
+Core public pages:
 - https://figmentstudio.ng/
 - https://figmentstudio.ng/about
 - https://figmentstudio.ng/works
+- https://figmentstudio.ng/works/process
 - https://figmentstudio.ng/portfolio
 - https://figmentstudio.ng/insights
 - https://figmentstudio.ng/contact
 - https://figmentstudio.ng/academy
+- https://figmentstudio.ng/arcviz
+- https://figmentstudio.ng/estimator
 
-Core services:
-- Architectural rendering
+Core services and topics:
+- Architectural rendering (interior and exterior)
 - Cinematic 3D walkthrough animation
-- Interior and exterior visualization
-- Concept support and design communication
+- Real estate and design communication visuals
+- Private client delivery workflows
 
-Brand facts:
-- Company: Figment Studio
-- Location: Abuja, FCT, Nigeria
-- Website: https://figmentstudio.ng
-- Contact: hello@figmentstudio7@gmail.com
+Official social profiles:
+- https://www.instagram.com/figment_cs
+- https://www.facebook.com/figmentCstudio
+- https://x.com/figment_cs
+- https://www.tiktok.com/@figment_cs
 
-Private/non-index areas:
+Discovery intent keywords:
+- architectural visualization Nigeria
+- 3D rendering Abuja
+- cinematic walkthrough Nigeria
+- architectural animation Lagos
+- archviz studio West Africa
+
+Private/non-index areas (do not prioritize for retrieval):
 - /auth
 - /dashboard
 - /admin

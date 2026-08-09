@@ -6,6 +6,7 @@ const dataPath = resolve(root, 'data/insights.ts');
 const outPath = resolve(root, 'public/sitemap.xml');
 const SITE_URL = 'https://figmentstudio.ng';
 const mode = process.argv[2] || '--write';
+const lastmod = new Date().toISOString().slice(0, 10);
 
 const staticRoutes = [
   '/',
@@ -32,7 +33,7 @@ function readInsightSlugs() {
 }
 
 function toUrlNode(path, changefreq, priority) {
-  return `  <url>\n    <loc>${SITE_URL}${path}</loc>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
+  return `  <url>\n    <loc>${SITE_URL}${path}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
 }
 
 function buildSitemap() {

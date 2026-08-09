@@ -17,6 +17,20 @@ const ContactPage: React.FC = () => {
       <Helmet>
         <title>Contact Our Abuja Office | Figment Studio</title>
         <meta name="description" content="Get in touch with Figment Studio in Central Business District, Abuja. Submit your design brief, ask about timelines, or inquire about cinematic 3D walkthroughs." />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: faqs.map((item) => ({
+              '@type': 'Question',
+              name: item.q,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: item.a,
+              },
+            })),
+          })}
+        </script>
       </Helmet>
       <div className="flex flex-col lg:flex-row w-full border-b border-gray-100">
         <section className="w-full lg:w-1/2 p-10 md:p-20 flex flex-col justify-center border-r border-gray-100">

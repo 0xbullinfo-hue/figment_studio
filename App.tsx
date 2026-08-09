@@ -41,10 +41,103 @@ const ScrollToTop: React.FC = () => {
 
 const APP_CANONICAL_ORIGIN = ((import.meta as any).env.VITE_SITE_URL as string | undefined) || 'https://figmentstudio.ng';
 
+type RouteMeta = {
+  title: string;
+  description: string;
+  keywords: string;
+  ogType?: 'website' | 'article';
+};
+
+const DEFAULT_ROUTE_META: RouteMeta = {
+  title: 'Figment Studio | Premium Architectural Visualization',
+  description:
+    'Figment Studio delivers cinematic architectural rendering, 3D walkthrough animation, and interior visualization from Abuja for projects across Nigeria and globally.',
+  keywords:
+    'Figment Studio, architectural visualization Nigeria, 3D rendering Abuja, architectural animation Lagos, archviz studio Nigeria, real estate visualization',
+  ogType: 'website',
+};
+
+const PUBLIC_ROUTE_META: Record<string, RouteMeta> = {
+  '/': DEFAULT_ROUTE_META,
+  '/about': {
+    title: 'About Figment Studio | Architectural Visualization Team in Abuja',
+    description:
+      'Meet the Figment Studio team in Abuja and learn how we produce premium architectural visualization for developers, architects, and real estate brands.',
+    keywords:
+      'about Figment Studio, architectural visualization company Abuja, archviz team Nigeria, 3D rendering studio profile',
+    ogType: 'website',
+  },
+  '/contact': {
+    title: 'Contact Figment Studio | Abuja Architectural Visualization Studio',
+    description:
+      'Contact Figment Studio for architectural rendering, cinematic walkthroughs, and project delivery timelines. Based in Abuja, serving Nigeria and international clients.',
+    keywords:
+      'contact Figment Studio, architectural rendering quote Nigeria, archviz studio Abuja contact, 3D visualization inquiry',
+    ogType: 'website',
+  },
+  '/portfolio': {
+    title: 'Portfolio | Figment Studio Architectural Renders and Walkthroughs',
+    description:
+      'Explore Figment Studio portfolio projects including residential, interior, and commercial architectural visualization work from Abuja, Lagos, and beyond.',
+    keywords:
+      'Figment Studio portfolio, architectural rendering portfolio Nigeria, 3D walkthrough examples, archviz project gallery',
+    ogType: 'website',
+  },
+  '/works': {
+    title: 'Our Works | Figment Studio Premium Architectural Visualization',
+    description:
+      'Browse Figment Studio works in cinematic architectural rendering, interior visualization, and animation for real estate marketing and design communication.',
+    keywords:
+      'Figment Studio works, architectural visualization projects, 3D render studio Nigeria, real estate visual marketing',
+    ogType: 'website',
+  },
+  '/works/process': {
+    title: 'Workflow Process | Figment Studio Delivery Pipeline',
+    description:
+      'See how Figment Studio manages project briefs, scene direction, approvals, and secure private delivery for high-end architectural visualization.',
+    keywords:
+      'architectural rendering process, archviz workflow Nigeria, project delivery pipeline, Figment Studio process',
+    ogType: 'website',
+  },
+  '/insights': {
+    title: 'Insights | Figment Studio on Architectural Visualization Trends',
+    description:
+      'Read Figment Studio insights on architectural visualization trends, cinematic walkthrough impact, and digital design communication in Africa.',
+    keywords:
+      'architectural visualization insights, archviz trends Nigeria, real estate rendering articles, Figment Studio news',
+    ogType: 'website',
+  },
+  '/academy': {
+    title: 'Academy | Figment Studio Learning and Industry Resources',
+    description:
+      'Access Figment Studio academy resources on rendering standards, design storytelling, and production-ready visualization practice.',
+    keywords:
+      'archviz academy, rendering tutorials Nigeria, architectural visualization training, Figment Studio learning',
+    ogType: 'website',
+  },
+  '/arcviz': {
+    title: 'ArcViz Services | Figment Studio 3D Rendering and Animation',
+    description:
+      'Discover Figment Studio ArcViz services for exterior and interior rendering, cinematic animation, and investor-ready visual communication.',
+    keywords:
+      'arcviz services Nigeria, 3D rendering services Abuja, architectural animation studio, real estate visualization service',
+    ogType: 'website',
+  },
+  '/estimator': {
+    title: 'Project Estimator | Figment Studio Architectural Visualization Pricing',
+    description:
+      'Use the Figment Studio estimator to scope architectural rendering and animation projects with transparent timelines and pricing guidance.',
+    keywords:
+      'architectural rendering cost Nigeria, archviz pricing estimator, 3D visualization quote tool, Figment Studio estimator',
+    ogType: 'website',
+  },
+};
+
 const RouteSeo: React.FC = () => {
   const location = useLocation();
   const pathname = location.pathname;
   const canonical = `${APP_CANONICAL_ORIGIN.replace(/\/$/, '')}${pathname === '/' ? '' : pathname}`;
+  const origin = APP_CANONICAL_ORIGIN.replace(/\/$/, '');
 
   const privateRoutePrefixes = [
     '/auth',
@@ -63,10 +156,39 @@ const RouteSeo: React.FC = () => {
   const isPrivateRoute = privateRoutePrefixes.some((prefix) => pathname === prefix || pathname.startsWith(prefix));
   const robots = isPrivateRoute ? 'noindex, nofollow' : 'index, follow';
 
+  const routeMeta = pathname.startsWith('/insights/')
+    ? {
+        title: 'Insight Article | Figment Studio',
+        description: 'Read expert insight articles from Figment Studio on architectural visualization, rendering workflows, and digital property storytelling.',
+        keywords: 'Figment Studio insights, architectural visualization article, archviz knowledge, rendering workflow insights',
+        ogType: 'article' as const,
+      }
+    : (PUBLIC_ROUTE_META[pathname] || DEFAULT_ROUTE_META);
+
   return (
     <Helmet>
+      <title>{routeMeta.title}</title>
+      <meta name="description" content={routeMeta.description} />
+      <meta name="keywords" content={routeMeta.keywords} />
+      <meta name="author" content="Figment Studio" />
+      <meta name="geo.region" content="NG-FC" />
+      <meta name="geo.placename" content="Abuja" />
+      <meta name="geo.position" content="9.0765;7.3986" />
+      <meta name="ICBM" content="9.0765, 7.3986" />
       <link rel="canonical" href={canonical} />
       <meta name="robots" content={robots} />
+      <meta property="og:type" content={routeMeta.ogType || 'website'} />
+      <meta property="og:url" content={canonical} />
+      <meta property="og:site_name" content="Figment Studio" />
+      <meta property="og:title" content={routeMeta.title} />
+      <meta property="og:description" content={routeMeta.description} />
+      <meta property="og:locale" content="en_NG" />
+      <meta property="og:image" content={`${origin}/og-image.png`} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={routeMeta.title} />
+      <meta name="twitter:description" content={routeMeta.description} />
+      <meta name="twitter:image" content={`${origin}/og-image.png`} />
+      <meta name="twitter:site" content="@figment_cs" />
     </Helmet>
   );
 };
