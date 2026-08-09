@@ -15,7 +15,7 @@ const TEAM = [
 
 const PROCESS = [
   { n: '01', title: 'Brief & Sketch Upload', body: 'Submit your project brief and reference images. We lock geometry constraints early to prevent costly revisions.' },
-  { n: '02', title: 'AI Scene Planning', body: 'Use our guided camera, motion, and context tools to direct the scene output. Our AI co-pilot helps find the best angles.' },
+  { n: '02', title: 'Guided Scene Direction', body: 'Use our camera, motion, and context workflow to direct scene output and refine the strongest presentation angles.' },
   { n: '03', title: 'Payment Settlement', body: 'Pay in USD or NGN via Paystack or Flutterwave with full SSL security. Transparent pricing, no hidden fees.' },
   { n: '04', title: 'Private Delivery', body: 'Access assets, revisions, and handoff via your secure dashboard. Every file encrypted and watermark-free.' },
 ];
