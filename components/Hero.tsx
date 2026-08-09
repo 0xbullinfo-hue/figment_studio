@@ -113,10 +113,6 @@ const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenArcViz, onOpenWorkPro
               {slide.category}  -  {slide.location}
             </span>
           </div>
-          <div className="hidden md:flex items-center gap-3 text-[10px] tracking-[0.22em] uppercase text-primary/80 font-medium">
-            <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
-            AI Scene Planning
-          </div>
         </div>
 
         {/* Main headline */}

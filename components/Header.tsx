@@ -158,7 +158,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
             aria-label="Figment Creative Studio Home"
           >
             <Logo
-              size={36}
+              size={42}
               showWordmark
               showTagline
             />

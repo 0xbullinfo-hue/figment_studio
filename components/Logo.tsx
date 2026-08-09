@@ -39,7 +39,7 @@ interface LogoProps {
  *  showWordmark + showTagline      -> flame mark + "figment" + "creative studio" (footer, hero)
  */
 const Logo: React.FC<LogoProps> = ({
-  size = 36,
+  size = 40,
   className = '',
   textColor = '#FFFFFF',
 }) => {
@@ -69,7 +69,6 @@ const Logo: React.FC<LogoProps> = ({
           display    : 'block',
           flexShrink : 0,
           filter     : imgFilter,
-          transform  : 'translateY(-2px)', // Optical adjustment to align the visual top of the logo text with the menu text
         }}
       />
     </div>
