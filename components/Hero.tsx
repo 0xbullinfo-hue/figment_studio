@@ -15,7 +15,7 @@ const SLIDES = [
     location: 'Maitama, Abuja',
     headline: ['We Make', 'Blueprints', 'Breathe.'],
     accent: 2, // index of accented word
-    sub: 'Cinematic 3D renders and AI-guided design for discerning architects.',
+    sub: 'Cinematic 3D renders and private visualization workflows for discerning architects.',
   },
   {
     id: 1,

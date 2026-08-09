@@ -53,7 +53,7 @@ const PLANS = [
     tier: 'Starter',
     price: 'Free',
     sub: 'For explorers',
-    features: ['Public AI teaser tools', '1 concept brief export', 'Community support', 'Portfolio access'],
+    features: ['Public design discovery tools', '1 concept brief export', 'Community support', 'Portfolio access'],
     cta: 'Try Instant Estimate',
     ctaPath: '/arcviz',
     featured: false,
@@ -547,7 +547,7 @@ const LandingPage: React.FC = () => {
                   <p className="text-xs text-text-secondary max-w-[220px] leading-relaxed font-sans">
                     {plan.tier === 'Studio Pro'
                       ? 'Mentorship cohorts and GPU cloud renders are currently in closed preview.'
-                      : 'Free public AI teaser tools and conceptual sketch planning are launching soon.'}
+                      : 'Free design discovery tools and conceptual sketch planning are launching soon.'}
                   </p>
                 </div>
               </article>

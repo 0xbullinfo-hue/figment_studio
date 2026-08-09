@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
           <div className="lg:col-span-4 space-y-8">
             <Logo showWordmark showTagline size={38} />
             <p className="text-sm leading-relaxed max-w-xs font-sans" style={{ color: 'rgba(255,255,255,0.3)' }}>
-              Nigeria's leading architectural visualization house. Cinematic renders, AI-guided design, and private delivery for world-class projects.
+              Nigeria's leading architectural visualization house. Cinematic renders, secure delivery, and studio-grade workflows for world-class projects.
             </p>
 
             {/* Contact info */}
