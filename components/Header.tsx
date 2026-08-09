@@ -159,6 +159,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
           >
             <Logo
               size={42}
+              className="translate-y-[2px]"
               showWordmark
               showTagline
             />
