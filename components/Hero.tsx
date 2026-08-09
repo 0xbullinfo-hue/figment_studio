@@ -182,8 +182,8 @@ const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenArcViz, onOpenWorkPro
             <div className="space-y-1.5">
               <h4 className="text-[10px] tracking-[0.22em] uppercase text-white/35 font-bold font-sans">Contact</h4>
               <p className="text-xs text-white/60 leading-relaxed font-sans">
-                T. +234 810 000 0000<br />
-                <a href="mailto:hello@figmentstudio7@gmail.com" className="hover:text-primary transition-colors">hello@figmentstudio7@gmail.com</a>
+                T. +234 816 829 9111<br />
+                <a href="mailto:figmentstudio7@gmail.com" className="hover:text-primary transition-colors">figmentstudio7@gmail.com</a>
               </p>
             </div>
             <div className="space-y-1.5 flex items-center">
