@@ -52,8 +52,8 @@ const Footer: React.FC = () => {
               <div>
                 <p className="text-[9px] tracking-[0.22em] uppercase font-semibold font-sans mb-1" style={{ color: 'rgba(255,255,255,0.18)' }}>Contact</p>
                 <p className="text-xs font-sans" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                  T. +234 810 000 0000<br />
-                  <a href="mailto:hello@figmentstudio7@gmail.com" className="hover:text-[#F07A3A] transition-colors">hello@figmentstudio7@gmail.com</a>
+                  T. +234 816 829 9111<br />
+                  <a href="mailto:figmentstudio7@gmail.com" className="hover:text-[#F07A3A] transition-colors">figmentstudio7@gmail.com</a>
                 </p>
               </div>
             </div>
