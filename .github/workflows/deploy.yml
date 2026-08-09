@@ -34,5 +34,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: /figmentstudio.ng/public_html/
+          server-dir: /figmentstudio.ng/
           dangerous-clean-slate: true
