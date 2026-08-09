@@ -2,14 +2,12 @@
   RewriteEngine On
   RewriteBase /
   RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_URI} ^/$ [OR]
-  RewriteCond %{REQUEST_URI} ^/(about|contact|works|portfolio|insights|academy|arcviz|estimator|feedback|auth|dashboard|admin|billing|payment|assets|support|profile|new-project|success)/?$ [OR]
-  RewriteCond %{REQUEST_URI} ^/insights/.+$ [OR]
-  RewriteCond %{REQUEST_URI} ^/works/.+$ [OR]
-  RewriteCond %{REQUEST_URI} ^/project/.+$
-  RewriteRule . /index.html [L]
 
-  RewriteRule . /404.html [R=404,L]
+  # Serve existing files and folders directly.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # SPA fallback for client-side routes.
+  RewriteRule . /index.html [L]
 </IfModule>
