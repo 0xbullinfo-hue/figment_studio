@@ -1,4 +1,4 @@
-﻿
+
 import React, { useState, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 
@@ -95,6 +95,8 @@ const NewProjectRequest: React.FC<NewProjectRequestProps> = ({ onBack, onSubmit 
   const [projectName, setProjectName] = useState('');
   const [visionDescription, setVisionDescription] = useState('');
   const [priority, setPriority] = useState<'Standard' | 'Urgent'>('Standard');
+  const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const [vizEnabled, setVizEnabled] = useState(true);
   const [animEnabled, setAnimEnabled] = useState(false);
@@ -235,8 +237,31 @@ const NewProjectRequest: React.FC<NewProjectRequestProps> = ({ onBack, onSubmit 
               <div className="text-center relative z-10">
                 <p className="font-black text-xs uppercase tracking-widest text-slate-900">Attach Architectural Blueprints</p>
                 <p className="text-[10px] text-slate-400 font-bold uppercase mt-1">CAD, PDF, or RVT (Max 50MB)</p>
+                {attachedFiles.length > 0 && (
+                  <p className="text-[11px] text-primary font-bold uppercase mt-2">
+                    {attachedFiles.length} file(s) selected ({attachedFiles.map(f => f.name).join(', ')})
+                  </p>
+                )}
+                {uploadError && (
+                  <p className="text-xs text-red-500 font-bold mt-2">{uploadError}</p>
+                )}
               </div>
-              <input className="absolute inset-0 opacity-0 cursor-pointer" type="file" />
+              <input
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                type="file"
+                multiple
+                accept=".pdf,.dwg,.rvt,.skp,.jpg,.png"
+                onChange={(e) => {
+                  const files = Array.from(e.target.files || []);
+                  const totalSize = files.reduce((sum, f) => sum + f.size, 0);
+                  if (totalSize > 50 * 1024 * 1024) {
+                    setUploadError('Total file size exceeds 50MB limit');
+                    return;
+                  }
+                  setAttachedFiles(files);
+                  setUploadError(null);
+                }}
+              />
             </section>
           </div>
 
@@ -272,7 +297,7 @@ const NewProjectRequest: React.FC<NewProjectRequestProps> = ({ onBack, onSubmit 
               <div className="pt-6 flex flex-col gap-4">
                 <button
                   onClick={handleSubmit}
-                  disabled={pricing.total === 0 || !projectName}
+                  disabled={pricing.total === 0 || !projectName.trim()}
                   className="w-full py-5 bg-primary text-white rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-primary/20 hover:brightness-110 active:scale-95 transition-all disabled:opacity-50"
                 >
                   Submit Project Request

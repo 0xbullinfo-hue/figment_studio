@@ -33,7 +33,7 @@ export const INSIGHT_ARTICLES: InsightArticle[] = [
     readTime: '4 min read',
     title: 'Why Cinematic Walkthroughs Close More Property Deals',
     excerpt: 'Data from 200+ projects reveals the compelling correlation between animation quality and investor conversion rates.',
-    img: '/figment_media/3D-Apartment-Rendering-Lagos-state.png',
+    img: '/figment_media/3D-Apartment-Rendering-Lagos-state 2.png',
     paragraphs: [
       'Why do static renders sometimes fail to capture the imagination of real estate investors? The answer lies in the human brain\'s response to spatial dynamics. A study of over 200 developments across Nigeria shows a clear trend: projects backed by high-fidelity cinematic walkthroughs close deals 40% faster.',
       '### The Psychology of Motion',

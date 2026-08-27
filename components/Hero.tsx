@@ -1,9 +1,8 @@
-﻿
+
 import React, { useState, useEffect, useCallback } from 'react';
 
 interface HeroProps {
   onStartProject: () => void;
-  onOpenArcViz: () => void;
   onOpenWorkProcess: () => void;
 }
 
@@ -19,7 +18,7 @@ const SLIDES = [
   },
   {
     id: 1,
-    image: '/figment_media/3D-Apartment-Rendering-Lagos-state.png',
+    image: '/figment_media/3D-Apartment-Rendering-Lagos-state 2.png',
     category: 'Residential',
     location: 'Lagos State',
     headline: ['Vision', 'Made', 'Tangible.'],
@@ -37,7 +36,7 @@ const SLIDES = [
   },
 ];
 
-const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenArcViz, onOpenWorkProcess }) => {
+const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenWorkProcess }) => {
   const [current, setCurrent] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -139,10 +138,10 @@ const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenArcViz, onOpenWorkPro
               Start Project
             </button>
             <button
-              onClick={onOpenArcViz}
+              onClick={onOpenWorkProcess}
               className="border border-white/20 hover:border-primary text-white hover:text-primary text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 bg-black/30 backdrop-blur-md transition-all duration-300 hover:translate-y-[-2px] focus:outline-none"
             >
-              ArcViz AI
+              Our Process
             </button>
           </div>
           {/* Progress + slide controls aligned under the buttons */}

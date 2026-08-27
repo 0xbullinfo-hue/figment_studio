@@ -1,8 +1,9 @@
 ﻿
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Logo from './Logo.tsx';
 import { useStudioStore } from '../store.ts';
+import { getReceipts } from '../services/apiClient.ts';
 
 interface BillingManagerProps {
   onBack: () => void;
@@ -10,33 +11,84 @@ interface BillingManagerProps {
 }
 
 const BillingManager: React.FC<BillingManagerProps> = ({ onBack, onNavigate }) => {
-  const { proposals } = useStudioStore();
-  const [invoices, setInvoices] = useState(
-    proposals.map(p => ({
+  const { proposals, receipts, auth, setReceipts } = useStudioStore();
+
+  useEffect(() => {
+    if (!auth.accessToken) return;
+    getReceipts(auth.accessToken)
+      .then((response) => setReceipts(response.receipts))
+      .catch(() => undefined);
+  }, [auth.accessToken, setReceipts]);
+
+  const invoices = useMemo(() => {
+    const proposalInvoices = proposals.map(p => ({
       id: p.id,
       project: p.projectName,
       company: p.clientName,
       date: p.date,
       amount: p.total,
       status: p.status === 'Approved' ? 'Paid' : 'Pending'
-    }))
-  );
+    }));
 
-  useEffect(() => {
-    setInvoices(
-      proposals.map(p => ({
-        id: p.id,
-        project: p.projectName,
-        company: p.clientName,
-        date: p.date,
-        amount: p.total,
-        status: p.status === 'Approved' ? 'Paid' : 'Pending'
-      }))
-    );
-  }, [proposals]);
+    const receiptInvoices = receipts.map(receipt => ({
+      id: receipt.invoiceId,
+      project: receipt.project,
+      company: receipt.clientName,
+      date: receipt.createdAt.split('T')[0],
+      amount: receipt.amount,
+      status: receipt.status,
+    }));
+
+    const mergedMap = new Map<string, { id: string; project: string; company: string; date: string; amount: number; status: string }>();
+    [...proposalInvoices, ...receiptInvoices].forEach(inv => {
+      mergedMap.set(inv.id, { ...inv, status: inv.status.toLowerCase() === 'paid' ? 'Paid' : inv.status });
+    });
+
+    return Array.from(mergedMap.values());
+  }, [proposals, receipts]);
 
   const handleUploadPOP = (id: string) => {
-    setInvoices(prev => prev.map(inv => inv.id === id ? { ...inv, status: 'Verifying' } : inv));
+    // This is intentionally a UI-only status change for the current demo state.
+    console.info('POP upload requested for invoice', id);
+  };
+
+  const handleDownloadReceipt = async (invoiceId: string, project: string, amount: number) => {
+    try {
+      const { jsPDF } = await import('jspdf');
+      const pdf = new jsPDF({ unit: 'pt', format: 'a4' });
+      const width = pdf.internal.pageSize.getWidth();
+      const margin = 42;
+
+      pdf.setFillColor(240, 122, 58);
+      pdf.rect(0, 0, width, 64, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(22);
+      pdf.text('FIGMENT STUDIO', margin, 32);
+      pdf.setFontSize(10);
+      pdf.text('RECEIPT', width - margin - 60, 32);
+
+      pdf.setTextColor(20, 20, 20);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(11);
+      let y = 98;
+      pdf.text(`Invoice ID: ${invoiceId}`, margin, y);
+      y += 22;
+      pdf.text(`Project: ${project}`, margin, y);
+      y += 22;
+      pdf.text(`Amount: ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)}`, margin, y);
+      y += 24;
+      pdf.text(`Generated: ${new Date().toLocaleDateString()}`, margin, y);
+      y += 28;
+      pdf.line(margin, y, width - margin, y);
+      y += 24;
+      pdf.text('Payment details for reference', margin, y);
+
+      pdf.save(`Figment_Receipt_${String(invoiceId).replace(/[^a-zA-Z0-9_-]/g, '')}.pdf`);
+    } catch (error) {
+      console.error('Failed to generate billing receipt', error);
+      window.alert('Unable to download this receipt at the moment.');
+    }
   };
 
   const getStatusClass = (status: string) => {
@@ -134,7 +186,11 @@ const BillingManager: React.FC<BillingManagerProps> = ({ onBack, onNavigate }) =
                           Upload Proof
                         </button>
                       )}
-                      <button className="size-8 text-gray-300 hover:text-primary transition-colors">
+                      <button
+                        onClick={() => handleDownloadReceipt(inv.id, inv.project, inv.amount)}
+                        className="size-8 text-gray-300 hover:text-primary transition-colors"
+                        aria-label={`Download receipt for ${inv.project}`}
+                      >
                         <span className="material-symbols-outlined text-xl">download</span>
                       </button>
                     </td>

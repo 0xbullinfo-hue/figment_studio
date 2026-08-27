@@ -1,9 +1,51 @@
-﻿import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStudioStore } from '../store';
-import BeforeAfterSlider from './BeforeAfterSlider';
 import Logo from './Logo.tsx';
+
+const CompareSlider: React.FC<{ beforeImage: string; afterImage: string }> = ({ beforeImage, afterImage }) => {
+  const [sliderPos, setSliderPos] = useState(50);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleMove = (clientX: number) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+    setSliderPos((x / rect.width) * 100);
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative w-full aspect-[16/9] overflow-hidden select-none cursor-ew-resize bg-black"
+      onMouseMove={(e) => e.buttons === 1 && handleMove(e.clientX)}
+      onTouchMove={(e) => e.touches[0] && handleMove(e.touches[0].clientX)}
+      onClick={(e) => handleMove(e.clientX)}
+    >
+      <img src={afterImage} alt="Final Render" className="absolute inset-0 w-full h-full object-cover" />
+      <div
+        className="absolute inset-0 overflow-hidden"
+        style={{ width: `${sliderPos}%` }}
+      >
+        <img
+          src={beforeImage}
+          alt="Clay / Pre-render"
+          className="absolute inset-0 w-full h-full object-cover max-w-none"
+          style={{ width: containerRef.current ? `${containerRef.current.clientWidth}px` : '100%' }}
+        />
+      </div>
+      <div
+        className="absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_10px_rgba(0,0,0,0.5)] z-20 flex items-center justify-center -translate-x-1/2"
+        style={{ left: `${sliderPos}%` }}
+      >
+        <div className="size-8 rounded-full bg-primary text-white flex items-center justify-center shadow-lg border-2 border-white text-xs">
+          <span className="material-symbols-outlined text-sm">unfold_more</span>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const DeliveryPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -87,7 +129,7 @@ const DeliveryPage: React.FC = () => {
           </div>
 
           <div className="group relative overflow-hidden rounded-[2.5rem] shadow-2xl border border-gray-100 bg-gray-50">
-            <BeforeAfterSlider
+            <CompareSlider
               beforeImage="https://images.unsplash.com/photo-1590494165264-1ebe3602eb80?q=80&w=2000&auto=format&fit=crop"
               afterImage={project.imageUrl}
             />

@@ -25,7 +25,7 @@ export const IMAGES = {
     story2: "/figment_media/3D-Rendering-B2B-Abuja 3.png"
   },
 
-  delivery: "/figment_media/3D-Apartment-Rendering-Lagos-state.png",
+  delivery: "/figment_media/3D-Apartment-Rendering-Lagos-state 2.png",
 
   portfolio: [
     { 

@@ -1,6 +1,8 @@
-﻿
+
 import React, { useState, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { IMAGES } from '../constants.ts';
 import { useStudioStore } from '../store.ts';
 
@@ -151,33 +153,78 @@ const Estimator: React.FC<EstimatorProps> = ({ onBack, onFinish }) => {
 
   const handleDownloadQuote = () => {
     setIsDownloading(true);
-    const content = `
-FIGMENT STUDIO - INSTANT QUOTE PROPOSAL
-----------------------------------------
-Project: ${projectName || 'Untitled Design'}
-Date: ${new Date().toLocaleDateString()}
-Priority: ${priority}
-Estimated Delivery: ${pricing.timeline}
+    try {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 20;
 
-Breakdown:
-${pricing.items.map(i => `- ${i.label}: $${i.price.toLocaleString()}`).join('\n')}
+      // Header Banner
+      doc.setFillColor(26, 26, 26);
+      doc.rect(0, 0, pageWidth, 50, 'F');
+      doc.setTextColor(240, 122, 58);
+      doc.setFontSize(22);
+      doc.setFont('helvetica', 'bold');
+      doc.text('FIGMENT STUDIO', margin, 24);
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Premium Architectural Visualization | Abuja, Nigeria', margin, 34);
 
-----------------------------------------
-TOTAL ESTIMATED INVESTMENT: $${pricing.total.toLocaleString()}
-----------------------------------------
-    `.trim();
+      // Quote Info
+      doc.setTextColor(26, 26, 26);
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text('QUOTE PROPOSAL', margin, 68);
 
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `Figment_Quote_${projectName.replace(/\s+/g, '_') || 'Studio'}.txt`;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Quote ID: FIG-${Date.now().toString().slice(-6)}`, margin, 78);
+      doc.text(`Date: ${new Date().toLocaleDateString('en-NG')}`, margin, 84);
+      doc.text(`Client: ${clientName || 'Guest Client'}`, margin, 90);
+      doc.text(`Project: ${projectName || 'Untitled Design'}`, margin, 96);
+      doc.text(`Priority: ${priority}`, margin, 102);
+      doc.text(`Estimated Delivery: ${pricing.timeline}`, margin, 108);
 
-    setTimeout(() => {
-      link.click();
-      URL.revokeObjectURL(url);
+      // Table
+      const tableBody = pricing.items.map((item) => [
+        item.label,
+        `$${item.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+      ]);
+
+      autoTable(doc, {
+        startY: 118,
+        head: [['Service / Scope', 'Amount (USD)']],
+        body: tableBody,
+        theme: 'grid',
+        headStyles: { fillColor: [240, 122, 58], textColor: [255, 255, 255], fontStyle: 'bold' },
+        bodyStyles: { fontSize: 10 },
+        alternateRowStyles: { fillColor: [250, 250, 250] },
+      });
+
+      // Total
+      const finalY = ((doc as any).lastAutoTable?.finalY || 180) + 14;
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text('TOTAL ESTIMATED INVESTMENT:', margin, finalY);
+      doc.setTextColor(240, 122, 58);
+      doc.setFontSize(18);
+      doc.text(`$${pricing.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, margin, finalY + 10);
+
+      // Terms / Footer
+      doc.setTextColor(128, 128, 128);
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.text('This quote is valid for 14 days. Prices exclude applicable local taxes.', margin, finalY + 28);
+      doc.text('Payment Channels: Paystack / Flutterwave / Bank Transfer | FIGMENT STUDIO', margin, finalY + 34);
+      doc.text('Contact: hello@figmentstudio.ng | +234 816 829 9111', margin, finalY + 40);
+
+      setTimeout(() => {
+        doc.save(`Figment_Quote_${(projectName || 'Studio').replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
+        setIsDownloading(false);
+      }, 500);
+    } catch {
       setIsDownloading(false);
-    }, 1000);
+    }
   };
 
   const handleRequestFinish = () => {

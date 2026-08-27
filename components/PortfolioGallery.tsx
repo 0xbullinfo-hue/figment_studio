@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -121,7 +121,6 @@ const PortfolioGallery: React.FC = () => {
       {/* Header Info & Category Filters */}
       <div className="px-8 md:px-14 lg:px-20 max-w-[1600px] w-full mx-auto flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
         <div className="space-y-4 max-w-xl text-left">
-          <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold font-sans">WORKS GALLERY</p>
           <h1 className="font-display font-light text-white uppercase tracking-tight leading-[0.9] text-5xl lg:text-7xl">
             Our<br />
             <em className="font-light not-italic text-white/30">Works</em>
@@ -161,8 +160,8 @@ const PortfolioGallery: React.FC = () => {
         </div>
       </div>
 
-      {/* Search and Settings Controls Bar */}
-      <div className="px-8 md:px-14 lg:px-20 max-w-[1600px] w-full mx-auto mb-10 flex flex-col sm:flex-row items-center gap-4">
+      {/* Search Bar */}
+      <div className="px-8 md:px-14 lg:px-20 max-w-[1600px] w-full mx-auto mb-10 flex items-center gap-4">
         <div className="relative flex-1 w-full">
           <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-white/40">search</span>
           <input
@@ -175,18 +174,13 @@ const PortfolioGallery: React.FC = () => {
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
+              aria-label="Clear search query"
               className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors"
             >
               <span className="material-symbols-outlined text-base">close</span>
             </button>
           )}
         </div>
-        <button
-          className="flex items-center justify-center gap-2 border border-white/5 hover:border-white/20 bg-[#141416] px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider text-white/70 hover:text-white transition-all font-sans w-full sm:w-auto cursor-pointer"
-        >
-          <span className="material-symbols-outlined text-base">settings</span>
-          Settings
-        </button>
       </div>
 
       {/* Vertical Masonry Grid Container */}
@@ -210,6 +204,8 @@ const PortfolioGallery: React.FC = () => {
                       <img
                         src={item.url}
                         alt={item.title}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover transition-all duration-[900ms] group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-all duration-500" />

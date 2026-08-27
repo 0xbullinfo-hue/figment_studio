@@ -49,8 +49,8 @@
 
 [[redirects]]
   from = "/arcviz"
-  to = "/index.html"
-  status = 200
+  to = "/portfolio"
+  status = 301
 
 [[redirects]]
   from = "/estimator"
@@ -119,6 +119,6 @@
 
 [[redirects]]
   from = "/*"
-  to = "/404.html"
-  status = 404
-  force = true
+  to = "/index.html"
+  status = 200
+

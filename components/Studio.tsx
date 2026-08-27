@@ -10,7 +10,6 @@ const Studio: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-[1600px] mx-auto">
         <div className="space-y-10 text-left">
           <div className="space-y-4">
-            <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold font-sans">Our Studio</p>
             <h2
               className="font-display font-light text-white leading-tight"
               style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4rem)', lineHeight: 1.06 }}

@@ -81,6 +81,17 @@ export interface ProjectProposal {
   attachments?: ProposalAttachment[];
 }
 
+export interface InvoiceReceipt {
+  id: string;
+  invoiceId: string;
+  project: string;
+  clientName: string;
+  amount: number;
+  status: 'Pending' | 'Paid' | 'Verifying';
+  createdAt: string;
+  source: 'estimate' | 'payment';
+}
+
 export interface PortfolioItem {
   id: number;
   type: string;

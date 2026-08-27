@@ -16,25 +16,13 @@ import { meRequest } from './services/apiClient.ts';
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
   useEffect(() => {
-    const resetScroll = () => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTo(0, 0);
-      document.body.scrollTo(0, 0);
-
-      const scrollableContainers = document.querySelectorAll('.overflow-y-auto, main, .custom-scrollbar, [class*="overflow-y-scroll"]');
-      scrollableContainers.forEach(container => {
-        container.scrollTop = 0;
-      });
-    };
-
-    resetScroll();
-
-    // Run at staggered delays to capture lazy route loads and component mounts
-    const timeouts = [20, 50, 100, 200, 400, 800].map(delay =>
-      setTimeout(resetScroll, delay)
-    );
-
-    return () => timeouts.forEach(clearTimeout);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    const scrollableContainers = document.querySelectorAll('.overflow-y-auto, main, .custom-scrollbar, [class*="overflow-y-scroll"]');
+    scrollableContainers.forEach(container => {
+      container.scrollTop = 0;
+    });
   }, [pathname]);
   return null;
 };
@@ -115,14 +103,6 @@ const PUBLIC_ROUTE_META: Record<string, RouteMeta> = {
       'archviz academy, rendering tutorials Nigeria, architectural visualization training, Figment Studio learning',
     ogType: 'website',
   },
-  '/arcviz': {
-    title: 'ArcViz Services | Figment Studio 3D Rendering and Animation',
-    description:
-      'Discover Figment Studio ArcViz services for exterior and interior rendering, cinematic animation, and investor-ready visual communication.',
-    keywords:
-      'arcviz services Nigeria, 3D rendering services Abuja, architectural animation studio, real estate visualization service',
-    ogType: 'website',
-  },
   '/estimator': {
     title: 'Project Estimator | Figment Studio Architectural Visualization Pricing',
     description:
@@ -199,7 +179,6 @@ const Estimator = lazy(() => import('./components/Estimator.tsx'));
 const PortfolioGallery = lazy(() => import('./components/PortfolioGallery.tsx'));
 const AboutPage = lazy(() => import('./components/AboutPage.tsx'));
 const ContactPage = lazy(() => import('./components/ContactPage.tsx'));
-const ArcVizPage = lazy(() => import('./components/ArcVizPage.tsx'));
 const ClientDashboard = lazy(() => import('./components/ClientDashboard.tsx'));
 const AuthPage = lazy(() => import('./components/AuthPage.tsx'));
 const MarkupTool = lazy(() => import('./components/MarkupTool.tsx'));
@@ -230,10 +209,10 @@ const AppOutlet = () => {
   );
 };
 
-const Layout = ({ onOpenVision }: { onOpenVision: () => void }) => {
+const Layout = () => {
   return (
     <div className="relative flex flex-col min-h-screen overflow-x-hidden bg-background">
-      <Header onOpenVision={onOpenVision} />
+      <Header />
       <main className="flex-1 flex flex-col">
         <AppOutlet />
       </main>
@@ -254,14 +233,8 @@ const DashboardLayout = () => {
 };
 
 const AppRoutes = () => {
-  const [isVisionAssistantOpen, setIsVisionAssistantOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
   const { auth, addProposal, setAuthSession, logout } = useStudioStore();
-
-  useEffect(() => {
-    setIsVisionAssistantOpen(false);
-  }, [location.pathname]);
 
   useEffect(() => {
     if (!auth.isAuthenticated || !auth.accessToken) {
@@ -298,7 +271,8 @@ const AppRoutes = () => {
   }, [auth.accessToken]);
 
   const handleNewProjectSubmit = (data: { projectName: string; type: string; total: number; details: string }) => {
-    const id = `FIG-${Math.floor(Math.random() * 10000) + 10000}`;
+    const uniqueSuffix = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID().slice(0, 6).toUpperCase() : `${Math.floor(Math.random() * 10000) + 10000}`;
+    const id = `FIG-${uniqueSuffix}`;
     addProposal({
       id,
       clientName: 'Julian Traore', // Current simulated logged-in client
@@ -315,7 +289,7 @@ const AppRoutes = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Layout onOpenVision={() => setIsVisionAssistantOpen(true)} />}>
+        <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
           <Route path="estimator" element={<Estimator onBack={() => navigate(-1)} onFinish={(data) => navigate('/success', { state: { invoiceId: data.id, amount: data.total, project: data.projectName } })} />} />
           <Route path="portfolio" element={<PortfolioGallery />} />
@@ -323,7 +297,6 @@ const AppRoutes = () => {
           <Route path="works/process" element={<WorkProcessPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="contact" element={<ContactPage />} />
-          <Route path="arcviz" element={<ArcVizPage />} />
           <Route path="insights" element={<InsightsPage />} />
           <Route path="insights/:slug" element={<InsightsPage />} />
           <Route path="feedback" element={<FeedbackForm onFinish={() => navigate(-1)} />} />
@@ -332,7 +305,7 @@ const AppRoutes = () => {
 
         <Route element={<DashboardLayout />}>
           <Route path="auth" element={<AuthPage onLogin={(role) => navigate(role === 'admin' ? '/admin' : '/dashboard')} onBack={() => navigate(-1)} />} />
-          <Route path="dashboard" element={<ProtectedRoute requiredRole="client"><ClientDashboard onOpenVision={() => setIsVisionAssistantOpen(true)} /></ProtectedRoute>} />
+          <Route path="dashboard" element={<ProtectedRoute requiredRole="client"><ClientDashboard /></ProtectedRoute>} />
           <Route path="admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
           <Route path="billing" element={<BillingManager onBack={() => navigate(-1)} onNavigate={(path, state) => navigate(path, state ? { state } : undefined)} />} />
           <Route path="payment" element={<PaymentPortal onBack={() => navigate(-1)} />} />
@@ -350,12 +323,10 @@ const AppRoutes = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {isVisionAssistantOpen && (
-        <VisionAssistant onClose={() => setIsVisionAssistantOpen(false)} />
-      )}
+      <VisionAssistant />
     </>
   );
-}
+};
 
 const App: React.FC = () => {
   return (

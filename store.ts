@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Project, ProjectProposal, PortfolioItem, AcademyRegistration, ClientReview } from './types';
+import { Project, ProjectProposal, PortfolioItem, AcademyRegistration, ClientReview, InvoiceReceipt } from './types';
 import { INITIAL_PROJECTS, IMAGES } from './constants';
 
 type UserRole = 'guest' | 'client' | 'admin';
@@ -19,9 +19,9 @@ interface AuthSession {
 
 interface StudioState {
   auth: AuthSession;
-  arcvizTrialUsed: number;
   projects: Project[];
   proposals: ProjectProposal[];
+  receipts: InvoiceReceipt[];
   portfolioItems: PortfolioItem[];
   academyRegistrations: AcademyRegistration[];
   reviews: ClientReview[];
@@ -37,13 +37,15 @@ interface StudioState {
   }) => void;
   logout: () => void;
   setPlan: (plan: SubscriptionPlan) => void;
-  incrementArcvizTrial: () => void;
   addProject: (project: Project) => void;
   updateProject: (project: Project) => void;
   deleteProject: (id: string) => void;
   setProjects: (projects: Project[]) => void;
   addProposal: (proposal: ProjectProposal) => void;
   updateProposalStatus: (id: string, status: 'Approved' | 'Rejected') => void;
+  addReceipt: (receipt: InvoiceReceipt) => void;
+  updateReceiptStatus: (invoiceId: string, status: InvoiceReceipt['status']) => void;
+  setReceipts: (receipts: InvoiceReceipt[]) => void;
   addPortfolioItem: (item: PortfolioItem) => void;
   updatePortfolioItem: (item: PortfolioItem) => void;
   deletePortfolioItem: (id: number) => void;
@@ -64,7 +66,6 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
     plan: 'trial',
     name: 'Guest User',
   },
-  arcvizTrialUsed: 0,
   projects: INITIAL_PROJECTS,
   proposals: [
     { 
@@ -77,6 +78,18 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
       date: new Date().toISOString().split('T')[0], 
       details: 'High-end 3D walkthrough requested for a 12-story commercial tower.',
       attachments: [{ name: 'Complex_Brief.pdf', url: '#', size: '2.4 MB' }]
+    }
+  ],
+  receipts: [
+    {
+      id: 'RCPT-1001',
+      invoiceId: 'PROP-901',
+      project: 'Maitama Office Complex',
+      clientName: 'Sarah Jenkins',
+      amount: 12500,
+      status: 'Pending',
+      createdAt: new Date().toISOString(),
+      source: 'estimate',
     }
   ],
   portfolioItems: IMAGES.gallery,
@@ -183,10 +196,6 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
     },
   })),
 
-  incrementArcvizTrial: () => set((state) => ({
-    arcvizTrialUsed: state.arcvizTrialUsed + 1,
-  })),
-
   addProject: (project) => set((state) => ({ 
     projects: [project, ...state.projects] 
   })),
@@ -207,6 +216,18 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
     proposals: [proposal, ...state.proposals] 
   })),
 
+  addReceipt: (receipt) => set((state) => ({
+    receipts: [receipt, ...state.receipts.filter(item => item.invoiceId !== receipt.invoiceId)]
+  })),
+
+  updateReceiptStatus: (invoiceId, status) => set((state) => ({
+    receipts: state.receipts.map(receipt => receipt.invoiceId === invoiceId ? { ...receipt, status } : receipt),
+  })),
+
+  setReceipts: (receipts) => set(() => ({
+    receipts,
+  })),
+
   updateProposalStatus: (id, status) => set((state) => {
     const updatedProposals = state.proposals.map(p => p.id === id ? { ...p, status } : p);
     
@@ -214,8 +235,9 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
     if (status === 'Approved') {
       const prop = state.proposals.find(p => p.id === id);
       if (prop) {
+        const uniqueId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID().slice(0, 8).toUpperCase() : Math.floor(Math.random() * 1000);
         const newProject: Project = {
-          id: `FS-${Math.floor(Math.random() * 1000)}`,
+          id: `FS-${uniqueId}`,
           title: prop.projectName,
           category: prop.type,
           location: 'Abuja (TBD)',
@@ -291,10 +313,20 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
   name: 'figment-studio-store',
   version: 2,
   partialize: (state) => ({
-    auth: state.auth,
-    arcvizTrialUsed: state.arcvizTrialUsed,
+    auth: {
+      isAuthenticated: state.auth.isAuthenticated,
+      role: state.auth.role,
+      plan: state.auth.plan,
+      name: state.auth.name,
+      id: state.auth.id,
+      email: state.auth.email,
+      // Tokens are intentionally omitted from localStorage persistence to prevent XSS exposure
+      accessToken: '',
+      refreshToken: '',
+    },
     projects: state.projects,
     proposals: state.proposals,
+    receipts: state.receipts,
     portfolioItems: state.portfolioItems,
     academyRegistrations: state.academyRegistrations,
     reviews: state.reviews,

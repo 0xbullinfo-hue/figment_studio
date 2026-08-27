@@ -27,6 +27,17 @@ if (typeof refreshSessionSweeper.unref === 'function') {
   refreshSessionSweeper.unref();
 }
 
+// SECURITY: In production these MUST come from the environment. Falling back to a
+// well-known default password (visible in .env.example / this source file on GitHub)
+// would let anyone log in as an admin. In non-production environments we still fall
+// back to a default so local dev keeps working without extra setup.
+if (config.nodeEnv === 'production' && (!process.env.ADMIN_PASSWORD || !process.env.CLIENT_PASSWORD)) {
+  throw new Error(
+    'ADMIN_PASSWORD and CLIENT_PASSWORD must be set via environment variables in production. ' +
+    'Refusing to start with default credentials.'
+  );
+}
+
 const seededUsers = [
   {
     id: 'admin-local',
@@ -67,7 +78,7 @@ function signAccessToken(user) {
       name: user.name,
     },
     config.jwt.secret,
-    { expiresIn: config.jwt.expiresIn }
+    { algorithm: 'HS256', expiresIn: config.jwt.expiresIn }
   );
 }
 
@@ -79,7 +90,7 @@ function signRefreshToken(user) {
       sessionId: randomUUID(),
     },
     config.jwt.refreshSecret,
-    { expiresIn: config.jwt.refreshExpiresIn }
+    { algorithm: 'HS256', expiresIn: config.jwt.refreshExpiresIn }
   );
 
   const decoded = jwt.decode(token);

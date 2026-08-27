@@ -32,7 +32,6 @@ const routeMetaFiles = [
   'components/ContactPage.tsx',
   'components/PortfolioGallery.tsx',
   'components/AcademyPage.tsx',
-  'components/ArcVizPage.tsx',
   'components/Estimator.tsx',
   'components/WorkProcessPage.tsx',
 ];

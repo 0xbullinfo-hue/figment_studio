@@ -27,10 +27,7 @@ export async function connectDatabase() {
     logger.info('Database connection established');
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    logger.error('Database connection failed', {
-      message,
-      databaseUrl: config.databaseUrl,
-    });
+    logger.error('Database connection failed', { message });
     throw new Error(`Database connection failed: ${message}`);
   } finally {
     if (client) {

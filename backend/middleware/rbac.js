@@ -3,14 +3,18 @@ import { verifyAccessToken } from '../services/auth.js';
 
 export function requireAuth(req, _res, next) {
   try {
-    const authorization = req.headers.authorization || '';
-    const [scheme, token] = authorization.split(' ');
+    const header = String(req.headers.authorization || '');
+    const [scheme, token] = header.split(' ');
 
     if (scheme !== 'Bearer' || !token) {
       throw new AppError('Missing or invalid authorization token', 401, 'UNAUTHORIZED');
     }
 
     const payload = verifyAccessToken(token);
+    if (!payload || !payload.sub) {
+      throw new AppError('Invalid token payload', 401, 'UNAUTHORIZED');
+    }
+
     req.user = payload;
     next();
   } catch (_error) {

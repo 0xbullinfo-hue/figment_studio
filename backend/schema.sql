@@ -61,6 +61,27 @@ CREATE TABLE IF NOT EXISTS payment_transactions (
   completed_at TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS invoice_receipts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  invoice_id VARCHAR(255) NOT NULL UNIQUE,
+  owner_id VARCHAR(255),
+  owner_email VARCHAR(255),
+  project VARCHAR(255) NOT NULL,
+  client_name VARCHAR(255) NOT NULL DEFAULT 'Client User',
+  amount DECIMAL(12, 2) NOT NULL DEFAULT 0 CHECK (amount >= 0),
+  status VARCHAR(50) NOT NULL DEFAULT 'Pending' CHECK (status IN ('Pending', 'Paid', 'Verifying')),
+  source VARCHAR(50) NOT NULL DEFAULT 'estimate' CHECK (source IN ('estimate', 'payment')),
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS processed_webhooks (
+  event_id VARCHAR(255) PRIMARY KEY,
+  provider VARCHAR(50) NOT NULL,
+  processed_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+
 -- ============================================================================
 -- ARCVIZ USAGE & QUOTAS
 -- ============================================================================
@@ -162,6 +183,9 @@ CREATE INDEX IF NOT EXISTS idx_payments_user ON payment_transactions(user_id);
 CREATE INDEX IF NOT EXISTS idx_payments_reference ON payment_transactions(reference);
 CREATE INDEX IF NOT EXISTS idx_payments_status ON payment_transactions(status);
 CREATE INDEX IF NOT EXISTS idx_payments_provider ON payment_transactions(provider);
+CREATE INDEX IF NOT EXISTS idx_receipts_owner ON invoice_receipts(owner_id);
+CREATE INDEX IF NOT EXISTS idx_receipts_email ON invoice_receipts(owner_email);
+CREATE INDEX IF NOT EXISTS idx_receipts_status ON invoice_receipts(status);
 CREATE INDEX IF NOT EXISTS idx_renders_user ON arcviz_renders(user_id);
 CREATE INDEX IF NOT EXISTS idx_renders_created ON arcviz_renders(created_at);
 CREATE INDEX IF NOT EXISTS idx_renders_status ON arcviz_renders(status);
@@ -176,7 +200,7 @@ CREATE INDEX IF NOT EXISTS idx_audit_action ON audit_logs(action);
 CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_logs(created_at);
 CREATE INDEX IF NOT EXISTS idx_audit_entity ON audit_logs(entity_type, entity_id);
 CREATE INDEX IF NOT EXISTS idx_subscriptions_active ON subscriptions(expires_at) WHERE status = 'active';
-CREATE INDEX IF NOT EXISTS idx_payments_pending ON payment_transactions(created_at) WHERE status IN ('pending', 'processing');
+CREATE INDEX IF NOT EXISTS idx_payments_pending ON payment_transactions(initiated_at) WHERE status IN ('pending', 'processing');
 CREATE INDEX IF NOT EXISTS idx_gallery_publishable ON gallery_items(created_at) WHERE status = 'published' AND deleted_at IS NULL;
 
 -- ============================================================================
@@ -214,11 +238,13 @@ DROP TRIGGER IF EXISTS trigger_subscriptions_updated_at ON subscriptions;
 DROP TRIGGER IF EXISTS trigger_gallery_updated_at ON gallery_items;
 DROP TRIGGER IF EXISTS trigger_process_posts_updated_at ON process_posts;
 DROP TRIGGER IF EXISTS trigger_projects_updated_at ON projects;
+DROP TRIGGER IF EXISTS trigger_invoice_receipts_updated_at ON invoice_receipts;
 CREATE TRIGGER trigger_users_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECUTE FUNCTION update_timestamp();
 CREATE TRIGGER trigger_subscriptions_updated_at BEFORE UPDATE ON subscriptions FOR EACH ROW EXECUTE FUNCTION update_timestamp();
 CREATE TRIGGER trigger_gallery_updated_at BEFORE UPDATE ON gallery_items FOR EACH ROW EXECUTE FUNCTION update_timestamp();
 CREATE TRIGGER trigger_process_posts_updated_at BEFORE UPDATE ON process_posts FOR EACH ROW EXECUTE FUNCTION update_timestamp();
 CREATE TRIGGER trigger_projects_updated_at BEFORE UPDATE ON projects FOR EACH ROW EXECUTE FUNCTION update_timestamp();
+CREATE TRIGGER trigger_invoice_receipts_updated_at BEFORE UPDATE ON invoice_receipts FOR EACH ROW EXECUTE FUNCTION update_timestamp();
 
 -- ============================================================================
 -- SEED DATA (Optional for development)

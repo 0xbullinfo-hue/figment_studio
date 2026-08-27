@@ -11,7 +11,9 @@
  */
 
 import express from 'express';
+import helmet from 'helmet';
 import dotenv from 'dotenv';
+import { randomUUID } from 'crypto';
 import { config, validateConfig } from './config.js';
 import { logger } from './logger.js';
 import { connectDatabase } from './db.js';
@@ -19,9 +21,10 @@ import { setupCors } from './middleware/cors.js';
 import { paymentLimiter, authLimiter, apiLimiter } from './middleware/rateLimiter.js';
 import { validate } from './middleware/validate.js';
 import { setupErrorHandler, AppError, ValidationError } from './middleware/errorHandler.js';
+import { generateVisionReply } from './services/aiChat.js';
 import { createAuthRouter } from './routes/auth.js';
-import { createArcvizRouter } from './routes/arcviz.js';
 import { createContentRouter } from './routes/content.js';
+import { createReceiptsRouter } from './routes/receipts.js';
 import { createPaymentIntent, getPaymentIntent, markPaymentCompleted } from './services/subscriptions.js';
 import {
   getWebhookEventId,
@@ -42,6 +45,18 @@ const app = express();
 // ============================================================================
 // MIDDLEWARE SETUP
 // ============================================================================
+
+// Request ID for tracing
+app.use((req, res, next) => {
+  req.id = req.headers['x-request-id'] || randomUUID();
+  res.setHeader('x-request-id', req.id);
+  next();
+});
+
+// Security: Helmet HTTP headers
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
+}));
 
 // Body parser (must be before routes)
 app.use(express.json({
@@ -242,9 +257,9 @@ app.post(
   }
 );
 
-app.get('/api/payments/mock-checkout/:reference', (req, res, next) => {
+app.get('/api/payments/mock-checkout/:reference', async (req, res, next) => {
   try {
-    if (config.nodeEnv === 'production') {
+    if (config.nodeEnv === 'production' || !config.payments.allowMock) {
       throw new AppError('Mock checkout is disabled', 403, 'MOCK_CHECKOUT_DISABLED');
     }
 
@@ -254,7 +269,7 @@ app.get('/api/payments/mock-checkout/:reference', (req, res, next) => {
       throw new AppError('Payment reference not found', 404, 'PAYMENT_NOT_FOUND');
     }
 
-    markPaymentCompleted(reference, {
+    await markPaymentCompleted(reference, {
       provider: intent.provider,
       source: 'mock-checkout',
     });
@@ -275,7 +290,7 @@ app.get('/api/payments/mock-checkout/:reference', (req, res, next) => {
 // PAYMENT WEBHOOKS (Rate limited, verified, idempotent)
 // ============================================================================
 
-app.post('/api/payments/webhook/:provider', paymentLimiter, (req, res, next) => {
+app.post('/api/payments/webhook/:provider', paymentLimiter, async (req, res, next) => {
   try {
     const provider = req.params.provider;
     const event = req.body;
@@ -290,7 +305,7 @@ app.post('/api/payments/webhook/:provider', paymentLimiter, (req, res, next) => 
     }
 
     const eventId = getWebhookEventId(provider, event);
-    if (eventId && hasProcessedWebhook(eventId)) {
+    if (eventId && await hasProcessedWebhook(eventId)) {
       return res.json({ ok: true, duplicate: true });
     }
 
@@ -305,7 +320,7 @@ app.post('/api/payments/webhook/:provider', paymentLimiter, (req, res, next) => 
     const looksSuccessful = ['successful', 'success', 'charge.success', 'charge.completed', 'payment.success'].some((value) => status.includes(value));
 
     if (reference && looksSuccessful) {
-      markPaymentCompleted(reference, {
+      await markPaymentCompleted(reference, {
         provider,
         source: 'webhook',
         eventId,
@@ -313,7 +328,7 @@ app.post('/api/payments/webhook/:provider', paymentLimiter, (req, res, next) => 
     }
 
     if (eventId) {
-      markWebhookProcessed(eventId);
+      await markWebhookProcessed(eventId, provider);
     }
 
     res.json({ ok: true, received: true });
@@ -323,8 +338,50 @@ app.post('/api/payments/webhook/:provider', paymentLimiter, (req, res, next) => 
 });
 
 app.use('/api/auth', createAuthRouter({ authLimiter, validate }));
-app.use('/api/arcviz', createArcvizRouter());
+
+// Agent chat endpoint (replaces legacy ArcViz endpoint)
+app.post('/api/agent/chat', apiLimiter, async (req, res, next) => {
+  try {
+    const { message, history, image } = req.body || {};
+    if (!message || typeof message !== 'string' || message.length > 8000) {
+      throw new AppError('Invalid message', 400, 'INVALID_MESSAGE');
+    }
+    const boundedHistory = Array.isArray(history)
+      ? history.slice(-20).map((entry) => ({
+          role: entry?.role === 'assistant' ? 'assistant' : 'user',
+          content: String(entry?.content || '').slice(0, 4000),
+        }))
+      : [];
+    const reply = await generateVisionReply({
+      message,
+      history: boundedHistory,
+      image: image?.data && image?.mimeType ? image : undefined,
+    });
+    res.json({ ok: true, reply });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Contact form submission endpoint
+app.post('/api/contact', apiLimiter, async (req, res, next) => {
+  try {
+    const { name, email, message, source, referrer } = req.body || {};
+    if (!name?.trim() || !email?.trim() || !message?.trim()) {
+      throw new AppError('Name, email, and message are required', 400, 'INVALID_CONTACT');
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      throw new AppError('Invalid email address', 400, 'INVALID_EMAIL');
+    }
+    logger.info('Contact form submission received', { name, email, source, referrer });
+    res.json({ ok: true, message: 'Message received successfully' });
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use('/api/content', createContentRouter());
+app.use('/api/receipts', createReceiptsRouter());
 
 // ============================================================================
 // ERROR HANDLING (Must be last)

@@ -17,7 +17,6 @@ const staticRoutes = [
   '/portfolio',
   '/insights',
   '/academy',
-  '/arcviz',
   '/estimator',
 ];
 

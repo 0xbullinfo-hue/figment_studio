@@ -10,17 +10,32 @@ const REQUIRED_ENV = [
   'JWT_REFRESH_SECRET',
 ];
 
+const DEV_DEFAULTS = {
+  NODE_ENV: 'development',
+  PORT: '8787',
+  DATABASE_URL: 'postgresql://user:password@localhost:5432/figment_studio',
+  JWT_SECRET: 'dev-secret-key-for-local-32-characters',
+  JWT_REFRESH_SECRET: 'dev-refresh-secret-key-for-local-32-characters',
+};
+
 export function validateConfig() {
   const errors = [];
   const warnings = [];
+  const nodeEnv = (process.env.NODE_ENV || DEV_DEFAULTS.NODE_ENV).toLowerCase();
+  const isDevelopment = nodeEnv === 'development';
 
   for (const key of REQUIRED_ENV) {
     if (!process.env[key]) {
-      errors.push(`Missing required environment variable: ${key}`);
+      if (isDevelopment && DEV_DEFAULTS[key]) {
+        process.env[key] = DEV_DEFAULTS[key];
+        warnings.push(`Using local development default for ${key}`);
+      } else {
+        errors.push(`Missing required environment variable: ${key}`);
+      }
     }
   }
 
-  const port = Number.parseInt(process.env.PORT || '', 10);
+  const port = Number.parseInt(process.env.PORT || DEV_DEFAULTS.PORT, 10);
   if (!Number.isInteger(port) || port < 1 || port > 65535) {
     errors.push(`Invalid PORT: ${process.env.PORT || '(empty)'}`);
   }
@@ -29,11 +44,11 @@ export function validateConfig() {
     errors.push(`Invalid NODE_ENV: ${process.env.NODE_ENV}`);
   }
 
-  if ((process.env.JWT_SECRET || '').length < 32) {
+  if ((process.env.JWT_SECRET || DEV_DEFAULTS.JWT_SECRET).length < 32) {
     errors.push('JWT_SECRET too short (minimum 32 characters)');
   }
 
-  if ((process.env.JWT_REFRESH_SECRET || '').length < 32) {
+  if ((process.env.JWT_REFRESH_SECRET || DEV_DEFAULTS.JWT_REFRESH_SECRET).length < 32) {
     errors.push('JWT_REFRESH_SECRET too short (minimum 32 characters)');
   }
 
@@ -60,6 +75,7 @@ export const config = {
     refreshExpiresIn: '30d',
   },
   payments: {
+    allowMock: process.env.ALLOW_MOCK_PAYMENTS === 'true',
     paystack: {
       secretKey: process.env.PAYSTACK_SECRET_KEY || '',
       checkoutUrl: process.env.PAYSTACK_CHECKOUT_URL || '',

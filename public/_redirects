@@ -1,4 +1,4 @@
-﻿/ /index.html 200
+/ /index.html 200
 /about /index.html 200
 /contact /index.html 200
 /works /index.html 200
@@ -7,7 +7,7 @@
 /insights /index.html 200
 /insights/* /index.html 200
 /academy /index.html 200
-/arcviz /index.html 200
+/arcviz /portfolio 301
 /estimator /index.html 200
 /feedback /index.html 200
 /auth /index.html 200

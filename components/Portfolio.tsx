@@ -52,7 +52,6 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
           <div className="space-y-4">
-            <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold font-sans">Portfolio</p>
             <h2 className="font-display font-light text-white leading-tight" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4rem)', lineHeight: 1.06 }}>
               Signature<br />
               <em className="font-light not-italic" style={{ color: 'rgba(255,255,255,0.28)' }}>Projects</em>

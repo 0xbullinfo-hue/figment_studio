@@ -1,4 +1,4 @@
-﻿
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from './Logo.tsx';
@@ -9,9 +9,9 @@ const Footer: React.FC = () => {
 
   const links = {
     Services: [
-      { label: '3D Rendering', path: '/arcviz' },
-      { label: 'Cinematic Animation', path: '/arcviz' },
-      { label: 'Interior Design', path: '/arcviz' },
+      { label: '3D Rendering', path: '/portfolio' },
+      { label: 'Cinematic Animation', path: '/portfolio' },
+      { label: 'Interior Design', path: '/portfolio' },
       { label: 'Scale Models', path: '/estimator' },
     ],
     Company: [
@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
     Client: [
       { label: 'Client (soon)', path: '/auth', disabled: true },
       { label: 'Get Estimate', path: '/estimator' },
-      { label: 'ArcViz AI', path: '/arcviz' },
+      { label: 'Academy', path: '/academy' },
       { label: 'Support', path: '/support' },
     ],
   };

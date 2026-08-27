@@ -1,25 +1,19 @@
-﻿
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from './Logo.tsx';
 import { useStudioStore } from '../store.ts';
 import { logoutRequest } from '../services/apiClient.ts';
 
-interface HeaderProps {
-  onOpenVision: () => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
+const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
   const { auth, logout } = useStudioStore();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [aiDropdownOpen, setAiDropdownOpen] = useState(false);
   const [worksDropdownOpen, setWorksDropdownOpen] = useState(false);
   const [mobileWorksOpen, setMobileWorksOpen] = useState(false);
-  const aiDropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const worksDropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleSignOut = async () => {
@@ -43,7 +37,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
   // Cleanup timer on unmount
   useEffect(() => {
     return () => {
-      if (aiDropdownTimer.current) clearTimeout(aiDropdownTimer.current);
       if (worksDropdownTimer.current) clearTimeout(worksDropdownTimer.current);
     };
   }, []);
@@ -64,31 +57,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
     }, 350);
   };
 
-  const handleAiDropdownEnter = () => {
-    if (!window.matchMedia('(hover: hover)').matches) return;
-    if (aiDropdownTimer.current) {
-      clearTimeout(aiDropdownTimer.current);
-      aiDropdownTimer.current = null;
-    }
-    setAiDropdownOpen(true);
-  };
-
-  const handleAiDropdownLeave = () => {
-    if (!window.matchMedia('(hover: hover)').matches) return;
-    aiDropdownTimer.current = setTimeout(() => {
-      setAiDropdownOpen(false);
-    }, 350); // 350ms delay before closing so user has time to move to the dropdown
-  };
-
-  const handleAiToolsClick = (e: React.MouseEvent) => {
-    if (window.matchMedia('(hover: hover)').matches) {
-      e.preventDefault();
-      return;
-    }
-    setAiDropdownOpen((v) => !v);
-  };
-
-  const navItems = [
+  const navItems: { label: string; path: string; disabled?: boolean }[] = [
     { label: 'Home', path: '/' },
     { label: 'About', path: '/about' },
     { label: 'Services', path: '/#services' },
@@ -249,46 +218,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
                 </button>
               );
             })}
-            
-            {/* AI Tools Dropdown Menu  -  with delayed close */}
-            <div
-              className="relative"
-              onMouseEnter={handleAiDropdownEnter}
-              onMouseLeave={handleAiDropdownLeave}
-            >
-              <button
-                onClick={handleAiToolsClick}
-                className="relative flex items-center gap-1.5 px-4 py-2 text-[12px] tracking-[0.16em] uppercase font-medium text-text-muted hover:text-primary transition-all duration-300 focus:outline-none"
-              >
-                <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
-                AI Tools
-                <span className="material-symbols-outlined" style={{ fontSize: '10px' }}>keyboard_arrow_down</span>
-              </button>
-              
-              {aiDropdownOpen && (
-                <div 
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-44 rounded-xl bg-zinc-950 border border-white/5 shadow-2xl p-1.5 flex flex-col gap-0.5 z-50"
-                  style={{ animation: 'fadeInDown 0.2s ease-out' }}
-                  onMouseEnter={handleAiDropdownEnter}
-                  onMouseLeave={handleAiDropdownLeave}
-                >
-                  <button
-                    onClick={() => { onOpenVision(); setAiDropdownOpen(false); }}
-                    className="w-full text-left flex items-center gap-2 px-3 py-2.5 text-[10px] tracking-wider uppercase text-text-muted hover:text-primary hover:bg-white/5 rounded-lg transition-all focus:outline-none font-semibold"
-                  >
-                    <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
-                    Vision AI
-                  </button>
-                  <button
-                    onClick={() => { navigate('/arcviz'); setAiDropdownOpen(false); }}
-                    className="w-full text-left flex items-center gap-2 px-3 py-2.5 text-[10px] tracking-wider uppercase text-text-muted hover:text-primary hover:bg-white/5 rounded-lg transition-all focus:outline-none font-semibold"
-                  >
-                    <span className="material-symbols-outlined text-[14px]">travel_explore</span>
-                    ArcViz AI
-                  </button>
-                </div>
-              )}
-            </div>
           </nav>
 
           {/* Right CTA - desktop */}
@@ -410,27 +339,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenVision }) => {
                 </button>
               );
             })}
-            
-            {/* Mobile AI Tools Sub-menu */}
-            <div className="border-t border-border-ui/50 pt-2 mt-2 text-left">
-              <p className="px-3 py-1 text-[9px] tracking-[0.25em] uppercase text-text-faint font-bold font-sans">AI Tools</p>
-              <div className="pl-3 space-y-0.5 mt-1">
-                <button
-                  onClick={() => { onOpenVision(); setMobileOpen(false); }}
-                  className="w-full text-left flex items-center gap-2.5 px-3 py-3 text-[12px] tracking-[0.2em] uppercase font-medium text-text-muted hover:text-white transition-colors focus:outline-none"
-                >
-                  <span className="material-symbols-outlined text-[14px] text-primary">auto_awesome</span>
-                  Vision AI
-                </button>
-                <button
-                  onClick={() => { navigate('/arcviz'); setMobileOpen(false); }}
-                  className="w-full text-left flex items-center gap-2.5 px-3 py-3 text-[12px] tracking-[0.2em] uppercase font-medium text-text-muted hover:text-white transition-colors focus:outline-none"
-                >
-                  <span className="material-symbols-outlined text-[14px] text-primary">travel_explore</span>
-                  ArcViz AI
-                </button>
-              </div>
-            </div>
             <div className="pt-4 mt-2 space-y-2.5">
               {auth.isAuthenticated ? (
                 <>

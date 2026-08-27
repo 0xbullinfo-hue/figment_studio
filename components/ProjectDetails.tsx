@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStudioStore } from '../store';
@@ -11,7 +11,11 @@ const ProjectDetails: React.FC = () => {
   const project = projects.find(p => p.id === id);
 
   const [activeSection, setActiveSection] = useState<'overview' | 'panorama' | 'timeline'>('overview');
-  const [panOffset, setPanOffset] = useState(0);
+  const [panOffset, setPanOffset] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const dragStartX = useRef(0);
+  const startOffset = useRef(50);
 
   if (!project) {
     return <div className="flex h-screen items-center justify-center text-red-500 font-bold">Project not found</div>;
@@ -24,20 +28,39 @@ const ProjectDetails: React.FC = () => {
     { label: "Final Render Export", date: "Est. Oct 26", status: "Pending", icon: "movie" }
   ];
 
-  const handlePan = (e: React.MouseEvent | React.TouchEvent) => {
-    // Simple mock logic for 360 scroller
-    if ('buttons' in e && e.buttons === 1) {
-      setPanOffset(prev => (prev + e.movementX) % 100);
-    }
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    dragStartX.current = e.clientX;
+    startOffset.current = panOffset;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    const delta = ((e.clientX - dragStartX.current) / (window.innerWidth || 1)) * 100;
+    setPanOffset(Math.max(0, Math.min(100, startOffset.current - delta)));
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
   };
 
   return (
-    <div className="flex h-screen bg-white overflow-hidden font-display text-left">
+    <div className="flex h-screen bg-white overflow-hidden font-display text-left relative">
       <Helmet>
         <title>{project.title} - Project Intelligence | Figment Studio</title>
         <meta name="description" content={`Monitor milestones, view interactive 360 previews, and manage revisions for ${project.title} directly in the Figment Studio portal.`} />
       </Helmet>
-      <aside className="w-64 bg-slate-50 border-r border-gray-200 flex flex-col justify-between p-8 shrink-0">
+
+      {/* Mobile sidebar toggle */}
+      <button
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="lg:hidden fixed top-4 left-4 z-[120] bg-white text-slate-800 p-2.5 rounded-xl border border-gray-200 shadow-md"
+        aria-label="Toggle navigation"
+      >
+        <span className="material-symbols-outlined">{sidebarOpen ? 'close' : 'menu'}</span>
+      </button>
+
+      <aside className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-[110] w-64 bg-slate-50 border-r border-gray-200 flex flex-col justify-between p-8 shrink-0 transition-transform duration-300`}>
         <div className="space-y-12">
           <div className="space-y-2">
             <button onClick={() => window.history.back()} className="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest hover:translate-x-[-4px] transition-all">
@@ -49,21 +72,21 @@ const ProjectDetails: React.FC = () => {
           </div>
           <nav className="space-y-4">
             <button
-              onClick={() => setActiveSection('overview')}
+              onClick={() => { setActiveSection('overview'); setSidebarOpen(false); }}
               className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all text-left ${activeSection === 'overview' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-primary'}`}
             >
               <span className="material-symbols-outlined text-xl">grid_view</span>
               <span className="font-bold text-xs uppercase tracking-widest">Overview</span>
             </button>
             <button
-              onClick={() => setActiveSection('panorama')}
+              onClick={() => { setActiveSection('panorama'); setSidebarOpen(false); }}
               className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all text-left ${activeSection === 'panorama' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-primary'}`}
             >
               <span className="material-symbols-outlined text-xl">360</span>
               <span className="font-bold text-xs uppercase tracking-widest">360° Preview</span>
             </button>
             <button
-              onClick={() => setActiveSection('timeline')}
+              onClick={() => { setActiveSection('timeline'); setSidebarOpen(false); }}
               className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all text-left ${activeSection === 'timeline' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-primary'}`}
             >
               <span className="material-symbols-outlined text-xl">route</span>
@@ -145,13 +168,16 @@ const ProjectDetails: React.FC = () => {
             {activeSection === 'panorama' && (
               <section className="bg-white rounded-3xl border border-gray-100 shadow-2xl overflow-hidden aspect-video relative group select-none">
                 <div
-                  className="absolute inset-0 bg-cover transition-transform duration-0 ease-linear cursor-grab active:cursor-grabbing"
+                  className="absolute inset-0 bg-cover transition-all duration-75 ease-linear cursor-grab active:cursor-grabbing"
                   style={{
                     backgroundImage: `url(${project.imageUrl})`,
                     backgroundPosition: `${panOffset}% center`,
                     transform: 'scale(1.2)'
                   }}
-                  onMouseMove={handlePan}
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp}
                 ></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
                 <div className="absolute top-8 left-8 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full text-white text-[10px] font-black uppercase tracking-[0.3em]">

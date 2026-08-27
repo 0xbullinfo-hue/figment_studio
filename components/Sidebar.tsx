@@ -1,13 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from './Logo.tsx';
 import { useStudioStore } from '../store.ts';
 
-interface SidebarProps {
-  onOpenVision: () => void;
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ onOpenVision }) => {
+const Sidebar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { auth, logout } = useStudioStore();
@@ -15,7 +11,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onOpenVision }) => {
   const navItems = [
     { label: 'About', path: '/about' },
     { label: 'Portfolio', path: '/portfolio' },
-    { label: 'ArcViz AI', path: '/arcviz', live: true },
     { label: 'Estimates', path: '/estimator' },
     { label: 'Contact', path: '/contact' },
   ];
@@ -56,12 +51,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onOpenVision }) => {
                 >
                   {item.label}
                 </span>
-                {item.live && (
-                  <span className="flex h-1.5 w-1.5 relative">
-                    <span className="animate-ping absolute inline-flex h-1.5 w-1.5 rounded-full bg-primary opacity-60" />
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
-                  </span>
-                )}
               </div>
 
               {/* Editorial Circle Indicator */}
@@ -80,18 +69,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onOpenVision }) => {
             </button>
           );
         })}
-
-        {/* Vision AI Trigger */}
-        <button
-          onClick={onOpenVision}
-          className="flex items-center justify-between py-2.5 text-text-muted hover:text-primary transition-all duration-300 group focus:outline-none"
-        >
-          <span className="text-[12px] tracking-[0.2em] uppercase flex items-center gap-1.5">
-            <span className="material-symbols-outlined text-[15px]">auto_awesome</span>
-            Vision AI
-          </span>
-          <div className="w-3.5 h-3.5 rounded-full border border-text-faint group-hover:border-primary/50 transition-all duration-300" />
-        </button>
       </nav>
 
       {/* Portal Shortcut & Client Auth (Bottom) */}

@@ -18,33 +18,35 @@ export interface LoginResponse {
 
 export type GoogleLoginResponse = LoginResponse;
 
-export interface ArcVizQuotaResponse {
-  ok: boolean;
-  plan: SubscriptionPlan;
-  trialLimit: number;
-  trialUsed: number;
-  trialRemaining: number;
-  allowed: boolean;
-}
-
-export interface StudioContentResponse {
-  ok: boolean;
-  services?: Array<any>;
-  about?: Record<string, any>;
-  reviews?: Array<any>;
-  portfolioItems?: Array<any>;
-  projects?: Array<any>;
-}
-
-export interface ArcVizChatPayload {
+export interface AgentChatPayload {
   message: string;
   history: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
   image?: { data: string; mimeType: string };
 }
 
-export interface ArcVizChatResponse {
+export type ArcVizChatPayload = AgentChatPayload;
+
+export interface AgentChatResponse {
   ok: boolean;
   reply: string;
+}
+
+export type ArcVizChatResponse = AgentChatResponse;
+
+export interface ReceiptRecord {
+  id: string;
+  invoiceId: string;
+  project: string;
+  clientName: string;
+  amount: number;
+  status: 'Pending' | 'Paid' | 'Verifying';
+  createdAt: string;
+  source: 'estimate' | 'payment';
+}
+
+export interface ReceiptsResponse {
+  ok: boolean;
+  receipts: ReceiptRecord[];
 }
 
 const backendBaseUrl = ((import.meta as any).env.VITE_BACKEND_URL as string | undefined) || 'http://localhost:8787';
@@ -100,55 +102,20 @@ export async function logoutRequest(refreshToken?: string, accessToken?: string)
   }).catch(() => undefined);
 }
 
-export async function authorizeArcvizRender(accessToken: string): Promise<ArcVizQuotaResponse> {
-  const response = await fetch(`${backendBaseUrl}/api/arcviz/render`, {
+export async function agentChatRequest(accessToken?: string, payload?: AgentChatPayload): Promise<AgentChatResponse> {
+  const response = await fetch(`${backendBaseUrl}/api/agent/chat`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
     },
-    body: JSON.stringify({}),
+    body: JSON.stringify(payload || {}),
   });
 
-  return parseJsonResponse<ArcVizQuotaResponse>(response);
+  return parseJsonResponse<AgentChatResponse>(response);
 }
 
-export async function getArcvizQuota(accessToken: string): Promise<ArcVizQuotaResponse> {
-  const response = await fetch(`${backendBaseUrl}/api/arcviz/quota`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  return parseJsonResponse<ArcVizQuotaResponse>(response);
-}
-
-export async function arcvizVisionChatRequest(accessToken: string, payload: ArcVizChatPayload): Promise<ArcVizChatResponse> {
-  const response = await fetch(`${backendBaseUrl}/api/arcviz/chat/vision`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(payload),
-  });
-
-  return parseJsonResponse<ArcVizChatResponse>(response);
-}
-
-export async function arcvizArchitecturalChatRequest(accessToken: string, payload: ArcVizChatPayload): Promise<ArcVizChatResponse> {
-  const response = await fetch(`${backendBaseUrl}/api/arcviz/chat/architectural`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(payload),
-  });
-
-  return parseJsonResponse<ArcVizChatResponse>(response);
-}
+export const arcvizVisionChatRequest = agentChatRequest;
 
 export async function getPublicStudioContent(): Promise<StudioContentResponse> {
   const response = await fetch(`${backendBaseUrl}/api/content/public`, {
@@ -204,4 +171,60 @@ export async function postAdminResource(path: string, accessToken: string, body:
   });
 
   return parseJsonResponse<StudioContentResponse>(response);
+}
+
+export async function getReceipts(accessToken: string): Promise<ReceiptsResponse> {
+  const response = await fetch(`${backendBaseUrl}/api/receipts`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  return parseJsonResponse<ReceiptsResponse>(response);
+}
+
+export async function createReceiptRequest(accessToken: string, receipt: ReceiptRecord): Promise<{ ok: boolean; receipt: ReceiptRecord }> {
+  const response = await fetch(`${backendBaseUrl}/api/receipts`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(receipt),
+  });
+
+  return parseJsonResponse<{ ok: boolean; receipt: ReceiptRecord }>(response);
+}
+
+export async function updateReceiptStatusRequest(
+  accessToken: string,
+  invoiceId: string,
+  status: ReceiptRecord['status']
+): Promise<{ ok: boolean; receipt: ReceiptRecord }> {
+  const response = await fetch(`${backendBaseUrl}/api/receipts/${encodeURIComponent(invoiceId)}/status`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ status }),
+  });
+
+  return parseJsonResponse<{ ok: boolean; receipt: ReceiptRecord }>(response);
+}
+
+export async function submitContactForm(data: {
+  name: string;
+  email: string;
+  message: string;
+  source?: string;
+  referrer?: string;
+}): Promise<{ ok: boolean; message: string }> {
+  const response = await fetch(`${backendBaseUrl}/api/contact`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  return parseJsonResponse<{ ok: boolean; message: string }>(response);
 }

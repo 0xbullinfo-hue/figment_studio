@@ -1,32 +1,49 @@
-﻿import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { VisionChat } from '../types.ts';
-import { arcvizVisionChatRequest } from '../services/apiClient.ts';
+import { agentChatRequest } from '../services/apiClient.ts';
 import { useStudioStore } from '../store.ts';
 import Logo from './Logo.tsx';
 
-interface VisionAssistantProps {
-  onClose: () => void;
-}
-
-const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
+const VisionAssistant: React.FC = () => {
   const { auth } = useStudioStore();
+  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<VisionChat[]>([
-    { role: 'assistant', content: 'Hi, I am Vision AI. Share your idea and I can help with mood, style, and simple design direction. For advanced architecture controls, open ArcViz.' }
+    {
+      role: 'assistant',
+      content: `Hello! I am the Figment Studio Assistant. 
+
+I can assist you with:
+• Our services (3D Stills, Animations, Scale Models)
+• Pricing benchmarks & project timelines
+• Design feedback, mood ideas & color styling
+• Navigating to instant quotes or booking a consultation
+
+What would you like to explore today?`
+    }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
-  const [isMinimized, setIsMinimized] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<{ data: string, mimeType: string, preview: string } | null>(null);
+  const [selectedImage, setSelectedImage] = useState<{ data: string; mimeType: string; preview: string } | null>(null);
+  const [hasNotification, setHasNotification] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Auto-scroll to bottom
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isLoading, streamingContent, isMinimized]);
+  }, [messages, isLoading, streamingContent, isOpen]);
+
+  // Show notification badge on first load after 3 seconds if not opened
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!isOpen) setHasNotification(true);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [isOpen]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -36,11 +53,7 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
     reader.onloadend = () => {
       const base64 = reader.result as string;
       const data = base64.split(',')[1];
-      setSelectedImage({
-        data,
-        mimeType: file.type,
-        preview: base64
-      });
+      setSelectedImage({ data, mimeType: file.type, preview: base64 });
     };
     reader.readAsDataURL(file);
   };
@@ -49,14 +62,14 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
     const finalInput = text || input;
     if ((!finalInput.trim() && !selectedImage) || isLoading) return;
 
-    if (!auth.accessToken) {
-      setMessages((prev) => [...prev, { role: 'assistant', content: 'Please sign in to use Vision AI securely.' }]);
-      return;
-    }
-
-    const userMessage: VisionChat = { role: 'user', content: finalInput || '[Image analysis request]' };
+    const userMessage: VisionChat = {
+      role: 'user',
+      content: finalInput || '[Image analysis request]'
+    };
     const currentHistory = [...messages];
-    const imageToSend = selectedImage ? { data: selectedImage.data, mimeType: selectedImage.mimeType } : undefined;
+    const imageToSend = selectedImage
+      ? { data: selectedImage.data, mimeType: selectedImage.mimeType }
+      : undefined;
 
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
@@ -65,64 +78,103 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
     setStreamingContent('');
 
     try {
-      const response = await arcvizVisionChatRequest(auth.accessToken, {
-        message: finalInput.trim() ? finalInput : 'Analyze this design image in simple terms.',
+      const response = await agentChatRequest(auth.accessToken, {
+        message: finalInput.trim() ? finalInput : 'Analyze this architectural design/concept.',
         history: currentHistory,
         image: imageToSend,
       });
 
-      const fullResponse = response.reply || '';
-      setStreamingContent(fullResponse);
-
+      const fullResponse = response?.reply || '';
       setMessages((prev) => [...prev, { role: 'assistant', content: fullResponse }]);
       setStreamingContent('');
     } catch {
-      setMessages((prev) => [...prev, { role: 'assistant', content: 'I could not process that right now. Please try again.' }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: 'I could not process that request right now. You can also connect with our team directly via hello@figmentstudio.ng or WhatsApp (+234 816 829 9111).'
+        }
+      ]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  if (isMinimized) {
+  const toggleOpen = () => {
+    setIsOpen((prev) => !prev);
+    setHasNotification(false);
+  };
+
+  // Floating trigger button (closed state)
+  if (!isOpen) {
     return (
-      <button
-        onClick={() => setIsMinimized(false)}
-        className="fixed bottom-8 right-8 z-[100] bg-primary text-white size-16 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all group border-4 border-white"
-      >
-        <span className="material-symbols-outlined text-3xl group-hover:rotate-12 transition-transform">auto_awesome</span>
-      </button>
+      <div className="fixed bottom-6 right-6 z-[100]">
+        <button
+          onClick={toggleOpen}
+          className="relative group p-0 border-0 bg-transparent cursor-pointer focus:outline-none"
+          aria-label="Open Studio Assistant"
+        >
+          {/* Notification dot */}
+          {hasNotification && (
+            <span className="absolute -top-1 -right-1 size-4 bg-primary rounded-full border-2 border-zinc-950 z-10 animate-bounce shadow-md" />
+          )}
+
+          <div className="relative size-14 rounded-full bg-primary text-white flex items-center justify-center shadow-[0_8px_30px_rgba(240,122,58,0.4)] hover:scale-110 active:scale-95 transition-all duration-300 border-2 border-white/20">
+            <span className="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform duration-300">
+              auto_awesome
+            </span>
+          </div>
+        </button>
+      </div>
     );
   }
 
+  // Chat panel (open state)
   return (
-    <div className="fixed bottom-8 right-8 z-[100] w-full max-w-[440px] h-[620px] max-h-[85vh] flex flex-col animate-in slide-in-from-bottom-8 fade-in duration-500">
-      <div className="bg-white rounded-[2rem] shadow-[0_30px_70px_-12px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col border border-gray-100 h-full relative">
-        <div className="bg-[#1a1a1a] p-6 flex items-center justify-between text-white shrink-0 border-b border-white/5">
+    <div className="fixed bottom-6 right-6 z-[100] w-[calc(100vw-2rem)] sm:w-[420px] h-[580px] max-h-[85vh] flex flex-col animate-in slide-in-from-bottom-6 fade-in duration-300">
+      <div className="bg-zinc-950 rounded-[1.5rem] shadow-[0_20px_60px_-12px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col border border-white/10 h-full relative text-text-main">
+        {/* Header */}
+        <div className="bg-[#181818] p-4 flex items-center justify-between text-white shrink-0 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <Logo size={22} iconOnly />
+            <Logo size={20} iconOnly />
             <div className="text-left">
-              <h3 className="font-display font-black text-base uppercase tracking-widest leading-none">Vision AI</h3>
-              <p className="text-primary text-[9px] font-black uppercase tracking-[0.25em] mt-1">Basic Assistant</p>
+              <h3 className="font-display font-bold text-sm uppercase tracking-wider leading-none text-white">
+                Studio Assistant
+              </h3>
+              <p className="text-primary text-[10px] font-bold uppercase tracking-[0.2em] mt-1 flex items-center gap-1.5">
+                <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                {isLoading ? 'Thinking...' : 'Online'}
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <button onClick={() => setIsMinimized(true)} className="size-9 flex items-center justify-center hover:bg-white/10 rounded-xl transition-colors">
-              <span className="material-symbols-outlined text-xl">remove</span>
-            </button>
-            <button onClick={onClose} className="size-9 flex items-center justify-center hover:bg-white/10 rounded-xl transition-colors">
-              <span className="material-symbols-outlined text-xl">close</span>
+            <button
+              onClick={toggleOpen}
+              className="size-8 flex items-center justify-center hover:bg-white/10 rounded-lg transition-colors text-text-muted hover:text-white"
+              aria-label="Close chat"
+            >
+              <span className="material-symbols-outlined text-lg">close</span>
             </button>
           </div>
         </div>
 
-        <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50/40 custom-scrollbar text-left">
+        {/* Messages list */}
+        <div
+          ref={scrollRef}
+          className="flex-1 overflow-y-auto p-4 space-y-4 bg-zinc-900/60 custom-scrollbar text-left text-xs"
+        >
           {messages.map((msg, idx) => (
-            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[85%] px-5 py-3 rounded-[1.25rem] text-sm leading-relaxed shadow-sm ${
-                msg.role === 'user'
-                  ? 'bg-primary text-white font-bold rounded-tr-none'
-                  : 'bg-white text-slate-800 border border-gray-100 rounded-tl-none font-medium whitespace-pre-wrap'
-              }`}>
+            <div
+              key={idx}
+              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`max-w-[85%] px-4 py-3 rounded-[1rem] text-xs leading-relaxed shadow-sm ${
+                  msg.role === 'user'
+                    ? 'bg-primary text-white font-medium rounded-tr-none'
+                    : 'bg-[#1E1E1E] text-text-secondary border border-white/5 rounded-tl-none font-normal whitespace-pre-wrap'
+                }`}
+              >
                 {msg.content}
               </div>
             </div>
@@ -130,29 +182,46 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
 
           {(isLoading || streamingContent) && (
             <div className="flex justify-start">
-              <div className="max-w-[85%] px-5 py-3 rounded-[1.25rem] rounded-tl-none bg-white text-slate-800 border border-gray-100 shadow-sm text-sm font-medium whitespace-pre-wrap">
-                {streamingContent || 'Thinking...'}
+              <div className="max-w-[85%] px-4 py-3 rounded-[1rem] rounded-tl-none bg-[#1E1E1E] text-text-secondary border border-white/5 shadow-sm text-xs font-medium whitespace-pre-wrap">
+                {streamingContent || (
+                  <span className="flex items-center gap-2 py-1">
+                    <span className="size-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="size-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="size-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </span>
+                )}
               </div>
             </div>
           )}
         </div>
 
-        <div className="p-6 bg-white border-t border-gray-100 relative">
+        {/* Input area */}
+        <div className="p-3 bg-[#181818] border-t border-white/10 relative">
           {selectedImage && (
-            <div className="mb-4 flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-primary/20">
-              <div className="size-12 rounded-lg overflow-hidden">
-                <img src={selectedImage.preview} className="w-full h-full object-cover" alt="Preview" />
+            <div className="mb-2 flex items-center gap-3 bg-zinc-900 p-2 rounded-xl border border-primary/20">
+              <div className="size-10 rounded-lg overflow-hidden shrink-0">
+                <img
+                  src={selectedImage.preview}
+                  className="w-full h-full object-cover"
+                  alt="Preview"
+                />
               </div>
-              <div className="flex-1">
-                <p className="text-[10px] font-black uppercase text-primary tracking-widest">Image Attached</p>
+              <div className="flex-1 text-left">
+                <p className="text-[10px] font-bold uppercase text-primary tracking-widest">
+                  Image Attached
+                </p>
               </div>
-              <button onClick={() => setSelectedImage(null)} className="text-gray-400 hover:text-red-500 transition-colors">
-                <span className="material-symbols-outlined">cancel</span>
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="text-text-muted hover:text-red-400 transition-colors p-1"
+                aria-label="Remove attached image"
+              >
+                <span className="material-symbols-outlined text-base">cancel</span>
               </button>
             </div>
           )}
 
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <input
               type="file"
               ref={fileInputRef}
@@ -162,24 +231,26 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
             />
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="size-12 rounded-xl border flex items-center justify-center transition-all bg-white border-gray-200 text-gray-500 hover:text-primary"
+              className="size-10 rounded-lg border flex items-center justify-center transition-all bg-zinc-900 border-white/10 text-text-muted hover:text-primary hover:border-primary/40 shrink-0"
+              aria-label="Attach reference image"
             >
-              <span className="material-symbols-outlined">image</span>
+              <span className="material-symbols-outlined text-lg">image</span>
             </button>
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Ask Vision AI..."
-              className="flex-1 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+              placeholder="Ask about estimates, styling, or timelines..."
+              className="flex-1 bg-zinc-900 border border-white/10 rounded-lg px-3 py-2 text-xs font-normal text-white focus:border-primary focus:outline-none transition-all placeholder:text-text-faint"
             />
             <button
               onClick={() => handleSend()}
               disabled={isLoading || (!input.trim() && !selectedImage)}
-              className="bg-primary text-white size-12 rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+              className="bg-primary text-white size-10 rounded-lg flex items-center justify-center shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-40 disabled:hover:scale-100 shrink-0"
+              aria-label="Send message"
             >
-              <span className="material-symbols-outlined text-xl">send</span>
+              <span className="material-symbols-outlined text-base">send</span>
             </button>
           </div>
         </div>
@@ -189,5 +260,3 @@ const VisionAssistant: React.FC<VisionAssistantProps> = ({ onClose }) => {
 };
 
 export default VisionAssistant;
-
-

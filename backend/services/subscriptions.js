@@ -1,3 +1,5 @@
+import { createReceipt } from './receipts.js';
+
 const subscriptionsByUserId = new Map();
 const subscriptionsByEmail = new Map();
 const paymentIntentsByReference = new Map();
@@ -99,7 +101,7 @@ export function getPaymentIntent(reference) {
   return paymentIntentsByReference.get(String(reference || '').trim()) || null;
 }
 
-export function markPaymentCompleted(reference, details = {}) {
+export async function markPaymentCompleted(reference, details = {}) {
   const normalizedReference = String(reference || '').trim();
   if (!normalizedReference) {
     throw new Error('Payment reference is required');
@@ -126,7 +128,21 @@ export function markPaymentCompleted(reference, details = {}) {
     source: details.source || 'payment',
   }));
 
-  return { intent, subscription };
+  const receipt = await createReceipt({
+    invoiceId: normalizedReference,
+    project: intent.project,
+    clientName: intent.email || details.email || 'Client User',
+    amount: intent.amount,
+    status: 'Paid',
+    source: 'payment',
+  }, {
+    sub: intent.userId || details.userId,
+    email: intent.email || details.email,
+    name: intent.email || details.email || 'Client User',
+    role: 'admin',
+  });
+
+  return { intent, subscription, receipt };
 }
 
 export function clearSubscriptionForIdentity(userOrPayload = {}) {

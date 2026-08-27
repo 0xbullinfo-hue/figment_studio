@@ -1,4 +1,4 @@
-﻿
+
 import React, { useState, useEffect } from 'react';
 import Hero from './Hero';
 import Services from './Services';
@@ -35,7 +35,7 @@ const INSIGHTS = [
     date: 'May 2025',
     title: 'Why Cinematic Walkthroughs Close More Property Deals',
     excerpt: 'Data from 200+ projects reveals the compelling correlation between animation quality and investor conversion rates.',
-    img: '/figment_media/3D-Apartment-Rendering-Lagos-state.png',
+    img: '/figment_media/3D-Apartment-Rendering-Lagos-state 2.png',
     readTime: '4 min read',
   },
   {
@@ -55,7 +55,7 @@ const PLANS = [
     sub: 'For explorers',
     features: ['Public design discovery tools', '1 concept brief export', 'Community support', 'Portfolio access'],
     cta: 'Try Instant Estimate',
-    ctaPath: '/arcviz',
+    ctaPath: '/estimator',
     featured: false,
   },
   {
@@ -68,10 +68,6 @@ const PLANS = [
     featured: true,
   },
 ];
-
-const SectionLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold font-sans mb-4">{children}</p>
-);
 
 import { useStudioStore } from '../store.ts';
 import { ClientReview } from '../types.ts';
@@ -161,7 +157,6 @@ const LandingPage: React.FC = () => {
 
       <Hero
         onStartProject={() => navigate('/estimator')}
-        onOpenArcViz={() => navigate('/arcviz')}
         onOpenWorkProcess={() => navigate('/works/process')}
       />
       <Services />
@@ -174,7 +169,6 @@ const LandingPage: React.FC = () => {
 
             <div className="space-y-8">
               <div>
-                <SectionLabel>Who We Are</SectionLabel>
                 <SectionHeading dim="for Every Ambition">
                   Rooted in Abuja,<br />Built
                 </SectionHeading>
@@ -223,7 +217,6 @@ const LandingPage: React.FC = () => {
         <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
             <div className="space-y-6 lg:sticky lg:top-28 self-start">
-              <SectionLabel>Private Workflow</SectionLabel>
               <SectionHeading dim="& Confidential Jobs">
                 Built For<br />Professional
               </SectionHeading>
@@ -267,7 +260,6 @@ const LandingPage: React.FC = () => {
         <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
             <div>
-              <SectionLabel>Our Team</SectionLabel>
               <SectionHeading dim="Behind the Work">
                 The People
               </SectionHeading>
@@ -309,7 +301,6 @@ const LandingPage: React.FC = () => {
             
             <div className="space-y-6 text-left">
               <div>
-                <SectionLabel>Client Stories</SectionLabel>
                 <SectionHeading dim="from Our Clients">
                   Feedback
                 </SectionHeading>
@@ -486,7 +477,6 @@ const LandingPage: React.FC = () => {
         <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
             <div>
-              <SectionLabel>Service Plans</SectionLabel>
               <SectionHeading dim="for Architectural Teams">
                 Premium Tiers
               </SectionHeading>
@@ -561,7 +551,6 @@ const LandingPage: React.FC = () => {
         <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
             <div>
-              <SectionLabel>Journal</SectionLabel>
               <SectionHeading dim="& Perspectives">
                 Insights
               </SectionHeading>
@@ -625,7 +614,6 @@ const LandingPage: React.FC = () => {
           />
 
           <div className="relative z-10 max-w-[1600px] mx-auto text-center space-y-8">
-            <SectionLabel>Ready to Begin?</SectionLabel>
             <h2
               className="font-display font-light text-white"
               style={{ fontSize: 'clamp(3rem, 7vw, 6.5rem)', lineHeight: 0.98, letterSpacing: '-0.025em' }}

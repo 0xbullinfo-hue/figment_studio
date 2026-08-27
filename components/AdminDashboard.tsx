@@ -1,10 +1,11 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import Logo from './Logo.tsx';
 import { Project, ProjectProposal, AcademyRegistration, PortfolioItem } from '../types.ts';
 import { useStudioStore } from '../store';
-import { deleteAdminResource, getAdminStudioContent, postAdminResource, putAdminResource } from '../services/apiClient.ts';
+import { deleteAdminResource, getAdminStudioContent, getReceipts, postAdminResource, putAdminResource, updateReceiptStatusRequest } from '../services/apiClient.ts';
+import { InvoiceReceipt } from '../types.ts';
 
 interface ChatMessage {
   id: string;
@@ -23,6 +24,7 @@ const AdminDashboard: React.FC = () => {
     academyRegistrations,
     reviews,
     auth,
+    logout,
     updateProject,
     updateProposalStatus,
     updateAcademyRegistrationStatus,
@@ -30,9 +32,14 @@ const AdminDashboard: React.FC = () => {
     setProjects,
     setPortfolioItems,
     setReviews,
+    receipts,
+    setReceipts,
+    updateReceiptStatus,
   } = useStudioStore();
 
   const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'proposals' | 'chat' | 'portfolio' | 'payments' | 'academy' | 'reviews' | 'content'>('overview');
+  const [projectFilter, setProjectFilter] = useState<'All' | 'In Progress' | 'Completed'>('All');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [academyStatusFilter, setAcademyStatusFilter] = useState<'All' | 'Pending' | 'Contacted' | 'Enrolled'>('All');
   const [academyLevelFilter, setAcademyLevelFilter] = useState<'All' | 'Beginner' | 'Intermediate' | 'Advanced'>('All');
   const [tempNotes, setTempNotes] = useState<Record<string, string>>({});
@@ -89,6 +96,13 @@ const AdminDashboard: React.FC = () => {
       .catch(() => undefined);
     return () => { cancelled = true; };
   }, [auth.accessToken, auth.role, setPortfolioItems, setProjects, setReviews]);
+
+  useEffect(() => {
+    if (!auth.accessToken || auth.role !== 'admin') return;
+    getReceipts(auth.accessToken)
+      .then((response) => setReceipts(response.receipts as InvoiceReceipt[]))
+      .catch(() => undefined);
+  }, [auth.accessToken, auth.role, setReceipts]);
 
   //  Optimistic delete with undo 
   const confirmAndDelete = async (
@@ -188,7 +202,7 @@ const AdminDashboard: React.FC = () => {
           { label: 'Active Projects',   value: projects.filter(p => p.status !== 'Completed').length, icon: 'architecture',   color: 'text-blue-500' },
           { label: 'Pending Proposals', value: proposals.filter(p => p.status === 'Received').length, icon: 'mark_as_unread', color: 'text-orange-500' },
           { label: 'Academy Leads',     value: academyRegistrations.length,                            icon: 'school',         color: 'text-amber-500' },
-          { label: 'Studio Revenue',    value: `$${projects.reduce((acc, p) => acc + (p.status === 'Completed' ? 5000 : 0), 0) + 124000}`, icon: 'trending_up', color: 'text-emerald-500' },
+          { label: 'Studio Revenue',    value: `$${proposals.filter(p => p.status === 'Approved').reduce((acc, p) => acc + p.total, 0).toLocaleString()}`, icon: 'trending_up', color: 'text-emerald-500' },
         ].map((stat, i) => (
           <div key={i} className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl shadow-xl space-y-4">
             <div className="flex justify-between items-start">
@@ -250,65 +264,79 @@ const AdminDashboard: React.FC = () => {
   );
 
   //  renderProjects 
-  const renderProjects = () => (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-black uppercase text-white">Project Pipeline</h2>
-        <div className="flex gap-2">
-          {['All', 'In Progress', 'Completed'].map(f => (
-            <button key={f} className="px-4 py-1.5 bg-zinc-800 text-zinc-400 text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-zinc-700 transition-colors">{f}</button>
+  const renderProjects = () => {
+    const filteredProjects = projectFilter === 'All'
+      ? projects
+      : projects.filter(p => p.status === projectFilter);
+
+    return (
+      <div className="space-y-8">
+        <div className="flex justify-between items-center">
+          <h2 className="text-3xl font-black uppercase text-white">Project Pipeline</h2>
+          <div className="flex gap-2">
+            {(['All', 'In Progress', 'Completed'] as const).map(f => (
+              <button
+                key={f}
+                onClick={() => setProjectFilter(f)}
+                className={`px-4 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-colors ${
+                  projectFilter === f ? 'bg-primary text-white' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                }`}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {filteredProjects.map(p => (
+            <div key={p.id} className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 flex flex-col gap-6 group hover:border-primary/50 transition-all">
+              <div className="flex justify-between items-start">
+                <div className="text-left">
+                  <h4 className="text-2xl font-black text-white uppercase leading-none">{p.title}</h4>
+                  <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest mt-2">{p.id}  -  {p.location}</p>
+                </div>
+                <div className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase ${p.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/10' : 'bg-primary/10 text-primary border border-primary/10'}`}>
+                  {p.status}
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-end">
+                  <span className="text-[10px] font-black uppercase text-zinc-500">Studio Delivery Progress</span>
+                  <span className="text-lg font-black text-white">{p.progress}%</span>
+                </div>
+                <input
+                  type="range" min="0" max="100" value={p.progress}
+                  onChange={(e) => {
+                    const nextProject = { ...p, progress: parseInt(e.target.value) };
+                    updateProject(nextProject);
+                  }}
+                  onMouseUp={() => {
+                    const currentProject = projects.find((item) => item.id === p.id) || p;
+                    void persistProjectProgress(currentProject);
+                  }}
+                  onTouchEnd={() => {
+                    const currentProject = projects.find((item) => item.id === p.id) || p;
+                    void persistProjectProgress(currentProject);
+                  }}
+                  className="w-full h-1 bg-zinc-800 rounded-full accent-primary appearance-none cursor-pointer"
+                />
+              </div>
+              <div className="flex gap-3 pt-4 border-t border-zinc-800">
+                <button onClick={() => setSelectedProject(p)} className="flex-1 py-3 bg-zinc-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-zinc-700">Edit Project</button>
+                <button onClick={() => { setActiveChatId(p.id); setActiveTab('chat'); }} className="flex-1 py-3 border border-zinc-800 text-zinc-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:text-white">Chat Client</button>
+              </div>
+              <button
+                onClick={() => confirmAndDelete('project', p)}
+                className="w-full py-3 border border-red-900/30 text-red-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-950/20 hover:text-white transition-all"
+              >
+                Delete Project
+              </button>
+            </div>
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {projects.map(p => (
-          <div key={p.id} className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 flex flex-col gap-6 group hover:border-primary/50 transition-all">
-            <div className="flex justify-between items-start">
-              <div className="text-left">
-                <h4 className="text-2xl font-black text-white uppercase leading-none">{p.title}</h4>
-                <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest mt-2">{p.id}  -  {p.location}</p>
-              </div>
-              <div className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase ${p.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/10' : 'bg-primary/10 text-primary border border-primary/10'}`}>
-                {p.status}
-              </div>
-            </div>
-            <div className="space-y-4">
-              <div className="flex justify-between items-end">
-                <span className="text-[10px] font-black uppercase text-zinc-500">Studio Delivery Progress</span>
-                <span className="text-lg font-black text-white">{p.progress}%</span>
-              </div>
-              <input
-                type="range" min="0" max="100" value={p.progress}
-                onChange={(e) => {
-                  const nextProject = { ...p, progress: parseInt(e.target.value) };
-                  updateProject(nextProject);
-                }}
-                onMouseUp={() => {
-                  const currentProject = projects.find((item) => item.id === p.id) || p;
-                  void persistProjectProgress(currentProject);
-                }}
-                onTouchEnd={() => {
-                  const currentProject = projects.find((item) => item.id === p.id) || p;
-                  void persistProjectProgress(currentProject);
-                }}
-                className="w-full h-1 bg-zinc-800 rounded-full accent-primary appearance-none cursor-pointer"
-              />
-            </div>
-            <div className="flex gap-3 pt-4 border-t border-zinc-800">
-              <button onClick={() => setSelectedProject(p)} className="flex-1 py-3 bg-zinc-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-zinc-700">Edit Project</button>
-              <button onClick={() => { setActiveChatId(p.id); setActiveTab('chat'); }} className="flex-1 py-3 border border-zinc-800 text-zinc-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:text-white">Chat Client</button>
-            </div>
-            <button
-              onClick={() => confirmAndDelete('project', p)}
-              className="w-full py-3 border border-red-900/30 text-red-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-950/20 hover:text-white transition-all"
-            >
-              Delete Project
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    );
+  };
 
   //  renderProposals 
   const renderProposals = () => (
@@ -493,10 +521,20 @@ const AdminDashboard: React.FC = () => {
 
   //  renderPayments 
   const renderPayments = () => {
-    const pending = proposals.filter(p => p.status === 'Received');
-    const approved = proposals.filter(p => p.status === 'Approved');
-    const pendingValue = pending.reduce((sum, p) => sum + p.total, 0);
-    const paidValue = approved.reduce((sum, p) => sum + p.total, 0);
+    const pending = receipts.filter(receipt => receipt.status !== 'Paid');
+    const paidValue = receipts.filter(receipt => receipt.status === 'Paid').reduce((sum, receipt) => sum + receipt.amount, 0);
+    const pendingValue = pending.reduce((sum, receipt) => sum + receipt.amount, 0);
+
+    const changeReceiptStatus = async (receipt: InvoiceReceipt, status: InvoiceReceipt['status']) => {
+      if (!auth.accessToken) return;
+      try {
+        const response = await updateReceiptStatusRequest(auth.accessToken, receipt.invoiceId, status);
+        updateReceiptStatus(receipt.invoiceId, response.receipt.status);
+        setOperationNotice({ type: 'success', text: `${receipt.invoiceId} marked ${status.toLowerCase()}.` });
+      } catch (error) {
+        setOperationNotice({ type: 'error', text: error instanceof Error ? error.message : 'Failed to update receipt status.' });
+      }
+    };
 
     return (
       <div className="space-y-10">
@@ -521,18 +559,20 @@ const AdminDashboard: React.FC = () => {
             <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Backend visibility</span>
           </div>
           <div className="space-y-3">
-            {pending.length === 0 ? (
-              <p className="text-zinc-500 text-sm">No pending invoices currently.</p>
+            {receipts.length === 0 ? (
+              <p className="text-zinc-500 text-sm">No persisted receipts currently.</p>
             ) : (
-              pending.map((p) => (
-                <div key={p.id} className="rounded-2xl border border-zinc-800 bg-black/20 p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              receipts.map((receipt) => (
+                <div key={receipt.invoiceId} className="rounded-2xl border border-zinc-800 bg-black/20 p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                   <div>
-                    <p className="text-white font-bold uppercase text-sm">{p.projectName}</p>
-                    <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">{p.id}  -  {p.clientName}</p>
+                    <p className="text-white font-bold uppercase text-sm">{receipt.project}</p>
+                    <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">{receipt.invoiceId}  -  {receipt.clientName}</p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-primary font-black">${p.total.toLocaleString()}</span>
-                    <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-primary/10 text-primary">Awaiting Payment</span>
+                    <span className="text-primary font-black">${receipt.amount.toLocaleString()}</span>
+                    <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-primary/10 text-primary">{receipt.status}</span>
+                    {receipt.status === 'Pending' && <button onClick={() => changeReceiptStatus(receipt, 'Verifying')} className="px-3 py-2 rounded-lg bg-blue-500/10 text-blue-300 text-[9px] font-black uppercase">Verify POP</button>}
+                    {receipt.status === 'Verifying' && <button onClick={() => changeReceiptStatus(receipt, 'Paid')} className="px-3 py-2 rounded-lg bg-emerald-500/10 text-emerald-300 text-[9px] font-black uppercase">Mark Paid</button>}
                   </div>
                 </div>
               ))
@@ -967,20 +1007,29 @@ const AdminDashboard: React.FC = () => {
 
   //  Main render 
   return (
-    <div className="flex h-screen bg-[#0c0c0c] font-display text-left overflow-hidden">
+    <div className="flex h-screen bg-[#0c0c0c] font-display text-left overflow-hidden relative">
       <Helmet>
         <title>Studio Control | Figment Studio</title>
         <meta name="description" content="Figment Studio internal administration and client pipeline controller." />
       </Helmet>
 
-      <aside className="w-80 bg-zinc-950 border-r border-zinc-900 p-10 flex flex-col justify-between shrink-0">
+      {/* Mobile sidebar toggle */}
+      <button
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="lg:hidden fixed top-4 left-4 z-[120] bg-zinc-900 text-white p-3 rounded-xl border border-zinc-800 focus:outline-none"
+        aria-label="Toggle sidebar"
+      >
+        <span className="material-symbols-outlined">{sidebarOpen ? 'close' : 'menu'}</span>
+      </button>
+
+      <aside className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-[110] w-80 bg-zinc-950 border-r border-zinc-900 p-10 flex flex-col justify-between shrink-0 transition-transform duration-300`}>
         <div className="space-y-16">
           <Logo size={36} showWordmark showTagline />
           <nav className="space-y-4">
             {menuItems.map(item => (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id as any)}
+                onClick={() => { setActiveTab(item.id as any); setSidebarOpen(false); }}
                 className={`w-full flex items-center gap-4 font-black text-xs uppercase tracking-[0.2em] p-4 rounded-2xl transition-all ${activeTab === item.id ? 'text-primary bg-primary/5 border border-primary/20 shadow-lg shadow-primary/5' : 'text-zinc-600 hover:text-primary hover:bg-zinc-900/50 border border-transparent'}`}
               >
                 <span className="material-symbols-outlined">{item.icon}</span>
@@ -989,7 +1038,13 @@ const AdminDashboard: React.FC = () => {
             ))}
           </nav>
         </div>
-        <button onClick={() => navigate('/')} className="flex items-center gap-4 text-zinc-600 font-black text-xs uppercase tracking-[0.2em] p-4 hover:text-red-500 transition-all">
+        <button
+          onClick={() => {
+            logout();
+            navigate('/');
+          }}
+          className="flex items-center gap-4 text-zinc-600 font-black text-xs uppercase tracking-[0.2em] p-4 hover:text-red-500 transition-all"
+        >
           <span className="material-symbols-outlined">logout</span>
           Studio Logout
         </button>

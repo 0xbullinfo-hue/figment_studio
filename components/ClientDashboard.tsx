@@ -1,12 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { useStudioStore } from '../store';
 import Logo from './Logo.tsx';
-
-interface DashboardProps {
-  onOpenVision: () => void;
-}
 
 const getStatusStyles = (status: string) => {
   switch (status) {
@@ -32,7 +28,7 @@ const getStatusIcon = (status: string) => {
   }
 };
 
-const ClientDashboard: React.FC<DashboardProps> = ({ onOpenVision }) => {
+const ClientDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { projects, auth } = useStudioStore();
   const clientName = auth.name || 'Client';
@@ -97,13 +93,6 @@ const ClientDashboard: React.FC<DashboardProps> = ({ onOpenVision }) => {
             <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Client Portal / Overview</h2>
           </div>
           <div className="flex items-center gap-6">
-            <button
-              onClick={onOpenVision}
-              className="flex items-center gap-2 group text-primary hover:text-primary-hover transition-all"
-            >
-              <span className="material-symbols-outlined text-xl group-hover:rotate-12 transition-transform">auto_awesome</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] hidden lg:inline">Vision AI</span>
-            </button>
             <button className="size-8 text-gray-400 hover:text-primary transition-colors"><span className="material-symbols-outlined text-xl">notifications</span></button>
             <button onClick={() => navigate('/new-project')} className="px-5 py-2 bg-primary text-white rounded-lg font-black text-[10px] uppercase tracking-widest shadow-lg shadow-primary/20 active:scale-95 transition-all">+ New Project</button>
           </div>
@@ -173,15 +162,6 @@ const ClientDashboard: React.FC<DashboardProps> = ({ onOpenVision }) => {
             </section>
           </div>
         </div>
-
-        <button
-          onClick={onOpenVision}
-          className="absolute bottom-8 right-8 size-16 bg-primary text-white rounded-full flex items-center justify-center shadow-[0_12px_24px_-8px_rgba(244,140,37,0.5)] hover:scale-110 active:scale-95 transition-all group z-50"
-          title="Open Vision AI"
-        >
-          <div className="absolute inset-0 rounded-full bg-primary animate-ping opacity-20 group-hover:animate-none"></div>
-          <span className="material-symbols-outlined text-3xl group-hover:rotate-12 transition-transform">auto_awesome</span>
-        </button>
       </main>
     </div>
   );

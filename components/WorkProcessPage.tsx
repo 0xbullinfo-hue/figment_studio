@@ -77,7 +77,6 @@ const WorkProcessPage: React.FC = () => {
 
       <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto">
         <div className="max-w-4xl space-y-6 mb-14">
-          <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold font-sans">Works / The Process</p>
           <h1
             className="font-display font-light text-white leading-tight"
             style={{ fontSize: 'clamp(2.4rem, 5vw, 4.8rem)', lineHeight: 1.02 }}

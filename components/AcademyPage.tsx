@@ -4,10 +4,50 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useStudioStore } from '../store.ts';
 import { AcademyRegistration } from '../types.ts';
 
-// Dedicated Admin WhatsApp number (digits only, country code first, no plus/spaces)
-const ADMIN_WHATSAPP_NUMBER = "2348168299111";
-// Configurable Admin target WhatsApp link
-const WHATSAPP_LINK = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}`;
+// WhatsApp contact requirement is the local mobile number 08168299111.
+// The WhatsApp API expects the international E.164 equivalent for the actual link target.
+const ADMIN_WHATSAPP_NUMBER_LOCAL = '08168299111';
+const ADMIN_WHATSAPP_NUMBER_E164 = '2348168299111';
+
+const buildWhatsAppUrl = (text: string) => `https://wa.me/${ADMIN_WHATSAPP_NUMBER_E164}?text=${encodeURIComponent(text)}`;
+
+const buildAdmissionMessage = (formData: {
+  name: string;
+  email: string;
+  phone: string;
+  experienceLevel: AcademyRegistration['experienceLevel'];
+  preferredFormat: AcademyRegistration['preferredFormat'];
+  courseInterest: string;
+  message: string;
+  referralSource: string;
+  referrerName: string;
+}) => {
+  let waText = `Hello Figment Academy Admissions,
+
+I want to declare my interest to subscribe for the architectural visualization sessions. Here are my registration details:
+
+ -  Name: ${formData.name}
+ -  Email: ${formData.email}
+ -  WhatsApp Number: ${formData.phone}
+ -  Experience Level: ${formData.experienceLevel}
+ -  Mentorship Mode: ${formData.preferredFormat}
+ -  Course Selection: ${formData.courseInterest}`;
+
+  if (formData.referralSource) {
+    waText += `\n -  Referral Source: ${formData.referralSource}`;
+  }
+  if (formData.referrerName) {
+    waText += `\n -  Referrer Details: ${formData.referrerName}`;
+  }
+  if (formData.message.trim()) {
+    waText += `\n -  Cover Statement: "${formData.message.trim()}"`;
+  }
+
+  waText += `\n\nPlease let me know the next steps for cohort onboarding.`;
+  return waText;
+};
+
+const WHATSAPP_LINK = buildWhatsAppUrl(`Hello Figment Academy Admissions,\n\nI would like to enquire about the academy admissions process and learn the next steps for enrollment.`);
 
 const AcademyPage: React.FC = () => {
   const { addAcademyRegistration } = useStudioStore();
@@ -47,7 +87,7 @@ const AcademyPage: React.FC = () => {
     {
       title: "Lagos Apartment Block",
       category: "Residential (Lagos State)",
-      url: "/figment_media/3D-Apartment-Rendering-Lagos-state.png",
+      url: "/figment_media/3D-Apartment-Rendering-Lagos-state 2.png",
       software: "D5 Render + Photoshop + AI Enhancement"
     }
   ];
@@ -167,34 +207,10 @@ const AcademyPage: React.FC = () => {
 
       addAcademyRegistration(submission);
 
-      // Compose WhatsApp inquiry message with all selected data
-      let waText = `Hello Figment Academy Admissions,
+      const waText = buildAdmissionMessage(formData);
+      const whatsappUrl = buildWhatsAppUrl(waText);
 
-I want to declare my interest to subscribe for the architectural visualization sessions. Here are my registration details:
-
- -  Name: ${formData.name}
- -  Email: ${formData.email}
- -  WhatsApp Number: ${formData.phone}
- -  Experience Level: ${formData.experienceLevel}
- -  Mentorship Mode: ${formData.preferredFormat}
- -  Course Selection: ${formData.courseInterest}`;
-
-      if (formData.referralSource) {
-        waText += `\n -  Referral Source: ${formData.referralSource}`;
-      }
-      if (formData.referrerName) {
-        waText += `\n -  Referrer Details: ${formData.referrerName}`;
-      }
-      if (formData.message.trim()) {
-        waText += `\n -  Cover Statement: "${formData.message.trim()}"`;
-      }
-
-      waText += `\n\nPlease let me know the next steps for cohort onboarding.`;
-
-      const encodedText = encodeURIComponent(waText);
-      const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodedText}`;
-
-      // Open WhatsApp in a new tab
+      // Open WhatsApp in a new tab with the full interest declaration payload
       window.open(whatsappUrl, '_blank');
 
       setIsSubmitting(false);
@@ -240,9 +256,6 @@ I want to declare my interest to subscribe for the architectural visualization s
             transition={{ duration: 0.8 }}
             className="space-y-4"
           >
-            <span className="text-primary font-bold tracking-[0.3em] text-xs uppercase mb-4 block border-l-2 border-primary pl-4 font-sans">
-              STUDIO COHORTS & MENTORSHIP
-            </span>
             <h1 className="font-display font-light text-white uppercase tracking-tight leading-[0.9] text-5xl md:text-8xl drop-shadow-md">
               FIGMENT<br />
               <span className="font-light not-italic text-white/30">ACADEMY</span>
@@ -297,7 +310,6 @@ I want to declare my interest to subscribe for the architectural visualization s
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-text-muted select-none">
-          <span className="text-[9px] uppercase tracking-[0.25em] font-semibold">Explore Curriculums</span>
           <span className="material-symbols-outlined scroll-bounce text-lg text-primary">keyboard_arrow_down</span>
         </div>
       </section>
@@ -306,7 +318,6 @@ I want to declare my interest to subscribe for the architectural visualization s
       <section id="curriculum-section" className="sec border-t border-border-ui bg-background-alt scroll-mt-[100px]">
         <div className="wrap space-y-16">
           <div className="space-y-4 max-w-xl text-left">
-            <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold">THE CURRICULUM</p>
             <h2 className="font-display font-light text-white uppercase tracking-tight leading-[1] text-4xl md:text-6xl">
               Core Skills<br />
               <span className="font-light text-white/30">For Master Renderers</span>
@@ -347,7 +358,6 @@ I want to declare my interest to subscribe for the architectural visualization s
         <div className="wrap space-y-16">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 text-left">
             <div className="space-y-4 max-w-xl">
-              <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold">THE MENTORS</p>
               <h2 className="font-display font-light text-white uppercase tracking-tight leading-[1] text-4xl md:text-6xl">
                 Studio Lead<br />
                 <span className="font-light text-white/30">Portfolios</span>
@@ -388,7 +398,6 @@ I want to declare my interest to subscribe for the architectural visualization s
       <section className="sec bg-background-alt border-t border-border-ui">
         <div className="wrap space-y-16">
           <div className="space-y-4 max-w-xl text-left">
-            <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold">STUDENT PORTFOLIOS</p>
             <h2 className="font-display font-light text-white uppercase tracking-tight leading-[1] text-4xl md:text-6xl">
               Works From<br />
               <span className="font-light text-white/30">Past Cohorts</span>

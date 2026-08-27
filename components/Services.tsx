@@ -71,7 +71,6 @@ const Services: React.FC = () => {
       <div className="px-8 md:px-14 lg:px-20 pt-24 pb-16 max-w-[1600px] mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="space-y-4">
-            <p className="text-[10px] tracking-[0.3em] uppercase text-primary font-semibold font-sans">Our Expertise</p>
             <h2 className="font-display font-light text-white leading-tight" style={{ fontSize: 'clamp(2.4rem, 5vw, 4.5rem)', lineHeight: 1.05 }}>
               Tailored Visualization<br />
               <em className="font-light not-italic" style={{ color: 'rgba(255,255,255,0.3)' }}>for Every Scale</em>

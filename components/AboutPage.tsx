@@ -6,7 +6,6 @@ import { getPublicStudioContent } from '../services/apiClient.ts';
 
 const AboutPage: React.FC = () => {
   const [aboutContent, setAboutContent] = useState({
-    badge: 'Est. 2015  -  Abuja, Nigeria',
     headline: 'Visualizing the Future of African Design.',
     lead: 'Abuja\'s premier architectural visualization firm, where precision meets artistry in every pixel.',
     story: [
@@ -23,7 +22,6 @@ const AboutPage: React.FC = () => {
         return;
       }
       setAboutContent({
-        badge: content.about.badge || aboutContent.badge,
         headline: content.about.headline || aboutContent.headline,
         lead: content.about.lead || aboutContent.lead,
         story: Array.isArray(content.about.story) ? content.about.story : aboutContent.story,
@@ -45,7 +43,6 @@ const AboutPage: React.FC = () => {
       <section className="px-6 lg:px-20 py-20 bg-gray-50 overflow-hidden relative">
         <div className="absolute inset-0 abuja-map-overlay opacity-[0.03]"></div>
         <div className="max-w-[1200px] mx-auto relative z-10">
-          <span className="text-primary font-bold tracking-[0.3em] text-xs uppercase mb-6 block border-l-2 border-primary pl-4">{aboutContent.badge}</span>
           <h1 className="text-5xl md:text-8xl font-black leading-[1] tracking-tighter mb-8 uppercase">
             {aboutContent.headline.split('Future').length > 1 ? (
               <>Visualizing the <br /><span className="text-primary italic font-light">Future</span> of African Design.</>
@@ -62,7 +59,6 @@ const AboutPage: React.FC = () => {
       <section className="py-24 max-w-[1200px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20">
         <div>
           <div className="flex items-center gap-4 mb-8">
-            <span className="text-primary font-bold uppercase tracking-widest text-sm">Our Narrative</span>
             <div className="w-16 h-[2px] bg-primary"></div>
           </div>
           <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-10 uppercase">Our Story</h2>
