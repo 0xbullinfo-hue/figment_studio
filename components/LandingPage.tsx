@@ -1,25 +1,24 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Hero from './Hero';
 import Services from './Services';
 import Portfolio from './Portfolio';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { useStudioStore } from '../store.ts';
+import { ClientReview } from '../types.ts';
 
 const TEAM = [
-  { name: 'Ikechukwu Onuegbu', role: 'Managing Director', specialty: 'Architectural Vision & Strategy', img: '/ikechukwu-onuegbu.jpg' },
-  { name: 'Loveth', role: 'Admin', specialty: 'Studio Operations & Client Success', img: '/avatar-silhouette.svg' },
-  { name: 'Chinedu', role: 'Developer', specialty: 'Technical Pipeline & Web Systems', img: '/avatar-silhouette.svg' },
-  { name: 'Amara', role: 'Media Manager', specialty: 'Brand Identity & Media Outreach', img: '/avatar-silhouette.svg' },
+  { name: 'Ikechukwu Onuegbu', role: 'Creative Team Lead (Architect)', specialty: 'Architectural Vision & Strategy', img: '/team/ikechukwu-onuegbu.jpg' },
+  { name: 'John Noah', role: 'Creative Model Specialist', specialty: '3D Modeling & Scene Composition', img: '/team/john-noah.jpg' },
+  { name: 'Chinedu Onuegbu', role: 'Creative Developer', specialty: 'Technical Pipeline & Web Systems', img: '/team/chinedu-onuegbu.png' },
+  { name: 'Loveth', role: 'Studio Operations', specialty: 'Client Success & Project Coordination', img: '/avatar-silhouette.svg' },
 ];
 
 const PROCESS = [
-  { n: '01', title: 'Brief & Sketch Upload', body: 'Submit your project brief and reference images. We lock geometry constraints early to prevent costly revisions.' },
-  { n: '02', title: 'Guided Scene Direction', body: 'Use our camera, motion, and context workflow to direct scene output and refine the strongest presentation angles.' },
-  { n: '03', title: 'Payment Settlement', body: 'Pay in USD or NGN via Paystack or Flutterwave with full SSL security. Transparent pricing, no hidden fees.' },
-  { n: '04', title: 'Private Delivery', body: 'Access assets, revisions, and handoff via your secure dashboard. Every file encrypted and watermark-free.' },
+  { n: '01', title: 'Brief & Sketch Upload', body: "Share your vision. Upload sketches, mood boards, or CAD files — we'll study every detail before the first pixel is placed." },
+  { n: '02', title: 'Guided Scene Direction', body: 'Direct the story. Choose your camera angles, lighting mood, and motion paths — or let our team recommend what sells best.' },
+  { n: '03', title: 'Payment Settlement', body: 'Secure payment, your way. Settle in Naira or USD through Paystack or Flutterwave — every transaction encrypted, every fee transparent.' },
+  { n: '04', title: 'Private Delivery', body: 'Your private gallery. Download final assets, request revisions, and share with stakeholders — all from your secure client portal.' },
 ];
-
 
 const INSIGHTS = [
   {
@@ -69,9 +68,6 @@ const PLANS = [
   },
 ];
 
-import { useStudioStore } from '../store.ts';
-import { ClientReview } from '../types.ts';
-
 const SectionHeading: React.FC<{ children: React.ReactNode; dim?: string }> = ({ children, dim }) => (
   <h2 className="font-display font-light text-white leading-tight" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4rem)', lineHeight: 1.06 }}>
     {children}
@@ -110,7 +106,7 @@ const LandingPage: React.FC = () => {
       rating: newReview.rating,
       comment: newReview.comment,
       date: new Date().toISOString().split('T')[0],
-      approved: true
+      approved: false
     };
     addReview(submittedReview);
     setReviewSubmitted(true);
@@ -120,6 +116,15 @@ const LandingPage: React.FC = () => {
       setShowForm(false);
     }, 3000);
   };
+
+  const scrollToServices = useCallback(() => {
+    const el = document.getElementById('services');
+    if (el) {
+      const headerOffset = 96;
+      const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  }, []);
 
   useEffect(() => {
     const scrollTarget = searchParams.get('scroll');
@@ -138,7 +143,7 @@ const LandingPage: React.FC = () => {
         return;
       }
 
-      const timeouts = [120, 260, 420, 650].map((delay) =>
+      const timeouts = [120, 300, 500, 800].map((delay) =>
         setTimeout(() => {
           scrollToTarget();
         }, delay)
@@ -150,11 +155,6 @@ const LandingPage: React.FC = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Figment Studio | Premium Architectural Visualization</title>
-        <meta name="description" content="Figment Studio provides world-class architectural rendering, cinematic 3D animation, and real estate visualization across Nigeria and globally." />
-      </Helmet>
-
       <Hero
         onStartProject={() => navigate('/estimator')}
         onExploreWorks={() => navigate('/works')}
@@ -174,14 +174,14 @@ const LandingPage: React.FC = () => {
                 </SectionHeading>
               </div>
               <p className="text-white/50 text-base leading-relaxed max-w-lg font-sans">
-                From our studio in the heart of Nigeria's capital, Figment Studio captures the essence of modern African architecture and international contemporary design. We leverage the unique light and landscape of Abuja to bring an authentic perspective to every project.
+                From our studio in the heart of Nigeria's capital, we capture the essence of modern African architecture and international contemporary design. We leverage the unique light and landscape of Abuja to bring an authentic perspective to every project.
               </p>
               <div className="grid grid-cols-2 gap-6 pt-4">
                 {[
                   { num: '200+', label: 'Projects' },
                   { num: '8+', label: 'Years' },
                   { num: '40+', label: 'Clients' },
-                  { num: '4K', label: 'Max Res.' },
+                  { num: '4K', label: 'Render Quality' },
                 ].map((s) => (
                   <div key={s.label} className="border-l-2 border-primary/30 pl-5 space-y-1">
                     <p className="font-display font-light text-white text-3xl">{s.num}</p>
@@ -199,6 +199,7 @@ const LandingPage: React.FC = () => {
               <div className="absolute -top-4 -right-4 w-3/4 h-[110%] border border-border-ui -z-0 hidden lg:block" />
               <img
                 alt="Figment Studio Abuja"
+                loading="lazy"
                 className="relative z-10 w-full h-[520px] object-cover"
                 src="/figment_media/3D-Rendering-Abuja.png"
               />
@@ -221,7 +222,7 @@ const LandingPage: React.FC = () => {
                 Built For<br />Professional
               </SectionHeading>
               <p className="text-white/45 text-sm leading-relaxed max-w-md font-sans">
-                Every premium project moves through a secure, auditable flow designed for serious developers and architects  -  from intake to final asset handoff.
+                Every premium project moves through a secure, auditable flow designed for serious developers and architects — from intake to final asset handoff.
               </p>
               <button onClick={() => navigate('/estimator')} className="flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase bg-primary hover:bg-primary-hover text-white px-7 py-3.5 font-semibold transition-all duration-300 hover:shadow-[0_4px_14px_rgba(240,122,58,0.3)] mt-2">
                 <span className="material-symbols-outlined text-base">calculate</span>
@@ -244,7 +245,7 @@ const LandingPage: React.FC = () => {
                       </div>
                       <span className={`material-symbols-outlined text-[18px] flex-shrink-0 transition-all duration-300 ${isOpen ? 'text-primary rotate-45' : 'text-white/20 rotate-0 group-hover:text-white/40'}`}>add</span>
                     </button>
-                    <div className={`overflow-hidden transition-all duration-500 ${isOpen ? 'max-h-32 pb-6 opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <div className={`overflow-hidden transition-all duration-500 ${isOpen ? 'max-h-40 pb-6 opacity-100' : 'max-h-0 opacity-0'}`}>
                       <p className="text-white/45 text-sm leading-relaxed font-sans pl-16">{step.body}</p>
                     </div>
                   </div>
@@ -273,8 +274,9 @@ const LandingPage: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {TEAM.map((member) => (
               <div key={member.name} className="group space-y-4">
-                <div className="relative overflow-hidden aspect-[3/4]">
+                <div className="relative overflow-hidden aspect-[3/4] bg-[#1a1a1a] rounded-lg">
                   <img
+                    loading="lazy"
                     src={member.img}
                     alt={member.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -307,9 +309,9 @@ const LandingPage: React.FC = () => {
               </div>
               
               <div className="flex flex-wrap gap-4 pt-4 font-sans">
-                {reviews.length > 0 && (
+                {reviews.filter(r => r.approved).length > 0 && (
                   <div className="flex gap-2">
-                    {reviews.map((_, i) => (
+                    {reviews.filter(r => r.approved).map((_, i) => (
                       <button
                         key={i}
                         onClick={() => setActiveTestimonial(i)}
@@ -322,17 +324,18 @@ const LandingPage: React.FC = () => {
                   onClick={() => setShowForm(!showForm)}
                   className="px-6 py-2.5 bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-white rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer font-sans"
                 >
-                  {showForm ? "Cancel Review" : "Write a Review"}
+                  {showForm ? "Cancel Review" : "Share Your Experience"}
                 </button>
               </div>
             </div>
 
             <div className="relative min-h-[260px] text-left">
-              {reviews.length === 0 ? (
+              {reviews.filter(r => r.approved).length === 0 ? (
                 <p className="text-zinc-600 italic text-sm font-sans pt-12">No client reviews posted yet. Be the first to share your experience!</p>
               ) : (
-                reviews.map((rev, i) => {
-                  const isActive = i === (activeTestimonial % reviews.length);
+                reviews.filter(r => r.approved).map((rev, i) => {
+                  const approvedList = reviews.filter(r => r.approved);
+                  const isActive = i === (activeTestimonial % approvedList.length);
                   return (
                     <div
                       key={rev.id}
@@ -343,7 +346,7 @@ const LandingPage: React.FC = () => {
                         <div className="flex justify-between items-center">
                           <span className="font-display text-6xl text-primary/20 leading-none select-none">"</span>
                           <span className="text-primary font-bold text-xs tracking-wider">
-                            {'*'.repeat(rev.rating)}{'-'.repeat(5 - rev.rating)}
+                            {'★'.repeat(rev.rating)}{'☆'.repeat(5 - rev.rating)}
                           </span>
                         </div>
                         <p className="text-white/70 text-lg font-light leading-relaxed font-sans italic">
@@ -357,7 +360,7 @@ const LandingPage: React.FC = () => {
                           </div>
                           <div>
                             <p className="text-sm font-semibold text-white font-sans">{rev.name}</p>
-                            <p className="text-[11px] text-white/35 font-sans">{rev.role} {rev.company ? ` -  ${rev.company}` : ''}</p>
+                            <p className="text-[11px] text-white/35 font-sans">{rev.role} {rev.company ? ` — ${rev.company}` : ''}</p>
                           </div>
                         </div>
 
@@ -367,7 +370,7 @@ const LandingPage: React.FC = () => {
                               deleteReview(rev.id);
                               setActiveTestimonial(0);
                             }}
-                            className="text-red-500 border border-red-950/20 hover:border-red-700 bg-red-950/10 hover:bg-red-950/20 px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded transition-all cursor-pointer flex items-center gap-1"
+                            className="text-red-400 border border-red-900/30 hover:border-red-700 bg-red-950/10 hover:bg-red-950/20 px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded transition-all cursor-pointer flex items-center gap-1"
                           >
                             <span className="material-symbols-outlined text-xs">delete</span>
                             Delete
@@ -389,8 +392,8 @@ const LandingPage: React.FC = () => {
                   <div className="mx-auto w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-500">
                     <span className="material-symbols-outlined">done</span>
                   </div>
-                  <h3 className="font-display text-white text-xl uppercase tracking-widest">Review Published!</h3>
-                  <p className="text-zinc-400 text-xs font-sans font-light">Thank you for sharing your feedback with the Figment Studio community.</p>
+                  <h3 className="font-display text-white text-xl uppercase tracking-widest">Review Submitted</h3>
+                  <p className="text-zinc-400 text-xs font-sans font-light">Thank you for your feedback. It will appear after moderator approval.</p>
                 </div>
               ) : (
                 <form onSubmit={handleReviewSubmit} className="space-y-6 font-sans">
@@ -463,7 +466,7 @@ const LandingPage: React.FC = () => {
                     type="submit"
                     className="w-full py-4 bg-primary hover:bg-primary-hover text-white font-bold text-xs uppercase tracking-widest rounded-lg shadow-lg shadow-primary/10 transition-all cursor-pointer"
                   >
-                    Submit Review Live
+                    Submit Review for Approval
                   </button>
                 </form>
               )}
@@ -481,8 +484,8 @@ const LandingPage: React.FC = () => {
                 Premium Tiers
               </SectionHeading>
             </div>
-            <p className="max-w-sm text-white/40 leading-relaxed text-sm font-sans md:text-right">
-              Scale from instant previews to private production workflows with studio-grade AI visualization.
+            <p className="max-w-sm text-white/50 leading-relaxed text-sm font-sans md:text-right">
+              Every project is unique. Tell us about yours and we'll respond with a tailored proposal within 24 hours.
             </p>
           </div>
 
@@ -490,7 +493,7 @@ const LandingPage: React.FC = () => {
             {PLANS.map((plan) => (
               <article
                 key={plan.tier}
-                className={`relative flex flex-col gap-8 p-10 ${plan.featured ? 'bg-surface border-t-2 border-t-primary' : 'bg-[#0E0E0E]'}`}
+                className={`relative flex flex-col gap-8 p-10 ${plan.featured ? 'bg-surface border-t-2 border-t-primary' : 'bg-[#0E0E0E]'} group hover:border-primary/20 transition-colors`}
               >
                 {plan.featured && (
                   <div className="absolute top-0 right-8 -translate-y-1/2">
@@ -528,18 +531,6 @@ const LandingPage: React.FC = () => {
                 >
                   {plan.cta}
                 </button>
-
-                {/* Coming Soon overlay for all plans */}
-                <div className={`absolute inset-0 ${plan.featured ? 'bg-surface' : 'bg-[#0E0E0E]'} z-20 flex flex-col items-center justify-center p-6 text-center`}>
-                  <span className="bg-primary/20 text-primary border border-primary/30 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.25em] mb-3">
-                    Coming Soon
-                  </span>
-                  <p className="text-xs text-text-secondary max-w-[220px] leading-relaxed font-sans">
-                    {plan.tier === 'Studio Pro'
-                      ? 'Mentorship cohorts and GPU cloud renders are currently in closed preview.'
-                      : 'Free design discovery tools and conceptual sketch planning are launching soon.'}
-                  </p>
-                </div>
               </article>
             ))}
           </div>
@@ -568,11 +559,12 @@ const LandingPage: React.FC = () => {
                 className="group bg-background cursor-pointer"
                 onClick={() => {
                   const slug = post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                  navigate(`/insights?read=${slug}`);
+                  navigate(`/insights/${slug}`);
                 }}
               >
                 <div className="aspect-[16/10] overflow-hidden">
                   <img
+                    loading="lazy"
                     src={post.img}
                     alt={post.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -610,7 +602,7 @@ const LandingPage: React.FC = () => {
           {/* Glow */}
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] pointer-events-none"
-            style={{ background: 'radial-gradient(ellipse, rgba(240,122,58,0.14) 0%, transparent 65%)', filter: 'blur(80px)' }}
+            style={{ background: 'radial-gradient(ellipse, rgba(240,122,58,0.12) 0%, transparent 65%)', filter: 'blur(80px)' }}
           />
 
           <div className="relative z-10 max-w-[1600px] mx-auto text-center space-y-8">
@@ -618,13 +610,13 @@ const LandingPage: React.FC = () => {
               className="font-display font-light text-white"
               style={{ fontSize: 'clamp(3rem, 7vw, 6.5rem)', lineHeight: 0.98, letterSpacing: '-0.025em' }}
             >
-              Bring Your Vision<br />
+              Let's Build Something<br />
               <span style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', backgroundImage: 'linear-gradient(135deg, #F07A3A 0%, #FF9A5C 60%, #F07A3A 100%)' }}>
-                To Life.
+                Unforgettable.
               </span>
             </h2>
-            <p className="text-white/40 max-w-lg mx-auto leading-relaxed text-base font-sans">
-              Join 200+ architects and developers who trust Figment Studio for their most ambitious projects.
+            <p className="text-white/50 max-w-lg mx-auto leading-relaxed text-base font-sans">
+              From Abuja to Lagos, from concept to completion — over 200 projects delivered with precision, passion, and a relentless eye for detail.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <button
@@ -637,7 +629,7 @@ const LandingPage: React.FC = () => {
                 onClick={() => navigate('/estimator')}
                 className="border border-white/15 hover:border-white/35 text-white/60 hover:text-white text-[11px] font-bold uppercase tracking-[0.2em] px-10 py-4 transition-all duration-300"
               >
-                Instant Estimate
+                Get an Estimate
               </button>
             </div>
           </div>
@@ -648,5 +640,3 @@ const LandingPage: React.FC = () => {
 };
 
 export default LandingPage;
-
-

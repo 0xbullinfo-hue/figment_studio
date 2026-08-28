@@ -81,7 +81,7 @@ export const INSIGHT_ARTICLES: InsightArticle[] = [
     readTime: '5 min read',
     title: 'The Future of 3D Printing in West African Construction',
     excerpt: 'An analysis of how additive manufacturing and concrete 3D printing are beginning to emerge in urban centers like Lagos and Accra.',
-    img: '/figment_media/3D-Villa-Animation-Abuja-Cover.jpg',
+    img: '/figment_media/3D-Printing.png',
     paragraphs: [
       'Additive manufacturing is transitioning from a high-tech novelty to a viable solution for the housing deficit in West Africa. Concrete 3D printing represents a paradigm shift in material efficiency and build speed.',
       '### Redefining Speed and Logistics',

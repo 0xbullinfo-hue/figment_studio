@@ -1,8 +1,6 @@
 
 import { Project } from './types.ts';
 
-const COVER_IMAGE = '/figment_media/3D-Villa-Animation-Abuja-Cover.jpg';
-
 export const IMAGES = {
   hero: "/figment_media/3D-Rendering-Abuja.png",
 
@@ -14,9 +12,9 @@ export const IMAGES = {
   },
 
   staff: [
-    { name: 'Ikechukwu Onuegbu', role: 'Creative Team Lead (Architect)', url: '/avatar-silhouette.svg' },
-    { name: 'John Noah', role: 'Creative Model specialist (Architect)', url: '/avatar-silhouette.svg' },
-    { name: 'Chinedu Onuegbu', role: 'Creative Developer (IT)', url: '/avatar-silhouette.svg' },
+    { name: 'Ikechukwu Onuegbu', role: 'Creative Team Lead (Architect)', url: '/team/ikechukwu-onuegbu.jpg' },
+    { name: 'John Noah', role: 'Creative Model specialist (Architect)', url: '/team/john-noah.jpg' },
+    { name: 'Chinedu Onuegbu', role: 'Creative Developer (IT)', url: '/team/chinedu-onuegbu.png' },
   ],
 
   about: {
@@ -32,7 +30,7 @@ export const IMAGES = {
       title: 'Abuja Luxury Villa Walkthrough', 
       category: 'Residential', 
       location: 'Maitama', 
-      url: COVER_IMAGE,
+      url: '/figment_media/3D-Rendering-Abuja 2.png',
       type: 'Animation',
       hasPlay: true,
       videoUrl: '/figment_media/3D-Villa-Animation-Abuja.mp4'
@@ -50,7 +48,7 @@ export const IMAGES = {
       title: 'Abuja B2B Residential Suite', 
       category: 'Residential (B2B)', 
       location: 'Central District', 
-      url: COVER_IMAGE,
+      url: '/figment_media/3D-Rendering-B2B-Abuja 3.png',
       type: 'Animation', 
       hasPlay: true,
       videoUrl: '/figment_media/3D-Office-Interior -Animation-Abuja.mp4'
@@ -66,9 +64,9 @@ export const IMAGES = {
   ],
 
   gallery: [
-    { id: 3, type: 'Animation', title: 'Lagos Apartment Walkthrough', url: COVER_IMAGE, class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Apartment-Animation-Lagos-state.mp4' },
+    { id: 3, type: 'Animation', title: 'Lagos Apartment Walkthrough', url: '/figment_media/3D-Apartment-Rendering-Lagos-state.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Apartment-Animation-Lagos-state.mp4' },
     { id: 4, type: 'Scale Models', title: 'Precision Maquette Printing', url: '/figment_media/3D-Printing.png', class: 'aspect-square' },
-    { id: 5, type: 'Scale Models', title: 'Residential Development Scale Model', url: COVER_IMAGE, class: 'aspect-[4/3]' },
+    { id: 5, type: 'Scale Models', title: 'Residential Development Scale Model', url: '/figment_media/3D-Printing-2.png', class: 'aspect-[4/3]' },
     { id: 6, type: 'Exterior', title: 'Edo Country Manor', url: '/figment_media/3D-Country-home-Rendering-Edo-state 1.png', class: 'aspect-[4/3]' },
     { id: 7, type: 'Exterior', title: 'Edo Country Manor - Side View', url: '/figment_media/3D-Country-home-Rendering-Edo-state 2.png', class: 'aspect-[4/3]' },
     { id: 8, type: 'Exterior', title: 'Edo Country Manor - Aerial View', url: '/figment_media/3D-Country-home-Rendering-Edo-state-Roof.png', class: 'aspect-[4/3]' },
@@ -78,10 +76,10 @@ export const IMAGES = {
     { id: 12, type: 'Interior', title: 'Abuja Serviced Apartment', url: '/figment_media/3D-Rendering-B2B-Abuja 2.png', class: 'aspect-[4/3]' },
     { id: 13, type: 'Interior', title: 'Abuja B2B Residential Suite', url: '/figment_media/3D-Rendering-B2B-Abuja 3.png', class: 'aspect-[4/3]' },
     { id: 14, type: 'Exterior', title: 'Bus Transit Terminal', url: '/figment_media/Ai-Render-Bus-terminal.png', class: 'aspect-[3/2]' },
-    { id: 15, type: 'Animation', title: 'Edo Suburban Estate Walkthrough', url: COVER_IMAGE, class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Villa-Animation-Edo-state.mp4' },
-    { id: 16, type: 'Animation', title: 'Abuja Luxury Villa Walkthrough', url: COVER_IMAGE, class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Villa-Animation-Abuja.mp4' },
+    { id: 15, type: 'Animation', title: 'Edo Suburban Estate Walkthrough', url: '/figment_media/3D-Country-home-Rendering-Edo-state 1.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Villa-Animation-Edo-state.mp4' },
+    { id: 16, type: 'Animation', title: 'Abuja Luxury Villa Walkthrough', url: '/figment_media/3D-Rendering-Abuja 2.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Villa-Animation-Abuja.mp4' },
     { id: 17, type: 'Exterior', title: 'Ondo Modern Residence', url: '/figment_media/3D-B2B-Rendering-Ondo-state.png', class: 'aspect-[3/2]' },
-    { id: 18, type: 'Animation', title: 'Abuja B2B Residential Walkthrough', url: COVER_IMAGE, class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Office-Interior -Animation-Abuja.mp4' },
+    { id: 18, type: 'Animation', title: 'Abuja B2B Residential Walkthrough', url: '/figment_media/3D-Rendering-B2B-Abuja 3.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Office-Interior -Animation-Abuja.mp4' },
     { id: 19, type: 'Exterior', title: 'Abuja Apartment', url: '/figment_media/3D-Rendering-Abuja 2.png', class: 'aspect-[4/3]' }
   ]
 };

@@ -199,6 +199,9 @@ const PortfolioGallery: React.FC = () => {
                         alt={item.title}
                         loading="lazy"
                         decoding="async"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/figment_media/3D-Rendering-Abuja.png';
+                        }}
                         className="w-full h-full object-cover transition-all duration-[900ms] group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-all duration-500" />
@@ -261,7 +264,7 @@ const PortfolioGallery: React.FC = () => {
             {/* Left Pane: Cinematic Visual Focus Frame */}
             <div className="w-full lg:w-[65%] h-[45vh] lg:h-full relative flex items-center justify-center bg-black/20 p-8 lg:p-16 border-b border-border-ui lg:border-none">
               <span className="absolute top-6 left-8 text-[9px] tracking-[0.3em] font-sans text-primary font-bold uppercase hidden md:block">
-                Figment Studio  -  Master Series Visual
+                Figment Studio — Master Series Visual
               </span>
 
               {/* Render Image or Animated Loop */}
@@ -272,6 +275,9 @@ const PortfolioGallery: React.FC = () => {
                       src={selectedItem.url}
                       className="w-full h-full object-contain shadow-2xl rounded-2xl"
                       alt={selectedItem.title}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/figment_media/3D-Rendering-Abuja.png';
+                      }}
                     />
                     {selectedItem.hasPlay && (
                       <div
@@ -288,6 +294,7 @@ const PortfolioGallery: React.FC = () => {
                     <div className="relative w-full h-full bg-zinc-950 flex items-center justify-center rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
                       <video 
                         src={selectedItem.videoUrl} 
+                        poster={selectedItem.url}
                         controls 
                         autoPlay 
                         className="w-full h-full object-contain"

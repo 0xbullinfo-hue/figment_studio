@@ -1,4 +1,4 @@
-﻿
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStudioStore } from '../store.ts';
@@ -77,8 +77,12 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
               {project.imageUrl ? (
                 <img
                   alt={project.title}
+                  loading="lazy"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                   src={project.imageUrl}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/figment_media/3D-Rendering-Abuja.png';
+                  }}
                 />
               ) : (
                 <div className="absolute inset-0 bg-zinc-950/60 overflow-hidden flex flex-col items-center justify-center p-6 text-center">
@@ -100,20 +104,12 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
               )}
 
               <div className="absolute bottom-0 left-0 p-8">
-                <p className="text-primary text-[10px] tracking-[0.25em] uppercase font-bold mb-2 font-sans">
-                  {project.category}  -  {project.location}
+                <p className="text-primary text-[10px] tracking-[0.22em] uppercase font-bold mb-2 font-sans">
+                  {project.category} — {project.location}
                 </p>
                 <h3 className="font-display font-light text-white text-2xl md:text-3xl leading-tight tracking-tight">
                   {project.title}
                 </h3>
-                <div className="flex items-center gap-3 mt-4 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white">
-                    <span className="material-symbols-outlined text-base">{project.hasPlay ? 'play_arrow' : 'zoom_in'}</span>
-                  </span>
-                  <span className="text-white/50 text-[10px] font-bold uppercase tracking-widest font-sans">
-                    {project.hasPlay ? 'Watch Animation' : 'View Full Render'}
-                  </span>
-                </div>
               </div>
             </div>
           ))}
@@ -124,13 +120,17 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
               <div
                 key={project.id}
                 onClick={() => setSelectedProject(project)}
-                className="group relative overflow-hidden cursor-pointer aspect-[16/9]"
+                className="group relative overflow-hidden aspect-[16/10] cursor-pointer"
               >
                 {project.imageUrl ? (
                   <img
                     alt={project.title}
+                    loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                     src={project.imageUrl}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/figment_media/3D-Rendering-Abuja.png';
+                    }}
                   />
                 ) : (
                   <div className="absolute inset-0 bg-zinc-950/60 overflow-hidden flex flex-col items-center justify-center p-6 text-center">
@@ -146,7 +146,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-500" />
                 <div className="absolute bottom-0 left-0 p-6">
                   <p className="text-primary text-[9px] tracking-[0.22em] uppercase font-bold mb-1.5 font-sans">
-                    {project.category}  -  {project.location}
+                    {project.category} — {project.location}
                   </p>
                   <h3 className="font-display font-light text-white text-xl leading-tight tracking-tight">
                     {project.title}
@@ -172,13 +172,21 @@ const Portfolio: React.FC<PortfolioProps> = ({ onViewAll }) => {
             {isPlayingVideo && selectedProject.videoUrl ? (
               <video 
                 src={selectedProject.videoUrl} 
+                poster={selectedProject.imageUrl}
                 controls 
                 autoPlay 
                 className="w-full h-full object-contain"
               />
             ) : (
               <>
-                <img src={selectedProject.imageUrl} className="w-full h-full object-cover" alt={selectedProject.title} />
+                <img
+                  src={selectedProject.imageUrl}
+                  className="w-full h-full object-cover"
+                  alt={selectedProject.title}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/figment_media/3D-Rendering-Abuja.png';
+                  }}
+                />
                 {selectedProject.hasPlay && (
                   <div 
                     onClick={() => setIsPlayingVideo(true)}
