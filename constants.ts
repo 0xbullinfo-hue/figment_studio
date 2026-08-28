@@ -47,14 +47,12 @@ export const IMAGES = {
     },
     { 
       id: 'P3', 
-      title: 'Lagos Luxury Apartments', 
-      category: 'Residential Development', 
-      location: 'Victoria Island, Lagos', 
-      url: '/figment_media/3D-Apartment-Rendering-Lagos-state.png',
-      description: 'Photorealistic multi-story apartment visualization capturing coastal daylight refraction, expansive glass balconies, and refined textured cladding.',
-      type: 'Animation', 
-      hasPlay: true,
-      videoUrl: '/figment_media/3D-Apartment-Animation-Lagos-state.mp4'
+      title: 'Anambra Villa Master Suite', 
+      category: 'Interior Visualization', 
+      location: 'Awka, Anambra', 
+      url: '/figment_media/3D-Rendering-interior-Anambra 2.png',
+      description: 'Ultra-modern master suite interior styling featuring minimalist bedside globes, warm sheer drapery, and curated abstract art.',
+      type: 'Interior'
     },
     { 
       id: 'P4', 
@@ -93,7 +91,14 @@ export const IMAGES = {
     { id: 16, type: 'Animation', title: 'Abuja Luxury Villa Walkthrough', url: '/figment_media/3D-Rendering-Abuja 2.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Villa-Animation-Abuja.mp4' },
     { id: 17, type: 'Exterior', title: 'Ondo Modern Residence', url: '/figment_media/3D-B2B-Rendering-Ondo-state.png', class: 'aspect-[3/2]' },
     { id: 18, type: 'Animation', title: 'Abuja B2B Residential Walkthrough', url: '/figment_media/3D-Rendering-B2B-Abuja 3.png', class: 'aspect-video', hasPlay: true, videoUrl: '/figment_media/3D-Office-Interior -Animation-Abuja.mp4' },
-    { id: 19, type: 'Exterior', title: 'Abuja Apartment', url: '/figment_media/3D-Rendering-Abuja 2.png', class: 'aspect-[4/3]' }
+    { id: 19, type: 'Exterior', title: 'Abuja Apartment', url: '/figment_media/3D-Rendering-Abuja 2.png', class: 'aspect-[4/3]' },
+    { id: 20, type: 'Exterior', title: 'Anambra Contemporary Villa', url: '/figment_media/3D-Rendering-Anambra 1.png', class: 'aspect-[4/3]' },
+    { id: 21, type: 'Exterior', title: 'Anambra Villa Cantilever View', url: '/figment_media/3D-Rendering-Anambra 2.png', class: 'aspect-[4/3]' },
+    { id: 22, type: 'Exterior', title: 'Anambra Villa Architecture Detail', url: '/figment_media/3D-Rendering-Anambra 3.png', class: 'aspect-[4/3]' },
+    { id: 23, type: 'Exterior', title: 'Anambra Villa Garden Perspective', url: '/figment_media/3D-Rendering-Anambra 4.png', class: 'aspect-[4/3]' },
+    { id: 24, type: 'Interior', title: 'Anambra Villa Dining & Grand Piano', url: '/figment_media/3D-Rendering-interior-Anambra 1.png', class: 'aspect-[4/3]' },
+    { id: 25, type: 'Interior', title: 'Anambra Villa Master Suite', url: '/figment_media/3D-Rendering-interior-Anambra 2.png', class: 'aspect-[4/3]' },
+    { id: 26, type: 'Interior', title: 'Anambra Villa Living Lounge', url: '/figment_media/3D-Rendering-interior-Anambra 3.png', class: 'aspect-[4/3]' }
   ]
 };
 
