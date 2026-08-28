@@ -97,13 +97,13 @@ const Header: React.FC = () => {
           {/* Logo  -  show wordmark + tagline consistently across all pages */}
           <button
             onClick={() => navigate('/')}
-            className="flex-shrink-0 group focus:outline-none"
+            className="flex-shrink-0 group focus:outline-none min-w-0"
             aria-label="Figment Creative Studio Home"
           >
             <Logo
-              size={38}
+              size={{ sm: 28, md: 32, lg: 38 }}
               showWordmark
-              showTagline
+              showTagline={false}
             />
           </button>
 
