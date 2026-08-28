@@ -47,11 +47,11 @@ export const IMAGES = {
     },
     { 
       id: 'P3', 
-      title: 'Anambra Villa Master Suite', 
+      title: 'Anambra Villa Living Lounge', 
       category: 'Interior Visualization', 
       location: 'Awka, Anambra', 
       url: '/figment_media/3D-Rendering-interior-Anambra 2.png',
-      description: 'Ultra-modern master suite interior styling featuring minimalist bedside globes, warm sheer drapery, and curated abstract art.',
+      description: 'Ultra-modern interior styling featuring minimalist bedside globes, warm sheer drapery, and curated abstract art.',
       type: 'Interior'
     },
     { 
@@ -97,8 +97,8 @@ export const IMAGES = {
     { id: 22, type: 'Exterior', title: 'Anambra Villa Architecture Detail', url: '/figment_media/3D-Rendering-Anambra 3.png', class: 'aspect-[4/3]' },
     { id: 23, type: 'Exterior', title: 'Anambra Villa Garden Perspective', url: '/figment_media/3D-Rendering-Anambra 4.png', class: 'aspect-[4/3]' },
     { id: 24, type: 'Interior', title: 'Anambra Villa Dining & Grand Piano', url: '/figment_media/3D-Rendering-interior-Anambra 1.png', class: 'aspect-[4/3]' },
-    { id: 25, type: 'Interior', title: 'Anambra Villa Master Suite', url: '/figment_media/3D-Rendering-interior-Anambra 2.png', class: 'aspect-[4/3]' },
-    { id: 26, type: 'Interior', title: 'Anambra Villa Living Lounge', url: '/figment_media/3D-Rendering-interior-Anambra 3.png', class: 'aspect-[4/3]' }
+    { id: 25, type: 'Interior', title: 'Anambra Villa Living Lounge', url: '/figment_media/3D-Rendering-interior-Anambra 2.png', class: 'aspect-[4/3]' },
+    { id: 26, type: 'Interior', title: 'Anambra Villa Master Suite', url: '/figment_media/3D-Rendering-interior-Anambra 3.png', class: 'aspect-[4/3]' }
   ]
 };
 
