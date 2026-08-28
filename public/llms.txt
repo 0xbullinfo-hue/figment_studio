@@ -20,7 +20,6 @@ Core public pages:
 - https://figmentstudio.ng/
 - https://figmentstudio.ng/about
 - https://figmentstudio.ng/works
-- https://figmentstudio.ng/works/process
 - https://figmentstudio.ng/portfolio
 - https://figmentstudio.ng/insights
 - https://figmentstudio.ng/contact

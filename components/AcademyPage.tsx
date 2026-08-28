@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStudioStore } from '../store.ts';
@@ -11,6 +11,55 @@ const ADMIN_WHATSAPP_NUMBER_E164 = '2348168299111';
 
 const buildWhatsAppUrl = (text: string) => `https://wa.me/${ADMIN_WHATSAPP_NUMBER_E164}?text=${encodeURIComponent(text)}`;
 
+interface CourseTier {
+  id: string;
+  name: string;
+  price: number;
+  duration: string;
+  highlight?: string;
+  description: string;
+}
+
+const ACADEMY_COURSES: CourseTier[] = [
+  {
+    id: 'revit-only',
+    name: 'Revit Only',
+    price: 150000,
+    duration: '2 Weeks',
+    description: 'BIM architectural modeling, parameter setup & clean scene export workflows',
+  },
+  {
+    id: 'd5-only',
+    name: 'D5 Interior/Exterior Only',
+    price: 250000,
+    duration: '2 Weeks',
+    description: 'PBR texturing, environmental lighting, HDRI skies, dusk renders & photorealistic still imagery.',
+  },
+  {
+    id: 'revit-d5',
+    name: 'Revit and D5 (Interior/Exterior)',
+    price: 350000,
+    duration: '4 Weeks',
+    highlight: 'Most Popular',
+    description: 'Complete studio pipeline from BIM modeling to photorealistic interior and exterior still renders.',
+  },
+  {
+    id: 'revit-d5-anim',
+    name: 'Revit and D5 (Interior/Exterior/Animation)',
+    price: 600000,
+    duration: '5 Weeks',
+    highlight: 'Comprehensive Masterclass',
+    description: 'Full end-to-end mastery: Revit BIM, D5 photorealism, camera sequencer & cinematic walkthrough animations.',
+  },
+  {
+    id: 'd5-anim',
+    name: 'D5 Interior/Exterior/Animation',
+    price: 300000,
+    duration: '3 Weeks',
+    description: 'Advanced real-time lighting, dynamic camera pathing, video editing & architectural animation.',
+  },
+];
+
 const buildAdmissionMessage = (formData: {
   name: string;
   email: string;
@@ -18,10 +67,14 @@ const buildAdmissionMessage = (formData: {
   experienceLevel: AcademyRegistration['experienceLevel'];
   preferredFormat: AcademyRegistration['preferredFormat'];
   courseInterest: string;
+  coursePrice: number;
+  courseDuration: string;
   message: string;
   referralSource: string;
   referrerName: string;
 }) => {
+  const formattedPrice = `₦${formData.coursePrice.toLocaleString('en-NG')}`;
+
   let waText = `Hello Figment Academy Admissions,
 
 I want to declare my interest to subscribe for the architectural visualization sessions. Here are my registration details:
@@ -31,7 +84,9 @@ I want to declare my interest to subscribe for the architectural visualization s
  -  WhatsApp Number: ${formData.phone}
  -  Experience Level: ${formData.experienceLevel}
  -  Mentorship Mode: ${formData.preferredFormat}
- -  Course Selection: ${formData.courseInterest}`;
+ -  Course Selection: ${formData.courseInterest}
+ -  Tuition / Price: ${formattedPrice}
+ -  Duration: ${formData.courseDuration}`;
 
   if (formData.referralSource) {
     waText += `\n -  Referral Source: ${formData.referralSource}`;
@@ -56,8 +111,8 @@ const AcademyPage: React.FC = () => {
     email: '',
     phone: '',
     experienceLevel: 'Beginner' as AcademyRegistration['experienceLevel'],
-    preferredFormat: 'Onsite Abuja Studio' as AcademyRegistration['preferredFormat'],
-    courseInterest: 'Revit + D5 rendering (interior/exterior)',
+    preferredFormat: 'Live Online Interactive' as AcademyRegistration['preferredFormat'],
+    courseInterest: ACADEMY_COURSES[0].name,
     message: '',
     referralSource: '',
     referrerName: ''
@@ -189,6 +244,7 @@ const AcademyPage: React.FC = () => {
 
     // Simulate database write delay
     setTimeout(() => {
+      const selectedCourse = ACADEMY_COURSES.find(c => c.name === formData.courseInterest) || ACADEMY_COURSES[0];
       const submission: AcademyRegistration = {
         id: `REG-${Math.floor(Math.random() * 90000) + 10000}`,
         name: formData.name,
@@ -197,17 +253,23 @@ const AcademyPage: React.FC = () => {
         experienceLevel: formData.experienceLevel,
         preferredFormat: formData.preferredFormat,
         courseInterest: formData.courseInterest,
+        coursePrice: selectedCourse.price,
+        courseDuration: selectedCourse.duration,
         status: 'Pending',
         date: new Date().toISOString().split('T')[0],
         message: formData.message,
         referralSource: formData.referralSource || undefined,
         referrerName: formData.referrerName || undefined,
-        notes: 'New registration from website portal.'
+        notes: `New registration from website portal. Selected course: ${formData.courseInterest} (₦${selectedCourse.price.toLocaleString('en-NG')}, ${selectedCourse.duration})`
       };
 
       addAcademyRegistration(submission);
 
-      const waText = buildAdmissionMessage(formData);
+      const waText = buildAdmissionMessage({
+        ...formData,
+        coursePrice: selectedCourse.price,
+        courseDuration: selectedCourse.duration,
+      });
       const whatsappUrl = buildWhatsAppUrl(waText);
 
       // Open WhatsApp in a new tab with the full interest declaration payload
@@ -222,7 +284,7 @@ const AcademyPage: React.FC = () => {
         phone: '',
         experienceLevel: 'Beginner',
         preferredFormat: 'Live Online Interactive',
-        courseInterest: 'Revit + D5 rendering (interior/exterior)',
+        courseInterest: ACADEMY_COURSES[0].name,
         message: '',
         referralSource: '',
         referrerName: ''
@@ -544,8 +606,8 @@ const AcademyPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* New Course Selector Section - What to Learn */}
-                  <div className="space-y-2 text-left">
+                  {/* Course Selector Section - What to Learn & Dynamic Price Tag */}
+                  <div className="space-y-3 text-left">
                     <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">What do you want to learn? *</label>
                     <select 
                       name="courseInterest"
@@ -553,12 +615,45 @@ const AcademyPage: React.FC = () => {
                       onChange={handleChange}
                       className="w-full bg-transparent border-b border-white/15 py-3 text-xs text-white outline-none focus:border-primary transition-colors cursor-pointer"
                     >
-                      <option value="Revit only" className="bg-[#1e1e1e] text-white">Revit only</option>
-                      <option value="D5 Rendering Only (interior/exterior)" className="bg-[#1e1e1e] text-white">D5 Rendering Only (interior/exterior)</option>
-                      <option value="Revit + D5 rendering (interior/exterior)" className="bg-[#1e1e1e] text-white">Revit + D5 rendering (interior/exterior)</option>
-                      <option value="Revit + D5 rendering (interior/exterior) + Animation" className="bg-[#1e1e1e] text-white">Revit + D5 rendering (interior/exterior) + Animation</option>
-                      <option value="D5 Rendering only (interior/exterior) + Animation" className="bg-[#1e1e1e] text-white">D5 Rendering only (interior/exterior) + Animation</option>
+                      {ACADEMY_COURSES.map((course) => (
+                        <option key={course.id} value={course.name} className="bg-[#1e1e1e] text-white">
+                          {course.name} — ₦{course.price.toLocaleString('en-NG')} ({course.duration})
+                        </option>
+                      ))}
                     </select>
+
+                    {/* Dynamic Price Tag Card reflecting active course under 'What do you want to learn' */}
+                    {(() => {
+                      const activeCourse = ACADEMY_COURSES.find(c => c.name === formData.courseInterest) || ACADEMY_COURSES[0];
+                      return (
+                        <motion.div
+                          key={activeCourse.id}
+                          initial={{ opacity: 0, y: 4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="mt-1.5 px-3.5 py-2.5 rounded-xl bg-primary/[0.06] border border-primary/25 flex flex-wrap items-center justify-between gap-2"
+                        >
+                          <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+                            <span className="text-white font-medium text-xs">
+                              {activeCourse.name}
+                            </span>
+                            <span className="text-[10px] text-text-muted font-light hidden sm:inline truncate">
+                              • {activeCourse.description}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-2.5 flex-shrink-0">
+                            <span className="text-base font-bold text-primary tracking-tight">
+                              ₦{activeCourse.price.toLocaleString('en-NG')}
+                            </span>
+                            <span className="inline-flex items-center gap-1 text-[9px] uppercase tracking-wider font-medium text-text-secondary bg-white/5 border border-white/10 px-2 py-0.5 rounded-md">
+                              <span className="material-symbols-outlined text-[10px] text-primary">schedule</span>
+                              {activeCourse.duration}
+                            </span>
+                          </div>
+                        </motion.div>
+                      );
+                    })()}
                   </div>
 
                   {/* Referral Fields */}

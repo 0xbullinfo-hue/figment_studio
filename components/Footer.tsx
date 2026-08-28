@@ -17,7 +17,6 @@ const Footer: React.FC = () => {
     Company: [
       { label: 'About Us', path: '/about' },
       { label: 'Our Works', path: '/works' },
-      { label: 'The Process', path: '/works/process' },
       { label: 'Insights', path: '/insights' },
       { label: 'Contact', path: '/contact' },
     ],

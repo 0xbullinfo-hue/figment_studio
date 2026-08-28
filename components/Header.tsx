@@ -12,9 +12,6 @@ const Header: React.FC = () => {
   const { auth, logout } = useStudioStore();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [worksDropdownOpen, setWorksDropdownOpen] = useState(false);
-  const [mobileWorksOpen, setMobileWorksOpen] = useState(false);
-  const worksDropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleSignOut = async () => {
     await logoutRequest(auth.refreshToken, auth.accessToken);
@@ -30,32 +27,7 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     setMobileOpen(false);
-    setMobileWorksOpen(false);
-    setWorksDropdownOpen(false);
   }, [location.pathname]);
-
-  // Cleanup timer on unmount
-  useEffect(() => {
-    return () => {
-      if (worksDropdownTimer.current) clearTimeout(worksDropdownTimer.current);
-    };
-  }, []);
-
-  const handleWorksDropdownEnter = () => {
-    if (!window.matchMedia('(hover: hover)').matches) return;
-    if (worksDropdownTimer.current) {
-      clearTimeout(worksDropdownTimer.current);
-      worksDropdownTimer.current = null;
-    }
-    setWorksDropdownOpen(true);
-  };
-
-  const handleWorksDropdownLeave = () => {
-    if (!window.matchMedia('(hover: hover)').matches) return;
-    worksDropdownTimer.current = setTimeout(() => {
-      setWorksDropdownOpen(false);
-    }, 350);
-  };
 
   const navItems: { label: string; path: string; disabled?: boolean }[] = [
     { label: 'Home', path: '/' },
@@ -63,7 +35,6 @@ const Header: React.FC = () => {
     { label: 'Services', path: '/#services' },
     { label: 'Works', path: '/works' },
     { label: 'Academy', path: '/academy' },
-    { label: 'Estimates', path: '/estimator' },
     { label: 'Contact', path: '/contact' },
   ];
 
@@ -79,6 +50,9 @@ const Header: React.FC = () => {
   };
 
   const isActive = (path: string) => {
+    if (path === '/works') {
+      return currentPath === '/portfolio' || currentPath === '/works' || currentPath.startsWith('/works/');
+    }
     if (path.includes('#')) {
       return currentPath === path.split('#')[0] && window.location.hash === '#' + path.split('#')[1];
     }
@@ -127,8 +101,7 @@ const Header: React.FC = () => {
             aria-label="Figment Creative Studio Home"
           >
             <Logo
-              size={42}
-              className="translate-y-[2px]"
+              size={38}
               showWordmark
               showTagline
             />
@@ -137,56 +110,6 @@ const Header: React.FC = () => {
           {/* Center Nav - desktop */}
           <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
             {navItems.map((item) => {
-              if (item.label === 'Works') {
-                const worksActive = currentPath === '/portfolio' || currentPath === '/works' || currentPath.startsWith('/works/');
-                return (
-                  <div
-                    key={item.label}
-                    className="relative"
-                    onMouseEnter={handleWorksDropdownEnter}
-                    onMouseLeave={handleWorksDropdownLeave}
-                  >
-                    <button
-                      onClick={() => navigate('/works')}
-                      className={`relative flex items-center gap-1.5 px-4 py-2 text-[12px] tracking-[0.16em] uppercase font-medium transition-all duration-300 focus:outline-none ${
-                        worksActive ? 'text-white' : 'text-text-muted hover:text-text-secondary'
-                      }`}
-                      aria-current={worksActive ? 'page' : undefined}
-                    >
-                      Works
-                      <span className="material-symbols-outlined text-[10px]">keyboard_arrow_down</span>
-                      <span
-                        className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
-                          worksActive ? 'bg-primary scale-100 opacity-100' : 'bg-transparent scale-0 opacity-0'
-                        }`}
-                      />
-                    </button>
-
-                    {worksDropdownOpen && (
-                      <div
-                        className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-44 rounded-xl bg-zinc-950 border border-white/5 shadow-2xl p-1.5 flex flex-col gap-0.5 z-50"
-                        style={{ animation: 'fadeInDown 0.2s ease-out' }}
-                        onMouseEnter={handleWorksDropdownEnter}
-                        onMouseLeave={handleWorksDropdownLeave}
-                      >
-                        <button
-                          onClick={() => { navigate('/works'); setWorksDropdownOpen(false); }}
-                          className="w-full text-left flex items-center gap-2 px-3 py-2.5 text-[10px] tracking-wider uppercase text-text-muted hover:text-primary hover:bg-white/5 rounded-lg transition-all focus:outline-none font-semibold"
-                        >
-                          Our Works
-                        </button>
-                        <button
-                          onClick={() => { navigate('/works/process'); setWorksDropdownOpen(false); }}
-                          className="w-full text-left flex items-center gap-2 px-3 py-2.5 text-[10px] tracking-wider uppercase text-text-muted hover:text-primary hover:bg-white/5 rounded-lg transition-all focus:outline-none font-semibold"
-                        >
-                          The Process
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                );
-              }
-
               if (item.disabled) {
                 return (
                   <button
@@ -278,42 +201,6 @@ const Header: React.FC = () => {
           />
           <div className="relative bg-[#0E0E0E] border-b border-border-ui shadow-2xl p-6 space-y-1">
             {navItems.map((item) => {
-              if (item.label === 'Works') {
-                const worksActive = currentPath === '/portfolio' || currentPath === '/works' || currentPath.startsWith('/works/');
-                return (
-                  <div key={item.label} className="border-b border-border-ui last:border-none">
-                    <button
-                      onClick={() => setMobileWorksOpen((value) => !value)}
-                      className={`w-full text-left flex items-center justify-between px-3 py-3.5 text-[12px] tracking-[0.2em] uppercase font-medium transition-all duration-200 ${
-                        worksActive ? 'text-primary' : 'text-text-muted hover:text-white'
-                      }`}
-                    >
-                      Works
-                      <span className={`material-symbols-outlined text-[16px] transition-transform ${mobileWorksOpen ? 'rotate-180' : 'rotate-0'}`}>
-                        keyboard_arrow_down
-                      </span>
-                    </button>
-
-                    {mobileWorksOpen && (
-                      <div className="pb-2 px-3 space-y-1">
-                        <button
-                          onClick={() => { navigate('/works'); setMobileOpen(false); setMobileWorksOpen(false); }}
-                          className="w-full text-left px-3 py-2.5 text-[11px] tracking-[0.18em] uppercase font-medium text-text-muted hover:text-white transition-colors"
-                        >
-                          Our Works
-                        </button>
-                        <button
-                          onClick={() => { navigate('/works/process'); setMobileOpen(false); setMobileWorksOpen(false); }}
-                          className="w-full text-left px-3 py-2.5 text-[11px] tracking-[0.18em] uppercase font-medium text-text-muted hover:text-white transition-colors"
-                        >
-                          The Process
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                );
-              }
-
               if (item.disabled) {
                 return (
                   <button

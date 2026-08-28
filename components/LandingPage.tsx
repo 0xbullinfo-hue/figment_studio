@@ -157,7 +157,7 @@ const LandingPage: React.FC = () => {
 
       <Hero
         onStartProject={() => navigate('/estimator')}
-        onOpenWorkProcess={() => navigate('/works/process')}
+        onExploreWorks={() => navigate('/works')}
       />
       <Services />
       <Portfolio onViewAll={() => navigate('/portfolio')} />

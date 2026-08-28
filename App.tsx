@@ -79,14 +79,6 @@ const PUBLIC_ROUTE_META: Record<string, RouteMeta> = {
       'Figment Studio works, architectural visualization projects, 3D render studio Nigeria, real estate visual marketing',
     ogType: 'website',
   },
-  '/works/process': {
-    title: 'Workflow Process | Figment Studio Delivery Pipeline',
-    description:
-      'See how Figment Studio manages project briefs, scene direction, approvals, and secure private delivery for high-end architectural visualization.',
-    keywords:
-      'architectural rendering process, archviz workflow Nigeria, project delivery pipeline, Figment Studio process',
-    ogType: 'website',
-  },
   '/insights': {
     title: 'Insights | Figment Studio on Architectural Visualization Trends',
     description:
@@ -196,7 +188,6 @@ const AdminDashboard = lazy(() => import('./components/AdminDashboard.tsx'));
 const ProfileSettings = lazy(() => import('./components/ProfileSettings.tsx'));
 const NotFound = lazy(() => import('./components/NotFound.tsx'));
 const AcademyPage = lazy(() => import('./components/AcademyPage.tsx'));
-const WorkProcessPage = lazy(() => import('./components/WorkProcessPage.tsx'));
 
 const AppOutlet = () => {
   const location = useLocation();
@@ -294,7 +285,6 @@ const AppRoutes = () => {
           <Route path="estimator" element={<Estimator onBack={() => navigate(-1)} onFinish={(data) => navigate('/success', { state: { invoiceId: data.id, amount: data.total, project: data.projectName } })} />} />
           <Route path="portfolio" element={<PortfolioGallery />} />
           <Route path="works" element={<PortfolioGallery />} />
-          <Route path="works/process" element={<WorkProcessPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="insights" element={<InsightsPage />} />

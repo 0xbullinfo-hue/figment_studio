@@ -11,7 +11,6 @@ const Sidebar: React.FC = () => {
   const navItems = [
     { label: 'About', path: '/about' },
     { label: 'Portfolio', path: '/portfolio' },
-    { label: 'Estimates', path: '/estimator' },
     { label: 'Contact', path: '/contact' },
   ];
 

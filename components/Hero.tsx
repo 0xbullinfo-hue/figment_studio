@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 interface HeroProps {
   onStartProject: () => void;
-  onOpenWorkProcess: () => void;
+  onExploreWorks?: () => void;
 }
 
 const SLIDES = [
@@ -36,7 +36,7 @@ const SLIDES = [
   },
 ];
 
-const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenWorkProcess }) => {
+const Hero: React.FC<HeroProps> = ({ onStartProject, onExploreWorks }) => {
   const [current, setCurrent] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -138,10 +138,10 @@ const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenWorkProcess }) => {
               Start Project
             </button>
             <button
-              onClick={onOpenWorkProcess}
+              onClick={onExploreWorks}
               className="border border-white/20 hover:border-primary text-white hover:text-primary text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 bg-black/30 backdrop-blur-md transition-all duration-300 hover:translate-y-[-2px] focus:outline-none"
             >
-              Our Process
+              Explore Works
             </button>
           </div>
           {/* Progress + slide controls aligned under the buttons */}
@@ -187,15 +187,15 @@ const Hero: React.FC<HeroProps> = ({ onStartProject, onOpenWorkProcess }) => {
             </div>
             <div className="space-y-1.5 flex items-center">
               <button
-                onClick={onOpenWorkProcess}
+                onClick={onExploreWorks}
                 className="flex items-center gap-4 group focus:outline-none"
               >
                 <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white bg-black/40 group-hover:border-primary group-hover:bg-primary/20 transition-all duration-300">
                   <span className="material-symbols-outlined text-lg">play_arrow</span>
                 </div>
                 <div>
-                  <h4 className="text-[10px] tracking-[0.22em] uppercase text-white/60 font-bold group-hover:text-primary transition-colors font-sans">Play Intro Film</h4>
-                  <p className="text-[10px] text-white/30 font-sans font-medium">Look How We Work</p>
+                  <h4 className="text-[10px] tracking-[0.22em] uppercase text-white/60 font-bold group-hover:text-primary transition-colors font-sans">Explore Works</h4>
+                  <p className="text-[10px] text-white/30 font-sans font-medium">View Portfolio Showcase</p>
                 </div>
               </button>
             </div>

@@ -33,7 +33,6 @@ const routeMetaFiles = [
   'components/PortfolioGallery.tsx',
   'components/AcademyPage.tsx',
   'components/Estimator.tsx',
-  'components/WorkProcessPage.tsx',
 ];
 
 if (!indexHtml.includes('<link rel="canonical"')) {

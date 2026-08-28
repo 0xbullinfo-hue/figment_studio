@@ -110,6 +110,8 @@ export interface AcademyRegistration {
   experienceLevel: 'Beginner' | 'Intermediate' | 'Advanced';
   preferredFormat: 'Onsite Abuja Studio' | 'Live Online Interactive';
   courseInterest: string;
+  coursePrice?: number;
+  courseDuration?: string;
   status: 'Pending' | 'Contacted' | 'Enrolled';
   date: string;
   notes?: string;

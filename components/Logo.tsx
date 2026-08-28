@@ -1,4 +1,4 @@
-﻿
+
 import React from 'react';
 
 interface LogoProps {
@@ -7,70 +7,67 @@ interface LogoProps {
    */
   size?: number;
   /**
-   * Show "figment" wordmark text beside the mark.
+   * Show "figment creative studio" wordmark text beside the mark.
    */
   showWordmark?: boolean;
   /**
    * Show "creative studio" tagline below the wordmark.
-   * Requires showWordmark to be true.
    */
   showTagline?: boolean;
   /**
-   * Render the mark only  -  no text regardless of other props.
+   * Render the mark only - no text regardless of other props.
    */
   iconOnly?: boolean;
   className?: string;
   /**
-   * Custom text color for the "figment" wordmark text.
-   * Defaults to white (#FFFFFF).
+   * Custom text color (preserved for interface compatibility).
    */
   textColor?: string;
 }
 
 /**
- * Figment Creative Studio  -  official brand logo component.
- *
- * Uses the real /logo.png asset (RGBA transparent background),
- * so the orange flame mark renders cleanly on any background color.
- *
- * Three visual variants:
- *  iconOnly                        -> flame mark only (compact nav/favicon contexts)
- *  showWordmark                    -> flame mark + "figment" (main header)
- *  showWordmark + showTagline      -> flame mark + "figment" + "creative studio" (footer, hero)
+ * Figment Creative Studio - official brand logo component using the official assets.
  */
 const Logo: React.FC<LogoProps> = ({
-  size = 40,
+  size = 36,
+  showWordmark = true,
+  iconOnly = false,
   className = '',
-  textColor = '#FFFFFF',
 }) => {
-
-  const isDarkText = textColor !== '#FFFFFF' && textColor !== 'white' && !textColor.startsWith('rgba(255');
-  const imgFilter = isDarkText ? 'brightness(0)' : 'none';
-
   return (
     <div
-      className={`inline-flex items-center justify-center flex-shrink-0 select-none ${className}`}
-      style={{
-        height: size,
-        width: Math.round(size * 3.8), // Tighter layout width for a more elegant horizontal balance
-        overflow: 'hidden', // Crops the excessive transparent padding cleanly
-      }}
-      aria-label="figment creative studio logo"
+      className={`inline-flex items-center gap-2 flex-shrink-0 select-none ${className}`}
+      aria-label="Figment Creative Studio Logo"
     >
-      {/* Transparent logo text image */}
+      {/* Official Flame/Wing Mark */}
       <img
-        src="/logo-text.png"
-        alt="" // decorative since wrapper has aria-label
-        draggable={false}
+        src="/logo-icon.png"
+        alt="Figment Studio Mark"
         style={{
-          height     : Math.round(size * 3.9), // Adjusted to ~3.9x for a clearer, less overpowering elegance
-          width      : 'auto',
-          maxWidth   : 'none', // Critical: allows image to overflow its container for cropping
-          display    : 'block',
-          flexShrink : 0,
-          filter     : imgFilter,
+          height: Math.round(size * 0.682),
+          width: 'auto',
+          display: 'block',
+          objectFit: 'contain',
+          flexShrink: 0,
         }}
+        draggable={false}
       />
+
+      {/* Official "figment creative studio" Wordmark */}
+      {!iconOnly && showWordmark && (
+        <img
+          src="/logo-text.png"
+          alt="Figment Creative Studio"
+          style={{
+            height: Math.round(size * 0.72),
+            width: 'auto',
+            display: 'block',
+            objectFit: 'contain',
+            flexShrink: 0,
+          }}
+          draggable={false}
+        />
+      )}
     </div>
   );
 };

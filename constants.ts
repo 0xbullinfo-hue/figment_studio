@@ -14,10 +14,9 @@ export const IMAGES = {
   },
 
   staff: [
-    { name: 'Ikechukwu Onuegbu', role: 'Managing Director', url: '/ikechukwu-onuegbu.jpg' },
-    { name: 'Loveth', role: 'Admin', url: '/avatar-silhouette.svg' },
-    { name: 'Chinedu', role: 'Developer', url: '/avatar-silhouette.svg' },
-    { name: 'Amara', role: 'Media Manager', url: '/avatar-silhouette.svg' },
+    { name: 'Ikechukwu Onuegbu', role: 'Creative Team Lead (Architect)', url: '/avatar-silhouette.svg' },
+    { name: 'John Noah', role: 'Creative Model specialist (Architect)', url: '/avatar-silhouette.svg' },
+    { name: 'Chinedu Onuegbu', role: 'Creative Developer (IT)', url: '/avatar-silhouette.svg' },
   ],
 
   about: {
