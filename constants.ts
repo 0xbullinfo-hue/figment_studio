@@ -28,37 +28,50 @@ export const IMAGES = {
     { 
       id: 'P1', 
       title: 'Abuja Luxury Villa Walkthrough', 
-      category: 'Residential', 
-      location: 'Maitama', 
-      url: '/figment_media/3D-Rendering-Abuja 2.png',
+      category: 'Cinematic Animation', 
+      location: 'Maitama, Abuja', 
+      url: '/figment_media/3D-Villa-Animation-Abuja-Cover.jpg',
       type: 'Animation',
+      description: 'Cinematic 3D animation exploring the expansive daylit volumes, infinity pool, and seamless indoor-outdoor flow of an ultra-luxury villa.',
       hasPlay: true,
       videoUrl: '/figment_media/3D-Villa-Animation-Abuja.mp4'
     },
     { 
       id: 'P2', 
-      title: 'Abuja Serviced Apartment', 
-      category: 'Interior', 
-      location: 'Wuse II', 
-      url: '/figment_media/3D-Rendering-B2B-Abuja 2.png', 
+      title: 'Abuja Contemporary Duplex', 
+      category: 'Residential Architecture', 
+      location: 'Guzape, Abuja', 
+      url: '/figment_media/3D-Duplex-Rendering-Abuja.png', 
+      description: 'Modern double-story duplex rendering with clean geometric lines, accent spotlights, and custom perimeter design.',
       type: 'Still Image'
     },
     { 
       id: 'P3', 
-      title: 'Abuja B2B Residential Suite', 
-      category: 'Residential (B2B)', 
-      location: 'Central District', 
-      url: '/figment_media/3D-Rendering-B2B-Abuja 3.png',
+      title: 'Lagos Luxury Apartments', 
+      category: 'Residential Development', 
+      location: 'Victoria Island, Lagos', 
+      url: '/figment_media/3D-Apartment-Rendering-Lagos-state.png',
+      description: 'Photorealistic multi-story apartment visualization capturing coastal daylight refraction, expansive glass balconies, and refined textured cladding.',
       type: 'Animation', 
       hasPlay: true,
-      videoUrl: '/figment_media/3D-Office-Interior -Animation-Abuja.mp4'
+      videoUrl: '/figment_media/3D-Apartment-Animation-Lagos-state.mp4'
     },
     { 
       id: 'P4', 
-      title: 'Ondo Modern Residence', 
-      category: 'Residential', 
-      location: 'Ondo State', 
-      url: '/figment_media/3D-B2B-Rendering-Ondo-state.png', 
+      title: 'Abuja Modern Residence', 
+      category: 'Private Estate', 
+      location: 'Central District, Abuja', 
+      url: '/figment_media/3D-Rendering-Abuja.png', 
+      description: 'Striking private residence visualization highlighting warm sunset ambiance, curtain-wall reflections, and minimalist landscaping.',
+      type: 'Still Image'
+    },
+    { 
+      id: 'P5', 
+      title: 'Abuja Urban Villa', 
+      category: 'Contemporary Living', 
+      location: 'Asokoro, Abuja', 
+      url: '/figment_media/3D-Rendering-Abuja 2.png', 
+      description: 'Signature 4K exterior rendering showcasing dramatic cantilevered overhangs, natural stone finishes, and lush tropical greenery.',
       type: 'Still Image'
     }
   ],
