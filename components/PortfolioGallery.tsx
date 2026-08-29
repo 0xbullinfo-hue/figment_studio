@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { PortfolioItem } from '../types.ts';
 import { useStudioStore } from '../store';
 import { getPublicStudioContent } from '../services/apiClient.ts';
+import { IMAGES } from '../constants.ts';
 
 const PortfolioGallery: React.FC = () => {
   const navigate = useNavigate();
@@ -16,6 +17,11 @@ const PortfolioGallery: React.FC = () => {
 
   useEffect(() => {
     let cancelled = false;
+    // Guarantee latest IMAGES.gallery is populated immediately if cached list is missing items
+    if (!items || items.length < IMAGES.gallery.length) {
+      setPortfolioItems(IMAGES.gallery);
+    }
+
     getPublicStudioContent()
       .then((content) => {
         if (cancelled || !content.portfolioItems?.length) {
@@ -23,18 +29,22 @@ const PortfolioGallery: React.FC = () => {
         }
         setPortfolioItems(content.portfolioItems);
       })
-      .catch(() => undefined);
+      .catch(() => {
+        if (!cancelled && (!items || items.length < IMAGES.gallery.length)) {
+          setPortfolioItems(IMAGES.gallery);
+        }
+      });
 
     return () => {
       cancelled = true;
     };
-  }, [setPortfolioItems]);
+  }, [setPortfolioItems, items]);
 
   // Dynamic filter categories based on actual items present
   const filterCategories = ['All', 'Exterior', 'Interior', 'Animation', 'Scale Models'];
 
   // Filter items based on selected category & search query
-  const filteredItems = items.filter(item => {
+  const filteredItems = (items && items.length >= IMAGES.gallery.length ? items : IMAGES.gallery).filter(item => {
     const normalizedType = item.type.toLowerCase();
     const matchesCategory = activeFilter === 'All' || normalizedType === activeFilter.toLowerCase();
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || item.type.toLowerCase().includes(searchQuery.toLowerCase());
@@ -92,6 +102,15 @@ const PortfolioGallery: React.FC = () => {
       'Abuja B2B Residential Suite': 'High-end interior visualization of a residential B2B suite featuring custom meeting tables, soundproofing wood panels, and smart curtain glass partitions.',
       'Abuja B2B Residential Walkthrough': 'A cinematic walkthrough animation showcasing a premium residential B2B suite, executive office, and private lounge.',
       'Abuja Apartment': 'Luxury residential Apartment with ground floor parking.',
+
+      // Anambra collection
+      'Anambra Contemporary Villa': 'High-contrast exterior visualization of a luxury modern villa featuring full-height curtain glazing, stone accents, and manicured landscaping.',
+      'Anambra Villa Cantilever View': 'Low-angle architectural perspective highlighting the sweeping cantilevered balcony and crisp geometric overhangs.',
+      'Anambra Villa Architecture Detail': 'Close-up architectural study focusing on structural glass facade integration, lush floral borders, and ambient recessed lighting.',
+      'Anambra Villa Garden Perspective': 'Expansive driveway and garden visualization capturing tropical foliage, private perimeter wall, and luxury estate presence.',
+      'Anambra Villa Dining & Grand Piano': 'Overhead master perspective of an 8-seater custom marble dining suite and concert grand piano under natural daylight.',
+      'Anambra Villa Living Lounge': 'Ultra-modern interior visualization featuring bespoke furnishings, warm sheer drapery, custom ambient lighting, and artful composition.',
+      'Anambra Villa Master Suite': 'Opulent master bedroom interior styling with clean architectural lines, minimalist sphere lamps, and curated modern wall art.',
 
       // Ondo state items
       'Ondo Modern Residence': 'A modern residential villa rendering in Ondo State, highlighting architectural geometry, integrated landscaping, and warm daylight refraction.',

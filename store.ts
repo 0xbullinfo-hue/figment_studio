@@ -311,7 +311,16 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
   })),
 }), {
   name: 'figment-studio-store',
-  version: 2,
+  version: 3,
+  migrate: (persistedState: any, version: number) => {
+    if (version < 3 || !persistedState?.portfolioItems || persistedState.portfolioItems.length < IMAGES.gallery.length) {
+      return {
+        ...persistedState,
+        portfolioItems: IMAGES.gallery,
+      };
+    }
+    return persistedState;
+  },
   partialize: (state) => ({
     auth: {
       isAuthenticated: state.auth.isAuthenticated,
