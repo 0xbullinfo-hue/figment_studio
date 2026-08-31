@@ -187,23 +187,39 @@ const AcademyPage: React.FC = () => {
   const trainingModules = [
     {
       num: "01",
+      icon: "domain",
+      title: "2D-to-3D Revit Modeling",
+      description: "Transform 2D architectural drafts and plans into clean, production-ready 3D models serving as a seamless foundation for rendering tools and visual workflows."
+    },
+    {
+      num: "02",
+      icon: "light_mode",
       title: "Lighting & Atmosphere",
       description: "Master photorealism, environmental shadows, HDRI sky projection, volumetric sunset rays, and dusk light balance to create cinematic mood."
     },
     {
-      num: "02",
+      num: "03",
+      icon: "texture",
       title: "PBR Material Texturing",
       description: "Understand architectural shaders, reflection maps, displacement grids, procedural weathering, and complex concrete/marble modeling."
     },
     {
-      num: "03",
+      num: "04",
+      icon: "view_in_ar",
       title: "Real-Time D5 Engine",
-      description: "Transition from stills to real-time image rendering and walk-through animation. Master the robust ArchViz power of D5 and accelerate your imagery workflow."
+      description: "Transition from basic modeling to real-time image rendering. Master the robust ArchViz power of D5 Render and accelerate your imagery workflow."
     },
     {
-      num: "04",
+      num: "05",
+      icon: "movie",
+      title: "Animation Walkthroughs & AI",
+      description: "Direct cinematic architectural walkthroughs using D5 Render and AI agents with precise prompting for camera sequencing, lifelike motion, and scene choreography."
+    },
+    {
+      num: "06",
+      icon: "auto_fix_high",
       title: "Cinematic Post-Processing",
-      description: "Enhance images via Integrated Ai tools to improve color grading, lookup tables (LUTs), camera raw adjustments, and composite editing."
+      description: "Enhance imagery via integrated AI tools to refine color grading, lookup tables (LUTs), camera raw adjustments, and composite editing."
     }
   ];
 
@@ -318,17 +334,6 @@ const AcademyPage: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="space-y-4"
           >
-            {/* Live Enrollment Notification Badge */}
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 backdrop-blur-md">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
-              </span>
-              <span className="text-[11px] md:text-xs font-bold uppercase tracking-[0.2em] text-primary font-sans">
-                Next Cohort: Registration Sep 4 – Sep 26 • Classes Begin Oct 3, 2026
-              </span>
-            </div>
-
             <h1 className="font-display font-light text-white uppercase tracking-tight leading-[0.9] text-5xl md:text-8xl drop-shadow-md">
               FIGMENT<br />
               <span className="font-light not-italic text-white/30">ACADEMY</span>
@@ -418,67 +423,6 @@ const AcademyPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Enrollment Dates Banner */}
-      <section className="relative bg-background border-t border-border-ui overflow-hidden">
-        <div className="absolute inset-0 bg-primary/[0.03] pointer-events-none" />
-        <div className="wrap py-10 md:py-14 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col items-center text-center space-y-6"
-          >
-            <span className="text-primary font-bold tracking-[0.3em] text-[10px] uppercase font-sans">October 2026 Cohort</span>
-            <h2 className="font-display font-light text-white uppercase tracking-tight text-3xl md:text-5xl leading-[0.95]">
-              Enrollment is <span className="text-primary">Open</span>
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 w-full max-w-3xl mt-4">
-              {/* Registration Start */}
-              <div className="bg-surface border border-border-ui/50 rounded-2xl p-5 md:p-6 text-center space-y-2 hover:border-primary/30 transition-colors">
-                <span className="material-symbols-outlined text-primary text-2xl">event_available</span>
-                <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-text-muted font-sans">Registration Opens</p>
-                <p className="text-white font-display text-xl md:text-2xl tracking-tight">Sep 4, 2026</p>
-              </div>
-              {/* Registration End */}
-              <div className="bg-surface border border-border-ui/50 rounded-2xl p-5 md:p-6 text-center space-y-2 hover:border-primary/30 transition-colors">
-                <span className="material-symbols-outlined text-red-400 text-2xl">event_busy</span>
-                <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-text-muted font-sans">Registration Closes</p>
-                <p className="text-white font-display text-xl md:text-2xl tracking-tight">Sep 26, 2026</p>
-              </div>
-              {/* Classes Start */}
-              <div className="bg-surface border border-primary/30 rounded-2xl p-5 md:p-6 text-center space-y-2 shadow-lg shadow-primary/5">
-                <span className="material-symbols-outlined text-primary text-2xl">school</span>
-                <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-primary font-sans">Classes Begin</p>
-                <p className="text-white font-display text-xl md:text-2xl tracking-tight">Oct 3, 2026</p>
-              </div>
-            </div>
-
-            <p className="text-text-muted text-xs font-light max-w-md font-sans leading-relaxed">
-              Secure your spot in the upcoming cohort. Enrollment is limited — early registrants receive priority placement and onboarding support.
-            </p>
-
-            <button
-              onClick={() => {
-                const el = document.getElementById("subscribe-form");
-                if (el) {
-                  const offset = 90;
-                  const bodyRect = document.body.getBoundingClientRect().top;
-                  const elRect = el.getBoundingClientRect().top;
-                  const elPosition = elRect - bodyRect;
-                  const offsetPosition = elPosition - offset;
-                  window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                }
-              }}
-              className="btn-fill text-center justify-center font-bold px-10 py-4 rounded-lg shadow-lg shadow-primary/10 transition-transform active:scale-95 text-sm tracking-widest uppercase"
-            >
-              Enroll Now
-            </button>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Academy Methodology / Key Modules */}
       <section id="curriculum-section" className="sec border-t border-border-ui bg-background-alt scroll-mt-[100px]">
         <div className="wrap space-y-16">
@@ -493,7 +437,7 @@ const AcademyPage: React.FC = () => {
           </div>
 
           {/* Curriculum card grids with animation */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {trainingModules.map((mod, idx) => (
               <motion.div 
                 key={mod.num} 
@@ -505,7 +449,7 @@ const AcademyPage: React.FC = () => {
               >
                 <div className="flex justify-between items-start">
                   <span className="text-3xl font-display font-bold text-white/10 group-hover:text-primary/30 transition-colors">{mod.num}</span>
-                  <span className="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors text-xl">architecture</span>
+                  <span className="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors text-xl">{mod.icon || 'architecture'}</span>
                 </div>
                 <div className="space-y-3">
                   <h3 className="font-display text-white text-lg tracking-wide uppercase">{mod.title}</h3>
