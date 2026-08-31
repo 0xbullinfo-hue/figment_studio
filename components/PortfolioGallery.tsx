@@ -119,7 +119,21 @@ const PortfolioGallery: React.FC = () => {
       'Residential Development Scale Model': 'Residential Development Scale Model.',
 
       // Bus terminal
-      'Bus Transit Terminal': 'AI-enhanced concept rendering of a modern transport interchange waiting area.'
+      'Bus Transit Terminal': 'AI-enhanced concept rendering of a modern transport interchange waiting area.',
+
+      // Asokoro Villa collection
+      'Asokoro Villa - Front Elevation': 'Crisp front-elevation render of a contemporary Asokoro villa featuring double-height curtain-wall glazing, stone-clad accents, and curated tropical landscaping.',
+      'Asokoro Villa - Angle View': 'Dramatic three-quarter perspective of the Asokoro contemporary villa, emphasizing stacked geometric volumes, glass balustrades, and mature tropical planting.',
+      'Asokoro Villa - Garden Perspective': 'Low-angle garden view capturing the villa\'s cantilevered upper floor, manicured hedgerow, and integrated carport framed by lush greenery.',
+
+      // Jabi collection
+      'Jabi Lakefront Dining': 'Overhead bird\'s-eye interior render of a marble dining suite with black accent tableware, paired with a concert grand piano under natural lakefront daylight.',
+      'Jabi Penthouse Living Room': 'Expansive double-height penthouse visualization featuring bespoke lounge furnishings, walnut slat panelling, marble coffee table, and open-plan dining and piano area.',
+
+      // Maitama collection
+      'Maitama Hillside Villas': 'Terraced hillside villa cluster rendered with pergola-shaded balconies, concrete retaining walls, and panoramic city views from an elevated Maitama vantage.',
+      'Maitama Villa - Day View': 'Clean daylight exterior rendering of a Maitama estate villa with tiered volumes, vertical timber fencing, integrated garage, and mature palm landscaping.',
+      'Maitama Villa - Dusk Lighting': 'Cinematic dusk visualization showcasing concealed warm LED strips, dark timber screening, layered terraces, and dramatic sky gradient over the Maitama skyline.'
     };
 
     return {

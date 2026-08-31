@@ -311,9 +311,9 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
   })),
 }), {
   name: 'figment-studio-store',
-  version: 3,
+  version: 4,
   migrate: (persistedState: any, version: number) => {
-    if (version < 3 || !persistedState?.portfolioItems || persistedState.portfolioItems.length < IMAGES.gallery.length) {
+    if (version < 4 || !persistedState?.portfolioItems || persistedState.portfolioItems.length < IMAGES.gallery.length) {
       return {
         ...persistedState,
         portfolioItems: IMAGES.gallery,

@@ -77,7 +77,7 @@ const buildAdmissionMessage = (formData: {
 
   let waText = `Hello Figment Academy Admissions,
 
-I want to declare my interest to subscribe for the architectural visualization sessions. Here are my registration details:
+I want to enroll for the upcoming October 2026 architectural visualization cohort. Here are my registration details:
 
  -  Name: ${formData.name}
  -  Email: ${formData.email}
@@ -98,7 +98,7 @@ I want to declare my interest to subscribe for the architectural visualization s
     waText += `\n -  Cover Statement: "${formData.message.trim()}"`;
   }
 
-  waText += `\n\nPlease let me know the next steps for cohort onboarding.`;
+  waText += `\n\nClasses start October 3rd, 2026. Please let me know the next steps for cohort onboarding.`;
   return waText;
 };
 
@@ -353,7 +353,7 @@ const AcademyPage: React.FC = () => {
               }}
               className="btn-fill text-center justify-center font-bold px-8 py-4 rounded-lg shadow-lg shadow-primary/10 transition-transform active:scale-95"
             >
-              Declare Interest
+              Enroll Now
             </button>
             <button 
               onClick={() => {
@@ -373,6 +373,67 @@ const AcademyPage: React.FC = () => {
         {/* Scroll Indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-text-muted select-none">
           <span className="material-symbols-outlined scroll-bounce text-lg text-primary">keyboard_arrow_down</span>
+        </div>
+      </section>
+
+      {/* Enrollment Dates Banner */}
+      <section className="relative bg-background border-t border-border-ui overflow-hidden">
+        <div className="absolute inset-0 bg-primary/[0.03] pointer-events-none" />
+        <div className="wrap py-10 md:py-14 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center text-center space-y-6"
+          >
+            <span className="text-primary font-bold tracking-[0.3em] text-[10px] uppercase font-sans">October 2026 Cohort</span>
+            <h2 className="font-display font-light text-white uppercase tracking-tight text-3xl md:text-5xl leading-[0.95]">
+              Enrollment is <span className="text-primary">Open</span>
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 w-full max-w-3xl mt-4">
+              {/* Registration Start */}
+              <div className="bg-surface border border-border-ui/50 rounded-2xl p-5 md:p-6 text-center space-y-2 hover:border-primary/30 transition-colors">
+                <span className="material-symbols-outlined text-primary text-2xl">event_available</span>
+                <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-text-muted font-sans">Registration Opens</p>
+                <p className="text-white font-display text-xl md:text-2xl tracking-tight">Sep 4, 2026</p>
+              </div>
+              {/* Registration End */}
+              <div className="bg-surface border border-border-ui/50 rounded-2xl p-5 md:p-6 text-center space-y-2 hover:border-primary/30 transition-colors">
+                <span className="material-symbols-outlined text-red-400 text-2xl">event_busy</span>
+                <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-text-muted font-sans">Registration Closes</p>
+                <p className="text-white font-display text-xl md:text-2xl tracking-tight">Sep 26, 2026</p>
+              </div>
+              {/* Classes Start */}
+              <div className="bg-surface border border-primary/30 rounded-2xl p-5 md:p-6 text-center space-y-2 shadow-lg shadow-primary/5">
+                <span className="material-symbols-outlined text-primary text-2xl">school</span>
+                <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-primary font-sans">Classes Begin</p>
+                <p className="text-white font-display text-xl md:text-2xl tracking-tight">Oct 3, 2026</p>
+              </div>
+            </div>
+
+            <p className="text-text-muted text-xs font-light max-w-md font-sans leading-relaxed">
+              Secure your spot in the upcoming cohort. Enrollment is limited — early registrants receive priority placement and onboarding support.
+            </p>
+
+            <button
+              onClick={() => {
+                const el = document.getElementById("subscribe-form");
+                if (el) {
+                  const offset = 90;
+                  const bodyRect = document.body.getBoundingClientRect().top;
+                  const elRect = el.getBoundingClientRect().top;
+                  const elPosition = elRect - bodyRect;
+                  const offsetPosition = elPosition - offset;
+                  window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                }
+              }}
+              className="btn-fill text-center justify-center font-bold px-10 py-4 rounded-lg shadow-lg shadow-primary/10 transition-transform active:scale-95 text-sm tracking-widest uppercase"
+            >
+              Enroll Now
+            </button>
+          </motion.div>
         </div>
       </section>
 
@@ -511,12 +572,12 @@ const AcademyPage: React.FC = () => {
 
         <div className="wrap-lg max-w-[860px] relative z-10">
           <div className="text-center space-y-4 mb-16">
-            <span className="text-primary font-bold tracking-[0.3em] text-xs uppercase block font-sans">ENROLLMENT INTAKE</span>
+            <span className="text-primary font-bold tracking-[0.3em] text-xs uppercase block font-sans">OCTOBER 2026 COHORT</span>
             <h2 className="font-display font-light text-white uppercase tracking-tight text-4xl md:text-6xl">
-              Declare Interest
+              Enroll Now
             </h2>
             <p className="text-text-muted text-sm font-light max-w-md mx-auto">
-              Mentorship cohort slots are evaluated by our studio directors. Currently, we operate 100% online classes. Submit your request below.
+              Registration is open from <span className="text-white font-medium">September 4 – 26, 2026</span>. Classes begin <span className="text-primary font-medium">October 3, 2026</span>. Currently, we operate 100% online classes. Secure your spot below.
             </p>
           </div>
 
@@ -711,10 +772,10 @@ const AcademyPage: React.FC = () => {
                       {isSubmitting ? (
                         <>
                           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          Registering Interest...
+                          Submitting Enrollment...
                         </>
                       ) : (
-                        "Submit Subscription Declaration"
+                        "Enroll Now"
                       )}
                     </button>
                   </div>

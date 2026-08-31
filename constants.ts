@@ -71,6 +71,33 @@ export const IMAGES = {
       url: '/figment_media/3D-Rendering-Abuja 2.png', 
       description: 'Signature 4K exterior rendering showcasing dramatic cantilevered overhangs, natural stone finishes, and lush tropical greenery.',
       type: 'Still Image'
+    },
+    { 
+      id: 'P6', 
+      title: 'Asokoro Contemporary Villa', 
+      category: 'Residential Architecture', 
+      location: 'Asokoro, Abuja', 
+      url: '/asokoro-villa-angle.jpg', 
+      description: 'Striking contemporary villa with double-height curtain-wall glazing, stone-clad accent columns, and manicured tropical gardens set against a clear sky.',
+      type: 'Still Image'
+    },
+    { 
+      id: 'P7', 
+      title: 'Jabi Lakefront Penthouse', 
+      category: 'Interior Visualization', 
+      location: 'Jabi, Abuja', 
+      url: '/jabi-penthouse-living.jpg', 
+      description: 'Open-plan penthouse interior with double-height ceilings, grand piano, marble dining, and warm natural light flooding through full-length drapes.',
+      type: 'Interior'
+    },
+    { 
+      id: 'P8', 
+      title: 'Maitama Luxury Villa', 
+      category: 'Private Estate', 
+      location: 'Maitama, Abuja', 
+      url: '/maitama-villa-dusk.jpg', 
+      description: 'Dramatic dusk visualization of a multi-level luxury villa with concealed LED strip accents, vertical timber screening, and layered rooftop terraces.',
+      type: 'Still Image'
     }
   ],
 
@@ -98,7 +125,15 @@ export const IMAGES = {
     { id: 23, type: 'Exterior', title: 'Anambra Villa Garden Perspective', url: '/figment_media/3D-Rendering-Anambra 4.png', class: 'aspect-[4/3]' },
     { id: 24, type: 'Interior', title: 'Anambra Villa Dining & Grand Piano', url: '/figment_media/3D-Rendering-interior-Anambra 1.png', class: 'aspect-[4/3]' },
     { id: 25, type: 'Interior', title: 'Anambra Villa Living Lounge', url: '/figment_media/3D-Rendering-interior-Anambra 2.png', class: 'aspect-[4/3]' },
-    { id: 26, type: 'Interior', title: 'Anambra Villa Master Suite', url: '/figment_media/3D-Rendering-interior-Anambra 3.png', class: 'aspect-[4/3]' }
+    { id: 26, type: 'Interior', title: 'Anambra Villa Master Suite', url: '/figment_media/3D-Rendering-interior-Anambra 3.png', class: 'aspect-[4/3]' },
+    { id: 27, type: 'Exterior', title: 'Asokoro Villa - Front Elevation', url: '/asokoro-villa-front.jpg', class: 'aspect-[4/3]' },
+    { id: 28, type: 'Exterior', title: 'Asokoro Villa - Angle View', url: '/asokoro-villa-angle.jpg', class: 'aspect-[4/3]' },
+    { id: 29, type: 'Exterior', title: 'Asokoro Villa - Garden Perspective', url: '/asokoro-villa-low-angle.jpg', class: 'aspect-[4/3]' },
+    { id: 30, type: 'Interior', title: 'Jabi Lakefront Dining', url: '/jabi-lakefront-dining.jpg', class: 'aspect-[4/3]' },
+    { id: 31, type: 'Interior', title: 'Jabi Penthouse Living Room', url: '/jabi-penthouse-living.jpg', class: 'aspect-[4/3]' },
+    { id: 32, type: 'Exterior', title: 'Maitama Hillside Villas', url: '/maitama-hillside-villas.jpg', class: 'aspect-[3/2]' },
+    { id: 33, type: 'Exterior', title: 'Maitama Villa - Day View', url: '/maitama-villa-day.jpg', class: 'aspect-[3/2]' },
+    { id: 34, type: 'Exterior', title: 'Maitama Villa - Dusk Lighting', url: '/maitama-villa-dusk.jpg', class: 'aspect-[3/2]' }
   ]
 };
 

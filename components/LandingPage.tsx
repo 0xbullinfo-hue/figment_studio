@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Helmet } from 'react-helmet-async';
 import Hero from './Hero';
 import Services from './Services';
 import Portfolio from './Portfolio';
@@ -155,6 +156,10 @@ const LandingPage: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Figment Studio | Architectural Visualization & 3D Rendering Abuja</title>
+        <meta name="description" content="Abuja's premier architectural visualization firm. High-fidelity 3D renderings, cinematic animations, interior design visualizations, and architectural scale models across Nigeria." />
+      </Helmet>
       <Hero
         onStartProject={() => navigate('/estimator')}
         onExploreWorks={() => navigate('/works')}
