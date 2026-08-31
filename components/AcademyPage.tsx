@@ -318,6 +318,17 @@ const AcademyPage: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="space-y-4"
           >
+            {/* Live Enrollment Notification Badge */}
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 backdrop-blur-md">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+              </span>
+              <span className="text-[11px] md:text-xs font-bold uppercase tracking-[0.2em] text-primary font-sans">
+                Next Cohort: Registration Sep 4 – Sep 26 • Classes Begin Oct 3, 2026
+              </span>
+            </div>
+
             <h1 className="font-display font-light text-white uppercase tracking-tight leading-[0.9] text-5xl md:text-8xl drop-shadow-md">
               FIGMENT<br />
               <span className="font-light not-italic text-white/30">ACADEMY</span>
@@ -333,11 +344,41 @@ const AcademyPage: React.FC = () => {
             Master the art of high-end, cinematic architectural storytelling. Transition from basic models to world-class portfolios using Revit integration, D5 Render, and generative AI post-production workflows.
           </motion.p>
 
+          {/* Quick Schedule Cards in Hero */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl pt-2 font-sans"
+          >
+            <div className="bg-white/[0.04] border border-white/10 backdrop-blur-md rounded-xl p-3.5 flex items-center gap-3">
+              <span className="material-symbols-outlined text-primary text-xl">event_available</span>
+              <div>
+                <p className="text-[9px] uppercase tracking-wider text-text-muted font-bold">Registration Opens</p>
+                <p className="text-white text-sm font-semibold">Sept 4, 2026</p>
+              </div>
+            </div>
+            <div className="bg-white/[0.04] border border-white/10 backdrop-blur-md rounded-xl p-3.5 flex items-center gap-3">
+              <span className="material-symbols-outlined text-red-400 text-xl">event_busy</span>
+              <div>
+                <p className="text-[9px] uppercase tracking-wider text-text-muted font-bold">Registration Closes</p>
+                <p className="text-white text-sm font-semibold">Sept 26, 2026</p>
+              </div>
+            </div>
+            <div className="bg-primary/[0.08] border border-primary/30 backdrop-blur-md rounded-xl p-3.5 flex items-center gap-3">
+              <span className="material-symbols-outlined text-primary text-xl">school</span>
+              <div>
+                <p className="text-[9px] uppercase tracking-wider text-primary font-bold">Classes Start</p>
+                <p className="text-white text-sm font-bold">October 3, 2026</p>
+              </div>
+            </div>
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 pt-4 font-sans"
+            className="flex flex-col sm:flex-row gap-4 pt-2 font-sans"
           >
             <button 
               onClick={() => {
@@ -351,9 +392,10 @@ const AcademyPage: React.FC = () => {
                   window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
                 }
               }}
-              className="btn-fill text-center justify-center font-bold px-8 py-4 rounded-lg shadow-lg shadow-primary/10 transition-transform active:scale-95"
+              className="btn-fill text-center justify-center font-bold px-10 py-4 rounded-lg shadow-lg shadow-primary/20 transition-transform active:scale-95 text-xs tracking-widest uppercase flex items-center gap-2"
             >
-              Enroll Now
+              <span>ENROLL NOW</span>
+              <span className="material-symbols-outlined text-sm">arrow_forward</span>
             </button>
             <button 
               onClick={() => {
@@ -362,7 +404,7 @@ const AcademyPage: React.FC = () => {
                   el.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
               }}
-              className="btn-outline text-center justify-center font-bold px-8 py-4 rounded-lg flex items-center gap-2 hover:bg-white/5 active:scale-95 text-white"
+              className="btn-outline text-center justify-center font-bold px-8 py-4 rounded-lg flex items-center gap-2 hover:bg-white/5 active:scale-95 text-white text-xs tracking-widest uppercase"
             >
               <span className="material-symbols-outlined text-lg">expand_more</span>
               Learn More
