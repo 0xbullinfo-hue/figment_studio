@@ -1,128 +1,187 @@
-﻿
-import React from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import DashboardShell from './DashboardShell.tsx';
+import {
+  MessageSquare,
+  Send,
+  Phone,
+  Mail,
+  ChevronDown,
+  ChevronUp,
+} from 'lucide-react';
 
-interface SupportCenterProps {
-  onBack: () => void;
-}
+const SupportCenter: React.FC = () => {
+  const [activeTicket, setActiveTicket] = useState<string | null>(null);
+  const [newMessage, setNewMessage] = useState('');
+  const [tickets, setTickets] = useState([
+    {
+      id: 'TKT-001',
+      subject: 'Revision on Terrace Render',
+      status: 'in_progress',
+      lastUpdate: 'Oct 24',
+      messages: [
+        { sender: 'client', text: 'Can we adjust the sunset lighting on the terrace angle?', time: 'Oct 23, 4:15 PM' },
+        { sender: 'support', text: 'Our lighting artist is adjusting the HDRI environment. Updated render coming today.', time: 'Oct 24, 10:30 AM' },
+      ],
+    },
+    {
+      id: 'TKT-002',
+      subject: 'Payment Confirmation Issue',
+      status: 'open',
+      lastUpdate: '2 hours ago',
+      messages: [
+        { sender: 'client', text: 'I sent the payment but it is not reflecting.', time: 'Yesterday' },
+        { sender: 'support', text: 'We are verifying with the bank. Please hold.', time: '2 hours ago' },
+      ],
+    },
+  ]);
 
-const SupportCenter: React.FC<SupportCenterProps> = ({ onBack }) => {
+  const handleSendMessage = (ticketId: string) => {
+    if (!newMessage.trim()) return;
+    setTickets((prev) =>
+      prev.map((t) => {
+        if (t.id === ticketId) {
+          return {
+            ...t,
+            messages: [
+              ...t.messages,
+              { sender: 'client', text: newMessage.trim(), time: 'Just now' },
+            ],
+          };
+        }
+        return t;
+      })
+    );
+    setNewMessage('');
+  };
+
+  const getStatusStyle = (status: string) => {
+    switch (status) {
+      case 'open':
+        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+      case 'in_progress':
+        return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+      case 'closed':
+        return 'bg-white/5 text-white/40 border-white/10';
+      default:
+        return 'bg-white/5 text-white/60 border-white/10';
+    }
+  };
+
   return (
-    <div className="bg-[#f8f7f5] min-h-screen text-[#1c140d] font-body">
+    <DashboardShell title="Support" subtitle="Get help with your projects">
       <Helmet>
-        <title>Client Support Hub | Figment Studio</title>
-        <meta name="description" content="Access Figment Studio's client support center. View active trouble tickets or search our architectural onboarding and delivery guides." />
+        <title>Support Center | Figment Studio</title>
+        <meta name="description" content="Get support for your Figment Studio projects. Open tickets, track issues, and communicate with our team." />
       </Helmet>
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#e9dace]">
-        <div className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <button onClick={onBack} className="flex items-center gap-2 group">
-              <span className="material-symbols-outlined text-primary group-hover:translate-x-[-2px] transition-transform">arrow_back</span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Back to Portal</span>
-            </button>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="bg-primary/10 p-2 rounded-lg text-primary">
-              <span className="material-symbols-outlined text-xl">help</span>
+
+      <div className="p-6 md:p-10">
+        <div className="max-w-6xl mx-auto space-y-10">
+          {/* Page Header */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-8">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-light tracking-tight text-white font-display">
+                Client <span className="font-bold text-primary">Support</span>
+              </h1>
+              <p className="text-white/40 text-sm mt-1 font-sans">Track your requests and communicate directly with the studio.</p>
             </div>
-            <h1 className="text-lg font-extrabold tracking-tighter uppercase">Support Hub</h1>
           </div>
-          <div className="size-9 rounded-full bg-primary/10 border-2 border-primary/20 flex items-center justify-center font-black text-primary">JT</div>
-        </div>
-      </header>
 
-      <main className="max-w-[1200px] mx-auto px-6 py-12 space-y-12">
-        <section className="max-w-3xl mx-auto text-center space-y-8">
-          <div className="space-y-2">
-            <h2 className="text-4xl font-black tracking-tight text-[#1c140d] leading-tight uppercase">
-              How can we help?
-            </h2>
-            <p className="text-lg text-[#9e7047] font-medium">Official help center for Figment Studio clients.</p>
-          </div>
-          <div className="relative group">
-            <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-[#9e7047] group-focus-within:text-primary transition-colors">
-              <span className="material-symbols-outlined">search</span>
+          {/* Contact Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-[#121212] border border-white/5 rounded-2xl p-8 text-center">
+              <div className="size-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/20">
+                <MessageSquare className="w-5 h-5 text-primary" />
+              </div>
+              <h3 className="font-bold text-white text-sm mb-1">Live Chat</h3>
+              <p className="text-xs text-white/40 font-sans">Response within 2 hours</p>
             </div>
-            <input className="w-full h-16 pl-12 pr-6 bg-white border-2 border-[#f4ede6] rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none text-lg transition-all shadow-sm" placeholder="Search architectural guides..." type="text" />
+            <div className="bg-[#121212] border border-white/5 rounded-2xl p-8 text-center">
+              <div className="size-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/20">
+                <Phone className="w-5 h-5 text-primary" />
+              </div>
+              <h3 className="font-bold text-white text-sm mb-1">Phone Support</h3>
+              <p className="text-xs text-white/40 font-sans">+234 816 829 9111</p>
+            </div>
+            <div className="bg-[#121212] border border-white/5 rounded-2xl p-8 text-center">
+              <div className="size-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/20">
+                <Mail className="w-5 h-5 text-primary" />
+              </div>
+              <h3 className="font-bold text-white text-sm mb-1">Email</h3>
+              <p className="text-xs text-white/40 font-sans">hello@figmentstudio.ng</p>
+            </div>
           </div>
-        </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start text-left">
-          <div className="lg:col-span-2 space-y-12">
-            <section>
-              <div className="flex items-center justify-between mb-6 px-2">
-                <h3 className="text-2xl font-bold flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary">menu_book</span>
-                  Knowledge Base
-                </h3>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { icon: 'rocket_launch', title: 'Onboarding', desc: 'Understanding your dashboard and project workflow.' },
-                  { icon: 'payments', title: 'Billing', desc: 'Managing payments, VAT, and international transfers.' },
-                  { icon: 'tactic', title: 'Feedback Loop', desc: 'How to use the markup tool for precision revisions.' },
-                  { icon: 'terminal', title: 'Deliverables', desc: 'Mastering our file formats and 360 viewer.' }
-                ].map((item, i) => (
-                  <div key={i} className="p-6 bg-white border border-[#f4ede6] rounded-xl hover:border-primary transition-all cursor-pointer group">
-                    <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-white transition-all">
-                      <span className="material-symbols-outlined">{item.icon}</span>
-                    </div>
-                    <h4 className="font-bold text-lg mb-1 uppercase tracking-tight">{item.title}</h4>
-                    <p className="text-sm text-[#9e7047] leading-relaxed">{item.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section>
-              <div className="flex items-center justify-between mb-6 px-2">
-                <h3 className="text-2xl font-bold flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary">confirmation_number</span>
-                  Active Tickets
-                </h3>
-              </div>
-              <div className="overflow-hidden rounded-xl border border-[#f4ede6] bg-white shadow-sm">
-                <div className="divide-y divide-[#f4ede6]">
-                  <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-[#fcfaf8] transition-colors">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs font-black tracking-wider text-[#9e7047] uppercase">#FIG-4822</span>
-                        <h5 className="font-bold">Revision on Terrace Render</h5>
+          {/* Tickets */}
+          <div className="bg-[#121212] border border-white/5 rounded-2xl overflow-hidden">
+            <div className="p-6 md:p-8 border-b border-white/5">
+              <h2 className="text-sm font-bold uppercase tracking-widest text-white/80">Active Tickets</h2>
+            </div>
+            <div className="divide-y divide-white/5">
+              {tickets.map((ticket) => (
+                <div key={ticket.id} className="p-6 md:p-8">
+                  <button
+                    onClick={() => setActiveTicket(activeTicket === ticket.id ? null : ticket.id)}
+                    className="w-full flex items-center justify-between text-left"
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className={`px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border ${getStatusStyle(ticket.status)}`}>
+                        {ticket.status.replace('_', ' ')}
+                      </span>
+                      <div>
+                        <h3 className="font-bold text-sm text-white">{ticket.subject}</h3>
+                        <p className="text-xs text-white/40 mt-0.5 font-sans">{ticket.id} — Last update: {ticket.lastUpdate}</p>
                       </div>
-                      <p className="text-sm text-[#9e7047]">Awaiting studio review  -  Oct 24</p>
                     </div>
-                    <span className="px-3 py-1 bg-primary text-white text-[10px] font-black uppercase rounded-full">In Progress</span>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </div>
+                    {activeTicket === ticket.id ? (
+                      <ChevronUp className="w-4 h-4 text-white/30" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4 text-white/30" />
+                    )}
+                  </button>
 
-          <aside className="sticky top-24">
-            <div className="bg-white border-2 border-[#f4ede6] rounded-2xl p-8 shadow-xl shadow-[#f4ede6]/50">
-              <h3 className="text-2xl font-black uppercase mb-2">New Inquiry</h3>
-              <p className="text-sm text-[#9e7047] mb-6">Need expert eyes? Our team is online.</p>
-              <form className="space-y-4" onSubmit={e => e.preventDefault()}>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-[#1c140d] tracking-widest">Subject</label>
-                  <input className="w-full bg-[#fcfaf8] border border-[#f4ede6] rounded-lg px-4 py-3 focus:ring-primary focus:border-primary outline-none text-sm" placeholder="How can we help?" type="text" />
+                  {activeTicket === ticket.id && (
+                    <div className="mt-6 space-y-4 pl-4 border-l-2 border-white/5">
+                      {ticket.messages.map((msg, i) => (
+                        <div key={i} className={`flex gap-3 ${msg.sender === 'client' ? 'flex-row' : 'flex-row-reverse'}`}>
+                          <div
+                            className={`max-w-[80%] rounded-xl p-4 ${
+                              msg.sender === 'client'
+                                ? 'bg-white/5 text-white'
+                                : 'bg-primary/10 text-primary border border-primary/20'
+                            }`}
+                          >
+                            <p className="text-xs font-sans">{msg.text}</p>
+                            <p className="text-[9px] text-white/30 mt-1">{msg.time}</p>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="flex gap-3 pt-2">
+                        <input
+                          type="text"
+                          value={newMessage}
+                          onChange={(e) => setNewMessage(e.target.value)}
+                          onKeyDown={(e) => e.key === 'Enter' && handleSendMessage(ticket.id)}
+                          placeholder="Type your message..."
+                          className="flex-1 bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 outline-none focus:border-primary transition-all"
+                        />
+                        <button
+                          onClick={() => handleSendMessage(ticket.id)}
+                          className="px-4 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl transition-all active:scale-95"
+                        >
+                          <Send className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-[#1c140d] tracking-widest">Message</label>
-                  <textarea className="w-full bg-[#fcfaf8] border border-[#f4ede6] rounded-lg px-4 py-3 focus:ring-primary focus:border-primary outline-none text-sm resize-none" rows={4}></textarea>
-                </div>
-                <button className="w-full py-4 bg-primary text-white font-black uppercase tracking-widest rounded-lg shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all" type="submit">
-                  Open Ticket
-                </button>
-              </form>
+              ))}
             </div>
-          </aside>
+          </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardShell>
   );
 };
 
 export default SupportCenter;
-
-

@@ -69,8 +69,8 @@ export const config = {
   port: Number.parseInt(process.env.PORT || '8787', 10),
   databaseUrl: process.env.DATABASE_URL || '',
   jwt: {
-    secret: process.env.JWT_SECRET || '',
-    refreshSecret: process.env.JWT_REFRESH_SECRET || '',
+    secret: process.env.JWT_SECRET || DEV_DEFAULTS.JWT_SECRET,
+    refreshSecret: process.env.JWT_REFRESH_SECRET || DEV_DEFAULTS.JWT_REFRESH_SECRET,
     expiresIn: '7d',
     refreshExpiresIn: '30d',
   },

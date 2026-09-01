@@ -92,6 +92,16 @@ export interface InvoiceReceipt {
   source: 'estimate' | 'payment';
 }
 
+export interface Invoice {
+  id: string;
+  projectName: string;
+  amount: number;
+  status: 'pending' | 'paid' | 'verifying';
+  date: string;
+  description: string;
+  clientName: string;
+}
+
 export interface PortfolioItem {
   id: number;
   type: string;

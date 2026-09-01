@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Project, ProjectProposal, PortfolioItem, AcademyRegistration, ClientReview, InvoiceReceipt } from './types';
+import { Project, ProjectProposal, PortfolioItem, AcademyRegistration, ClientReview, InvoiceReceipt, Invoice } from './types';
 import { INITIAL_PROJECTS, IMAGES } from './constants';
 
 type UserRole = 'guest' | 'client' | 'admin';
@@ -22,6 +22,7 @@ interface StudioState {
   projects: Project[];
   proposals: ProjectProposal[];
   receipts: InvoiceReceipt[];
+  invoices: Invoice[];
   portfolioItems: PortfolioItem[];
   academyRegistrations: AcademyRegistration[];
   reviews: ClientReview[];
@@ -46,6 +47,9 @@ interface StudioState {
   addReceipt: (receipt: InvoiceReceipt) => void;
   updateReceiptStatus: (invoiceId: string, status: InvoiceReceipt['status']) => void;
   setReceipts: (receipts: InvoiceReceipt[]) => void;
+  addInvoice: (invoice: Invoice) => void;
+  updateInvoiceStatus: (id: string, status: 'pending' | 'paid' | 'verifying') => void;
+  setInvoices: (invoices: Invoice[]) => void;
   addPortfolioItem: (item: PortfolioItem) => void;
   updatePortfolioItem: (item: PortfolioItem) => void;
   deletePortfolioItem: (id: number) => void;
@@ -90,6 +94,17 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
       status: 'Pending',
       createdAt: new Date().toISOString(),
       source: 'estimate',
+    }
+  ],
+  invoices: [
+    {
+      id: 'INV-901',
+      projectName: 'Maitama Office Complex',
+      amount: 12500,
+      status: 'pending',
+      date: new Date().toLocaleDateString('en-NG'),
+      description: 'High-end 3D walkthrough requested for a 12-story commercial tower.',
+      clientName: 'Sarah Jenkins',
     }
   ],
   portfolioItems: IMAGES.gallery,
@@ -256,6 +271,20 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
     return { proposals: updatedProposals };
   }),
 
+  addInvoice: (invoice) => set((state) => ({
+    invoices: [invoice, ...state.invoices],
+  })),
+
+  updateInvoiceStatus: (id, status) => set((state) => ({
+    invoices: state.invoices.map((inv) =>
+      inv.id === id ? { ...inv, status } : inv
+    ),
+  })),
+
+  setInvoices: (invoices) => set(() => ({
+    invoices,
+  })),
+
   addPortfolioItem: (item) => set((state) => ({ 
     portfolioItems: [item, ...state.portfolioItems] 
   })),
@@ -336,6 +365,7 @@ export const useStudioStore = create<StudioState>()(persist((set) => ({
     projects: state.projects,
     proposals: state.proposals,
     receipts: state.receipts,
+    invoices: state.invoices,
     portfolioItems: state.portfolioItems,
     academyRegistrations: state.academyRegistrations,
     reviews: state.reviews,

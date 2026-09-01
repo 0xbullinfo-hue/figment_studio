@@ -186,6 +186,7 @@ const SupportCenter = lazy(() => import('./components/SupportCenter.tsx'));
 const NewProjectRequest = lazy(() => import('./components/NewProjectRequest.tsx'));
 const AdminDashboard = lazy(() => import('./components/AdminDashboard.tsx'));
 const ProfileSettings = lazy(() => import('./components/ProfileSettings.tsx'));
+const DashboardEstimator = lazy(() => import('./components/DashboardEstimator.tsx'));
 const NotFound = lazy(() => import('./components/NotFound.tsx'));
 const AcademyPage = lazy(() => import('./components/AcademyPage.tsx'));
 
@@ -297,10 +298,11 @@ const AppRoutes = () => {
           <Route path="auth" element={<AuthPage onLogin={(role) => navigate(role === 'admin' ? '/admin' : '/dashboard')} onBack={() => navigate(-1)} />} />
           <Route path="dashboard" element={<ProtectedRoute requiredRole="client"><ClientDashboard /></ProtectedRoute>} />
           <Route path="admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
-          <Route path="billing" element={<BillingManager onBack={() => navigate(-1)} onNavigate={(path, state) => navigate(path, state ? { state } : undefined)} />} />
+          <Route path="billing" element={<BillingManager />} />
+          <Route path="estimate" element={<ProtectedRoute requiredRole="client"><DashboardEstimator /></ProtectedRoute>} />
           <Route path="payment" element={<PaymentPortal onBack={() => navigate(-1)} />} />
-          <Route path="assets" element={<AssetManager onBack={() => navigate(-1)} onNavigate={(path) => navigate(path)} />} />
-          <Route path="support" element={<SupportCenter onBack={() => navigate(-1)} />} />
+          <Route path="assets" element={<AssetManager />} />
+          <Route path="support" element={<SupportCenter />} />
           <Route path="profile" element={<ProfileSettings onBack={() => navigate(-1)} onNavigate={(path) => navigate(path)} />} />
           <Route path="new-project" element={<NewProjectRequest onBack={() => navigate(-1)} onSubmit={handleNewProjectSubmit} />} />
           <Route path="project/:id" element={<ProjectDetails />} />

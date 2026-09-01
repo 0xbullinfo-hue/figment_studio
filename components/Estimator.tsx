@@ -1,10 +1,13 @@
 
 import React, { useState, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { IMAGES } from '../constants.ts';
 import { useStudioStore } from '../store.ts';
+import { Invoice } from '../types.ts';
+import DashboardShell from './DashboardShell.tsx';
 
 interface ServiceCardProps {
   enabled: boolean;
@@ -157,12 +160,13 @@ const TOP_CURRENCIES = [
 ];
 
 interface EstimatorProps {
-  onBack: () => void;
-  onFinish: (data: { projectName: string; clientName: string; type: string; total: number; details: string }) => void;
+  onBack?: () => void;
+  onFinish?: (data: { projectName: string; clientName: string; type: string; total: number; details: string }) => void;
 }
 
 const Estimator: React.FC<EstimatorProps> = ({ onBack, onFinish }) => {
-  const addProposal = useStudioStore(state => state.addProposal);
+  const navigate = useNavigate();
+  const { auth, addProposal, addInvoice } = useStudioStore();
 
   const [vizEnabled, setVizEnabled] = useState(true);
   const [animEnabled, setAnimEnabled] = useState(true);
@@ -384,20 +388,37 @@ _I have generated this quote and would like to receive the official bank details
   };
 
   const handleRequestFinish = () => {
+    const invoiceSuffix = Date.now().toString().slice(-6);
+    const invoiceId = `INV-${invoiceSuffix}`;
     const proposalData = {
-      id: `PROP-${Math.floor(Math.random() * 1000 + 1000)}`,
+      id: `PROP-${invoiceSuffix}`,
       projectName: projectName || 'Instant Package',
       clientName: clientName || 'Anonymous Client',
       type: 'Architectural Visualization',
       total: pricing.total,
       status: 'Received' as const,
       details: pricing.items.map(i => i.label).join(', '),
-      date: new Date().toISOString().split('T')[0],
+      date: new Date().toLocaleDateString('en-NG'),
       attachments: []
     };
 
+    const invoiceData: Invoice = {
+      id: invoiceId,
+      projectName: projectName || 'Instant Package',
+      amount: pricing.total,
+      status: 'pending',
+      date: new Date().toLocaleDateString('en-NG'),
+      description: pricing.items.map(i => `${i.label}: ₦${i.price.toLocaleString('en-NG')}`).join(' | '),
+      clientName: clientName || 'Anonymous Client',
+    };
+
     addProposal(proposalData);
-    onFinish(proposalData);
+    addInvoice(invoiceData);
+    if (onFinish) {
+      onFinish(proposalData);
+    } else {
+      navigate('/billing');
+    }
   };
 
   return (
@@ -410,40 +431,40 @@ _I have generated this quote and would like to receive the official bank details
       <main className="mx-auto max-w-[1240px] px-6 pt-6 pb-12">
         {/* Top Return & Title */}
         <div className="mb-6 flex flex-col gap-3 text-left">
-          <button onClick={onBack} className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest hover:translate-x-[-4px] transition-all w-fit">
+          <button onClick={onBack || (() => navigate(-1))} className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest hover:translate-x-[-4px] transition-all w-fit">
             <span className="material-symbols-outlined text-base font-bold">arrow_back</span>
             Return to Homepage
           </button>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <h1 className="text-3xl font-display font-bold tracking-tight lg:text-5xl text-white uppercase leading-tight">Instant Estimate</h1>
-                <p className="text-xs text-text-muted font-medium mt-1">Select your project requirements to calculate estimated investment and delivery timeline.</p>
-              </div>
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-display font-bold tracking-tight lg:text-5xl text-white uppercase leading-tight">Instant Estimate</h1>
+              <p className="text-xs text-text-muted font-medium mt-1">Select your project requirements to calculate estimated investment and delivery timeline.</p>
+            </div>
 
-              {/* Priority Toggle */}
-              <div className="bg-surface p-1 rounded-xl border border-border-ui flex h-fit">
-                <button
-                  onClick={() => setPriority('Standard')}
-                  className={`px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-                    priority === 'Standard' ? 'bg-primary text-white shadow-md' : 'text-text-muted hover:text-white'
-                  }`}
-                >
-                  Standard (7-14 Days)
-                </button>
-                <button
-                  onClick={() => setPriority('Urgent')}
-                  className={`px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-                    priority === 'Urgent' ? 'bg-primary text-white shadow-md' : 'text-text-muted hover:text-white'
-                  }`}
-                >
-                  Urgent (3-6 Days +30%)
-                </button>
-              </div>
+            {/* Priority Toggle */}
+            <div className="bg-surface p-1 rounded-xl border border-border-ui flex h-fit">
+              <button
+                onClick={() => setPriority('Standard')}
+                className={`px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+                  priority === 'Standard' ? 'bg-primary text-white shadow-md' : 'text-text-muted hover:text-white'
+                }`}
+              >
+                Standard (7-14 Days)
+              </button>
+              <button
+                onClick={() => setPriority('Urgent')}
+                className={`px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+                  priority === 'Urgent' ? 'bg-primary text-white shadow-md' : 'text-text-muted hover:text-white'
+                }`}
+              >
+                Urgent (3-6 Days +30%)
+              </button>
             </div>
           </div>
         </div>
+      </div>
 
         {/* Total Estimate Bar */}
         <div className="mb-10 flex flex-col lg:flex-row items-center justify-between py-6 px-8 rounded-3xl bg-surface border border-primary/30 shadow-2xl relative overflow-hidden backdrop-blur-xl gap-6">
