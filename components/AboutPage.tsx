@@ -1,3 +1,4 @@
+import { buildBreadcrumbs } from '../lib/structuredData.ts';
 
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -39,7 +40,15 @@ const AboutPage: React.FC = () => {
       <Helmet>
         <title>About Our Studio | Figment Studio</title>
         <meta name="description" content="Discover Figment Studio, Abuja's premier architectural visualization firm. We combine design precision, cinematic animation, and local inspiration to tell architectural stories globally." />
-      </Helmet>
+        <link rel="canonical" href="https://figmentstudio.ng/about" />
+          <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+          <script type="application/ld+json">
+            {JSON.stringify({
+              '@context': 'https://schema.org',
+              ...buildBreadcrumbs([{ name: 'Home', item: '/' }, { name: 'About', item: '/about' }])
+            })}
+          </script>
+        </Helmet>
 
       {/* Hero Section */}
       <section className="px-6 lg:px-20 py-24 bg-background-alt border-b border-border-ui overflow-hidden relative">

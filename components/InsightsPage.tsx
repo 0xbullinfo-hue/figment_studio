@@ -1,3 +1,4 @@
+import { buildBreadcrumbs } from '../lib/structuredData.ts';
 ﻿import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -45,7 +46,7 @@ const InsightsPage: React.FC = () => {
       <Helmet>
         {article ? (
           <>
-            <title>{article.title} | Figment Studio Insights</title>
+            <title>{`${article.title} | Figment Studio Insights`}</title>
             <meta name="description" content={article.excerpt} />
             <meta property="og:type" content="article" />
             <meta property="og:title" content={`${article.title} | Figment Studio`} />
@@ -83,7 +84,15 @@ const InsightsPage: React.FC = () => {
           </>
         ) : (
           <>
-            <title>Insights & News | Figment Studio</title>
+            <link rel="canonical" href="https://figmentstudio.ng/insights" />
+              <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+              <script type="application/ld+json">
+                {JSON.stringify({
+                  '@context': 'https://schema.org',
+                  ...buildBreadcrumbs([{ name: 'Home', item: '/' }, { name: 'Insights', item: '/insights' }])
+                })}
+              </script>
+              <title>Insights & News | Figment Studio</title>
             <meta name="description" content="Read industry insights, trends, and technology updates on architectural visualization, 3D printing, and design in West Africa from Figment Studio." />
           </>
         )}

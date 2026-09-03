@@ -14,4 +14,26 @@ Disallow: /new-project
 Disallow: /project
 Disallow: /success
 
+# Search Engine & AI Crawlers
+User-agent: bingbot
+Allow: /
+
+User-agent: msnbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
 Sitemap: https://figmentstudio.ng/sitemap.xml

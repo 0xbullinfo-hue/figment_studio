@@ -41,7 +41,8 @@ const ContactPage: React.FC = () => {
   return (
     <div className="bg-white">
       <Helmet>
-        <title>Contact Our Abuja Office | Figment Studio</title>
+        <link rel="canonical" href="https://figmentstudio.ng/contact" />
+          <title>Contact Our Abuja Office | Figment Studio</title>
         <meta name="description" content="Get in touch with Figment Studio in Central Business District, Abuja. Submit your design brief, ask about timelines, or inquire about cinematic 3D walkthroughs." />
         <script type="application/ld+json">
           {JSON.stringify({

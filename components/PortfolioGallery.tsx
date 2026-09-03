@@ -1,3 +1,4 @@
+import { buildBreadcrumbs } from '../lib/structuredData.ts';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
@@ -149,7 +150,15 @@ const PortfolioGallery: React.FC = () => {
       <Helmet>
         <title>Portfolio | Figment Studio</title>
         <meta name="description" content="Browse Figment Studio's curated collection of premium 3D renderings, cinematic animations, and interior visualizations for real estate in Abuja and beyond." />
-      </Helmet>
+        <link rel="canonical" href="https://figmentstudio.ng/portfolio" />
+          <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+          <script type="application/ld+json">
+            {JSON.stringify({
+              '@context': 'https://schema.org',
+              ...buildBreadcrumbs([{ name: 'Home', item: '/' }, { name: 'Portfolio', item: '/portfolio' }])
+            })}
+          </script>
+        </Helmet>
 
       {/* Header Info & Category Filters */}
       <div className="px-8 md:px-14 lg:px-20 max-w-[1600px] w-full mx-auto flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">

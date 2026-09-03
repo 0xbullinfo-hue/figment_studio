@@ -1,3 +1,4 @@
+import { buildWebsiteSchema, buildOrganizationSchema, buildProfessionalServiceSchema } from '../lib/structuredData.ts';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Hero from './Hero';
@@ -159,7 +160,19 @@ const LandingPage: React.FC = () => {
       <Helmet>
         <title>Figment Studio | Architectural Visualization & 3D Rendering Abuja</title>
         <meta name="description" content="Abuja's premier architectural visualization firm. High-fidelity 3D renderings, cinematic animations, interior design visualizations, and architectural scale models across Nigeria." />
-      </Helmet>
+        <link rel="canonical" href="https://figmentstudio.ng/" />
+          <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+          <script type="application/ld+json">
+            {JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                buildWebsiteSchema(),
+                buildOrganizationSchema(),
+                buildProfessionalServiceSchema(),
+              ]
+            })}
+          </script>
+        </Helmet>
       <Hero
         onStartProject={() => navigate('/estimator')}
         onExploreWorks={() => navigate('/works')}

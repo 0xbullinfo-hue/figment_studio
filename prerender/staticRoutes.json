@@ -1,0 +1,10 @@
+[
+  { "path": "/" },
+  { "path": "/about" },
+  { "path": "/contact" },
+  { "path": "/works" },
+  { "path": "/portfolio" },
+  { "path": "/insights" },
+  { "path": "/academy" },
+  { "path": "/estimator" }
+]

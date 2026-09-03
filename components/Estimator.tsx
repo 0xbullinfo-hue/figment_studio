@@ -1,3 +1,4 @@
+import { buildBreadcrumbs } from '../lib/structuredData.ts';
 
 import React, { useState, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -426,7 +427,15 @@ _I have generated this quote and would like to receive the official bank details
       <Helmet>
         <title>Instant Quote Estimator | Figment Studio</title>
         <meta name="description" content="Calculate your 3D architectural rendering, cinematic animation, or scale model project cost instantly with Figment Studio's tiered pricing tool." />
-      </Helmet>
+        <link rel="canonical" href="https://figmentstudio.ng/estimator" />
+          <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+          <script type="application/ld+json">
+            {JSON.stringify({
+              '@context': 'https://schema.org',
+              ...buildBreadcrumbs([{ name: 'Home', item: '/' }, { name: 'Cost Estimator', item: '/estimator' }])
+            })}
+          </script>
+        </Helmet>
 
       <main className="mx-auto max-w-[1240px] px-6 pt-6 pb-12">
         {/* Top Return & Title */}

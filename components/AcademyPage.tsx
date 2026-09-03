@@ -1,3 +1,4 @@
+import { buildBreadcrumbs } from '../lib/structuredData.ts';
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -313,7 +314,15 @@ const AcademyPage: React.FC = () => {
       <Helmet>
         <title>Academy | Figment Studio</title>
         <meta name="description" content="Join Figment Studio's Academy. Master architectural visualization, Revit integration, real-time D5 Rendering, and post-production with our expert instructors in Abuja." />
-      </Helmet>
+        <link rel="canonical" href="https://figmentstudio.ng/academy" />
+          <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+          <script type="application/ld+json">
+            {JSON.stringify({
+              '@context': 'https://schema.org',
+              ...buildBreadcrumbs([{ name: 'Home', item: '/' }, { name: 'Academy', item: '/academy' }])
+            })}
+          </script>
+        </Helmet>
 
       {/* Cinematic Hero Section - High Contrast Readability */}
       <section className="relative w-full min-h-[90vh] flex items-center justify-center bg-black overflow-hidden py-24">
