@@ -49,26 +49,6 @@ const INSIGHTS = [
   },
 ];
 
-const PLANS = [
-  {
-    tier: 'Starter',
-    price: 'Free',
-    sub: 'For explorers',
-    features: ['Public design discovery tools', '1 concept brief export', 'Community support', 'Portfolio access'],
-    cta: 'Try Instant Estimate',
-    ctaPath: '/estimator',
-    featured: false,
-  },
-  {
-    tier: 'Studio Pro',
-    price: '$149',
-    sub: 'per month',
-    features: ['Guided AI (camera, motion, lighting)', 'Sketch-preserving enhancement', 'Private project dashboard', 'Paystack & Flutterwave checkout', '20 AI credits / month'],
-    cta: 'Upgrade to Pro',
-    ctaPath: '/auth?upgrade=pro',
-    featured: true,
-  },
-];
 
 const SectionHeading: React.FC<{ children: React.ReactNode; dim?: string }> = ({ children, dim }) => (
   <h2 className="font-display font-light text-white leading-tight" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4rem)', lineHeight: 1.06 }}>
@@ -493,67 +473,6 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/*  PRICING  */}
-      <section className="bg-background border-t border-border-ui" id="pricing">
-        <div className="px-8 md:px-14 lg:px-20 py-24 max-w-[1600px] mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
-            <div>
-              <SectionHeading dim="for Architectural Teams">
-                Premium Tiers
-              </SectionHeading>
-            </div>
-            <p className="max-w-sm text-white/50 leading-relaxed text-sm font-sans md:text-right">
-              Every project is unique. Tell us about yours and we'll respond with a tailored proposal within 24 hours.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border-ui max-w-4xl mx-auto">
-            {PLANS.map((plan) => (
-              <article
-                key={plan.tier}
-                className={`relative flex flex-col gap-8 p-10 ${plan.featured ? 'bg-surface border-t-2 border-t-primary' : 'bg-[#0E0E0E]'} group hover:border-primary/20 transition-colors`}
-              >
-                {plan.featured && (
-                  <div className="absolute top-0 right-8 -translate-y-1/2">
-                    <span className="text-[9px] tracking-[0.2em] uppercase bg-primary text-white px-4 py-1.5 font-bold font-sans">
-                      Most Popular
-                    </span>
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  <p className="text-[10px] tracking-[0.25em] uppercase text-primary font-sans font-semibold">{plan.tier}</p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-display font-light text-4xl text-white">{plan.price}</span>
-                    <span className="text-xs text-white/30 font-sans">{plan.sub}</span>
-                  </div>
-                </div>
-
-                <ul className="space-y-3.5 flex-1">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-3 text-sm">
-                      <span className="w-4 h-4 rounded-full border border-primary/30 bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="material-symbols-outlined text-[10px] text-primary">check</span>
-                      </span>
-                      <span className="text-white/55 font-sans leading-snug">{f}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <button
-                  onClick={() => navigate(plan.ctaPath)}
-                  className={`text-[11px] tracking-[0.2em] uppercase font-bold font-sans py-3.5 transition-all duration-300 ${plan.featured
-                      ? 'bg-primary hover:bg-primary-hover text-white hover:shadow-[0_4px_14px_rgba(240,122,58,0.3)]'
-                      : 'border border-border-strong text-white/60 hover:text-white hover:border-white/30'
-                    }`}
-                >
-                  {plan.cta}
-                </button>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/*  JOURNAL / INSIGHTS  */}
       <section className="bg-[#0E0E0E] border-t border-border-ui" id="journal">

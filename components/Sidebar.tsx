@@ -96,10 +96,10 @@ const Sidebar: React.FC = () => {
           ) : (
             <div className="flex flex-col gap-2">
               <button
-                onClick={() => navigate('/auth')}
-                className="w-full py-2.5 rounded-lg text-xs font-semibold tracking-wider uppercase border border-border-ui hover:border-primary/30 hover:bg-primary-light text-text-secondary transition-all"
+                disabled
+                className="w-full py-2.5 rounded-lg text-xs font-semibold tracking-wider uppercase border border-border-ui/50 text-text-muted/40 cursor-not-allowed transition-all"
               >
-                Client Portal
+                Client (soon)
               </button>
               <button
                 onClick={() => navigate('/estimator')}
